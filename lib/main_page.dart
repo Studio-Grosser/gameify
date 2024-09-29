@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/database_service.dart';
+import 'package:gameify/database/database_service.dart';
+import 'package:gameify/database/task_service.dart';
 import 'package:gameify/task.dart';
 import 'package:gameify/task_display.dart';
 
@@ -18,10 +19,7 @@ class _MainPageState extends State<MainPage> {
           completedTasks.contains(task.id)) // Nur die erledigten Tasks filtern
       .fold(0, (sum, task) => sum + task.score);
 
-  List<Task> tasks = [
-    Task(name: 'name', score: 20),
-    Task(name: 'nasdassame', score: -15)
-  ];
+  List<Task> tasks = [];
 
   Set<String> completedTasks = {};
 
@@ -35,6 +33,11 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
     currentDate = DateTime.now();
+    TaskService().readTasks().then((value) {
+      setState(() {
+        tasks = value;
+      });
+    });
   }
 
   @override
@@ -59,9 +62,7 @@ class _MainPageState extends State<MainPage> {
             TextField(
               onSubmitted: (value) async {
                 Task task = Task(name: value, score: 15);
-                await DatabaseService.instance.createTask(task);
-                var a = await DatabaseService.instance.readTasks();
-                print(a.length);
+                await TaskService().createTask(task);
                 setState(() {
                   tasks.add(task);
                 });

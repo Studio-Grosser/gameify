@@ -20,6 +20,7 @@ class TaskDisplay extends StatelessWidget {
             value: isCompleted,
             onChanged: (value) => onChanged(value ?? false)),
         Text(task.name),
+        Text(task.id),
         Text(task.score.toString()),
       ],
     );
