@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gameify/database_service.dart';
 import 'package:gameify/task.dart';
 import 'package:gameify/task_display.dart';
 
@@ -21,6 +22,7 @@ class _MainPageState extends State<MainPage> {
     Task(name: 'name', score: 20),
     Task(name: 'nasdassame', score: -15)
   ];
+
   Set<String> completedTasks = {};
 
   void changeDay(int offset) {
@@ -46,14 +48,25 @@ class _MainPageState extends State<MainPage> {
               children: [
                 IconButton(
                     onPressed: () => changeDay(-1),
-                    icon: Icon(Icons.chevron_left)),
+                    icon: const Icon(Icons.chevron_left)),
                 Text(currentDate.toString()),
                 IconButton(
                     onPressed: () => changeDay(1),
-                    icon: Icon(Icons.chevron_right)),
+                    icon: const Icon(Icons.chevron_right)),
               ],
             ),
             Text(score.toString()),
+            TextField(
+              onSubmitted: (value) async {
+                Task task = Task(name: value, score: 15);
+                await DatabaseService.instance.createTask(task);
+                var a = await DatabaseService.instance.readTasks();
+                print(a.length);
+                setState(() {
+                  tasks.add(task);
+                });
+              },
+            ),
             SizedBox(
               height: 300,
               child: ListView.builder(
