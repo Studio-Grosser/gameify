@@ -11,8 +11,17 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late DateTime currentDate;
-  int score = 0;
-  List<Task> tasks = [Task(name: 'name', score: 20)];
+
+  int get score => tasks
+      .where((task) =>
+          completedTasks.contains(task.id)) // Nur die erledigten Tasks filtern
+      .fold(0, (sum, task) => sum + task.score);
+
+  List<Task> tasks = [
+    Task(name: 'name', score: 20),
+    Task(name: 'nasdassame', score: -15)
+  ];
+  Set<String> completedTasks = {};
 
   void changeDay(int offset) {
     setState(() {
@@ -50,7 +59,18 @@ class _MainPageState extends State<MainPage> {
               child: ListView.builder(
                   itemCount: tasks.length,
                   itemBuilder: (context, index) {
-                    return TaskDisplay(task: tasks[index]);
+                    Task task = tasks[index];
+                    bool isCompleted = completedTasks.contains(task.id);
+                    return TaskDisplay(
+                        task: task,
+                        isCompleted: isCompleted,
+                        onChanged: (value) {
+                          setState(() {
+                            value
+                                ? completedTasks.add(task.id)
+                                : completedTasks.remove(task.id);
+                          });
+                        });
                   }),
             )
           ],
