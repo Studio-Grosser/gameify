@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gameify/task.dart';
+import 'package:gameify/task_display.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -10,6 +12,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late DateTime currentDate;
   int score = 0;
+  List<Task> tasks = [Task(name: 'name', score: 20)];
 
   void changeDay(int offset) {
     setState(() {
@@ -41,7 +44,15 @@ class _MainPageState extends State<MainPage> {
                     icon: Icon(Icons.chevron_right)),
               ],
             ),
-            Text(score.toString())
+            Text(score.toString()),
+            SizedBox(
+              height: 300,
+              child: ListView.builder(
+                  itemCount: tasks.length,
+                  itemBuilder: (context, index) {
+                    return TaskDisplay(task: tasks[index]);
+                  }),
+            )
           ],
         ),
       ),
