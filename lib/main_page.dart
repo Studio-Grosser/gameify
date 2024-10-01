@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gameify/database/database_service.dart';
+import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/task_service.dart';
+import 'package:gameify/date.dart';
 import 'package:gameify/task.dart';
 import 'package:gameify/task_display.dart';
+import 'package:gameify/utils.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -27,12 +30,22 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       currentDate = currentDate.add(Duration(days: offset));
     });
+    loadDate();
+  }
+
+  Future<void> loadDate() async {
+    DateService().readDate(currentDate.toId()).then((value) {
+      setState(() {
+        completedTasks = value?.completedTaskIds ?? {};
+      });
+    });
   }
 
   @override
   void initState() {
     super.initState();
     currentDate = DateTime.now();
+    loadDate();
     TaskService().readTasks().then((value) {
       setState(() {
         tasks = value;
@@ -87,6 +100,9 @@ class _MainPageState extends State<MainPage> {
                                 ? completedTasks.add(task.id)
                                 : completedTasks.remove(task.id);
                           });
+                          DateService().writeDate(Date(
+                              id: currentDate.toId(),
+                              completedTaskIds: completedTasks));
                         });
                   }),
             )

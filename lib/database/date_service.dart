@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/date.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DateService {
   Future<Date?> readDate(String id) async {
@@ -17,6 +20,8 @@ class DateService {
 
   Future<void> writeDate(Date date) async {
     final db = await DatabaseService.instance.database;
-    await db.insert(Date.tableName, date.toJson());
+    await db.insert(Date.tableName, date.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+    log('date added');
   }
 }
