@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gameify/add_task_page.dart';
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/task_service.dart';
@@ -56,6 +57,21 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return AddTaskPage(
+              onTaskAdded: (task) async {
+                await TaskService().writeTask(task);
+                setState(() {
+                  tasks.add(task);
+                });
+              },
+            );
+          }));
+        },
+        child: Icon(Icons.add),
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -75,15 +91,6 @@ class _MainPageState extends State<MainPage> {
               ],
             ),
             Text(score.toString()),
-            TextField(
-              onSubmitted: (value) async {
-                Task task = Task(name: value, score: 15);
-                await TaskService().writeTask(task);
-                setState(() {
-                  tasks.add(task);
-                });
-              },
-            ),
             SizedBox(
               height: 300,
               child: ListView.builder(
