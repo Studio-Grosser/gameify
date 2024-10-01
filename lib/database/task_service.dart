@@ -12,9 +12,4 @@ class TaskService {
     final db = await DatabaseService.instance.database;
     await db.insert(Task.tableName, task.toJson());
   }
-
-  Future<void> createTask(Task task) async {
-    final db = await DatabaseService.instance.database;
-    await db.insert(Task.tableName, task.toJson());
-  }
 }

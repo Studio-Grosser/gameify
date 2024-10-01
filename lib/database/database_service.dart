@@ -1,16 +1,20 @@
+import 'dart:developer';
+
+import 'package:gameify/date.dart';
 import 'package:gameify/task.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._init();
   static Database? _database;
+  static const dbPath = 'gameify.db';
 
   DatabaseService._init();
 
   Future<Database> get database async {
     if (_database != null) return _database!;
 
-    _database = await _initDB('gameify.db');
+    _database = await _initDB(dbPath);
     return _database!;
   }
 
@@ -26,10 +30,23 @@ class DatabaseService {
         ${Task.score_} INTEGER NOT NULL
       )
       ''');
+
+    await db.execute('''
+      CREATE TABLE ${Date.tableName} (
+        ${Date.id_} TEXT PRIMARY KEY,
+        ${Date.completedTaskIds_} TEXT NOT NULL
+      )
+      ''');
+  }
+
+  Future<void> delteDb() async {
+    await deleteDatabase(dbPath);
+    log('database deleted');
   }
 
   Future<void> close() async {
     final db = await instance.database;
     db.close();
+    log('database closed');
   }
 }

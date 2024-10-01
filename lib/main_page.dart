@@ -46,6 +46,9 @@ class _MainPageState extends State<MainPage> {
       body: SafeArea(
         child: Column(
           children: [
+            IconButton(
+                onPressed: () => DatabaseService.instance.delteDb(),
+                icon: Icon(Icons.delete)),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -62,7 +65,7 @@ class _MainPageState extends State<MainPage> {
             TextField(
               onSubmitted: (value) async {
                 Task task = Task(name: value, score: 15);
-                await TaskService().createTask(task);
+                await TaskService().writeTask(task);
                 setState(() {
                   tasks.add(task);
                 });
