@@ -88,5 +88,14 @@ flutter:
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: assets/fonts/Figtree-Light.ttf
+        - asset: assets/fonts/Figtree-Medium.ttf
+        - asset: assets/fonts/Figtree-Regular.ttf
+        - asset: assets/fonts/Figtree-SemiBold.ttf
+        - asset: assets/fonts/Figtree-Bold.ttf
+
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

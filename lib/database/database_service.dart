@@ -1,7 +1,7 @@
 import 'dart:developer';
 
-import 'package:gameify/date.dart';
-import 'package:gameify/task.dart';
+import 'package:gameify/models/date.dart';
+import 'package:gameify/models/task.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseService {

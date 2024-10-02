@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:gameify/database/database_service.dart';
-import 'package:gameify/date.dart';
+import 'package:gameify/models/date.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DateService {

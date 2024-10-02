@@ -1,5 +1,5 @@
 import 'package:gameify/database/database_service.dart';
-import 'package:gameify/task.dart';
+import 'package:gameify/models/task.dart';
 
 class TaskService {
   Future<List<Task>> readTasks() async {
