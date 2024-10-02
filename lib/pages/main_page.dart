@@ -5,7 +5,7 @@ import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/task_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
-import 'package:gameify/task_display.dart';
+import 'package:gameify/widgets/task_display.dart';
 import 'package:gameify/utils/utils.dart';
 
 class MainPage extends StatefulWidget {
