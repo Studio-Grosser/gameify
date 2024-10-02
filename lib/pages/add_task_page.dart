@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/task.dart';
+import 'package:gameify/models/task.dart';
 
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({super.key, required this.onTaskAdded});
