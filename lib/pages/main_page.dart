@@ -24,6 +24,9 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late DateTime currentDate;
 
+  int highscore = 0;
+  int average = 0;
+
   int get score => tasks
       .where((task) =>
           completedTasks.contains(task.id)) // Nur die erledigten Tasks filtern
@@ -63,6 +66,18 @@ class _MainPageState extends State<MainPage> {
     TaskService().readTasks().then((value) {
       setState(() {
         tasks = value;
+      });
+    });
+
+    DateService().getHighestScore().then((value) {
+      setState(() {
+        highscore = value ?? 0;
+      });
+    });
+
+    DateService().getHighestScore().then((value) {
+      setState(() {
+        average = value ?? 0;
       });
     });
   }
@@ -119,10 +134,11 @@ class _MainPageState extends State<MainPage> {
                           value: negativeScore, isDefaultNegative: true),
                     ],
                   )),
-              const Row(
+              Row(
                 children: [
-                  MetricDisplay(metric: '153', unit: 'average'),
-                  MetricDisplay(metric: '164', unit: 'highscore'),
+                  MetricDisplay(metric: average.toString(), unit: 'average'),
+                  MetricDisplay(
+                      metric: highscore.toString(), unit: 'highscore'),
                 ],
               ),
               const SizedBox(height: 100),
@@ -144,7 +160,8 @@ class _MainPageState extends State<MainPage> {
                             });
                             DateService().writeDate(Date(
                                 id: currentDate.toId(),
-                                completedTaskIds: completedTasks));
+                                completedTaskIds: completedTasks,
+                                score: score));
                           });
                     }),
               )

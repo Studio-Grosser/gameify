@@ -24,4 +24,28 @@ class DateService {
         conflictAlgorithm: ConflictAlgorithm.replace);
     log('date added');
   }
+
+  Future<int?> getHighestScore() async {
+    final db = await DatabaseService.instance.database;
+    final List<Map<String, dynamic>> result = await db
+        .rawQuery('SELECT MAX(score) as max_score FROM ${Date.tableName}');
+
+    if (result.isNotEmpty && result.first['max_score'] != null) {
+      return result.first['max_score'] as int;
+    } else {
+      return null;
+    }
+  }
+
+  Future<int?> getAverageScore() async {
+    final db = await DatabaseService.instance.database;
+    final List<Map<String, dynamic>> result = await db
+        .rawQuery('SELECT AVG(score) as avg_score FROM ${Date.tableName}');
+
+    if (result.isNotEmpty && result.first['avg_score'] != null) {
+      return result.first['avg_score'] as int;
+    } else {
+      return null;
+    }
+  }
 }

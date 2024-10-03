@@ -34,7 +34,8 @@ class DatabaseService {
     await db.execute('''
       CREATE TABLE ${Date.tableName} (
         ${Date.id_} TEXT PRIMARY KEY,
-        ${Date.completedTaskIds_} TEXT NOT NULL
+        ${Date.completedTaskIds_} TEXT NOT NULL,
+        ${Date.score_} INTEGER
       )
       ''');
   }
