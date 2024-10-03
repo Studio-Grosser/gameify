@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/pages/add_task_page.dart';
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/task_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
+import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/task_display.dart';
 import 'package:gameify/utils/utils.dart';
 
@@ -57,8 +59,11 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
+      floatingActionButton: StyledFab(
+        icon: FontAwesomeIcons.plus,
+        width: 65,
+        height: 65,
+        onTap: () {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return AddTaskPage(
               onTaskAdded: (task) async {
@@ -70,7 +75,6 @@ class _MainPageState extends State<MainPage> {
             );
           }));
         },
-        child: Icon(Icons.add),
       ),
       body: SafeArea(
         child: Column(

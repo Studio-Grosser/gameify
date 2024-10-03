@@ -90,7 +90,7 @@ flutter:
   #         weight: 700
   #
   fonts:
-    - family: Montserrat
+    - family: Figtree
       fonts:
         - asset: assets/fonts/Figtree-Light.ttf
         - asset: assets/fonts/Figtree-Medium.ttf

@@ -26,5 +26,12 @@ class Themes {
           height: 1,
           fontSize: 14,
         ),
+        bodyLarge: TextStyle(
+          fontFamily: 'Figtree',
+          fontWeight: FontWeight.w600,
+          color: primary,
+          height: 1,
+          fontSize: 18,
+        ),
       ));
 }

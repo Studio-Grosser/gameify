@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/widgets/styled_container.dart';
+import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
 
 class AddTaskPage extends StatefulWidget {
@@ -19,6 +20,10 @@ class _AddTaskPageState extends State<AddTaskPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: StyledFab(
+        icon: FontAwesomeIcons.chevronUp,
+        text: 'add task',
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -37,7 +42,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   ));
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.check))
+                icon: Icon(
+                  Icons.check,
+                ))
           ],
         ),
       ),
