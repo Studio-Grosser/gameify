@@ -29,6 +29,6 @@ class StyledContainer extends StatelessWidget {
               width: 2, color: Theme.of(context).colorScheme.secondary),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
-        child: Center(child: child));
+        child: child);
   }
 }

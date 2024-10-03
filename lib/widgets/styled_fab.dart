@@ -23,10 +23,9 @@ class StyledFab extends StatelessWidget {
     return GestureDetector(
         onTap: onTap,
         child: Container(
-            alignment: Alignment.center,
             height: height,
             width: width,
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 30),
+            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 35),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(50),

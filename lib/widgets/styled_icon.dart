@@ -15,7 +15,7 @@ class StyledIcon extends StatelessWidget {
         borderRadius: 25,
         width: 50,
         height: 50,
-        child: FaIcon(icon),
+        child: Center(child: FaIcon(icon)),
       ),
     );
   }
