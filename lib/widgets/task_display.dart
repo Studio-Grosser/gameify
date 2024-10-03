@@ -18,6 +18,7 @@ class TaskDisplay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StyledContainer(
+      hideBorder: true,
       margin: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
         children: [

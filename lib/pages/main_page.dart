@@ -7,6 +7,7 @@ import 'package:gameify/database/task_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/utils/font.dart';
+import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/task_display.dart';
@@ -102,18 +103,29 @@ class _MainPageState extends State<MainPage> {
                 currentDate.format(),
                 style: Font.h2,
               ),
+              const SizedBox(height: 20),
               StyledContainer(
+                  padding: const EdgeInsets.all(15),
+                  hideBorder: true,
                   child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ValueDisplay(value: positiveScore),
+                      Text(
+                        score.toString(),
+                        style: Font.h1,
+                      ),
+                      ValueDisplay(
+                          value: negativeScore, isDefaultNegative: true),
+                    ],
+                  )),
+              const Row(
                 children: [
-                  ValueDisplay(value: positiveScore),
-                  Text(
-                    score.toString(),
-                    style: Font.h1,
-                  ),
-                  ValueDisplay(value: negativeScore, isDefaultNegative: true),
+                  MetricDisplay(metric: '153', unit: 'average'),
+                  MetricDisplay(metric: '164', unit: 'highscore'),
                 ],
-              )),
+              ),
+              const SizedBox(height: 100),
               Expanded(
                 child: ListView.builder(
                     shrinkWrap: true,
