@@ -12,6 +12,7 @@ class Themes {
 
   static ThemeData lightTheme = ThemeData(
       brightness: Brightness.light,
+      scaffoldBackgroundColor: surface,
       colorScheme: const ColorScheme.light(
         primary: accent,
         secondary: secondary,

@@ -77,47 +77,50 @@ class _MainPageState extends State<MainPage> {
         },
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            IconButton(
-                onPressed: () => DatabaseService.instance.delteDb(),
-                icon: Icon(Icons.delete)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                    onPressed: () => changeDay(-1),
-                    icon: const Icon(Icons.chevron_left)),
-                Text(currentDate.toString()),
-                IconButton(
-                    onPressed: () => changeDay(1),
-                    icon: const Icon(Icons.chevron_right)),
-              ],
-            ),
-            Text(score.toString()),
-            SizedBox(
-              height: 300,
-              child: ListView.builder(
-                  itemCount: tasks.length,
-                  itemBuilder: (context, index) {
-                    Task task = tasks[index];
-                    bool isCompleted = completedTasks.contains(task.id);
-                    return TaskDisplay(
-                        task: task,
-                        isCompleted: isCompleted,
-                        onChanged: (value) {
-                          setState(() {
-                            value
-                                ? completedTasks.add(task.id)
-                                : completedTasks.remove(task.id);
+        child: Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            children: [
+              IconButton(
+                  onPressed: () => DatabaseService.instance.delteDb(),
+                  icon: Icon(Icons.delete)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () => changeDay(-1),
+                      icon: const Icon(Icons.chevron_left)),
+                  Text(currentDate.toString()),
+                  IconButton(
+                      onPressed: () => changeDay(1),
+                      icon: const Icon(Icons.chevron_right)),
+                ],
+              ),
+              Text(score.toString()),
+              SizedBox(
+                height: 300,
+                child: ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (context, index) {
+                      Task task = tasks[index];
+                      bool isCompleted = completedTasks.contains(task.id);
+                      return TaskDisplay(
+                          task: task,
+                          isCompleted: isCompleted,
+                          onChanged: (value) {
+                            setState(() {
+                              value
+                                  ? completedTasks.add(task.id)
+                                  : completedTasks.remove(task.id);
+                            });
+                            DateService().writeDate(Date(
+                                id: currentDate.toId(),
+                                completedTaskIds: completedTasks));
                           });
-                          DateService().writeDate(Date(
-                              id: currentDate.toId(),
-                              completedTaskIds: completedTasks));
-                        });
-                  }),
-            )
-          ],
+                    }),
+              )
+            ],
+          ),
         ),
       ),
     );

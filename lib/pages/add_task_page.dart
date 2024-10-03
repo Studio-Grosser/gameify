@@ -38,7 +38,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     }
     widget.onTaskAdded(Task(
       name: taskTextController.text,
-      score: int.parse(taskValueController.text),
+      score: int.parse(taskValueController.text) * (isScorePositive ? 1 : -1),
     ));
     Navigator.pop(context);
   }
