@@ -6,9 +6,12 @@ import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/task_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
+import 'package:gameify/utils/font.dart';
+import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/task_display.dart';
 import 'package:gameify/utils/utils.dart';
+import 'package:gameify/widgets/value_display.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -26,8 +29,15 @@ class _MainPageState extends State<MainPage> {
       .fold(0, (sum, task) => sum + task.score);
 
   List<Task> tasks = [];
-
   Set<String> completedTasks = {};
+
+  int get positiveScore => tasks
+      .where((task) => completedTasks.contains(task.id) && task.score > 0)
+      .fold(0, (sum, task) => sum + task.score);
+
+  int get negativeScore => tasks
+      .where((task) => completedTasks.contains(task.id) && task.score < 0)
+      .fold(0, (sum, task) => sum + task.score);
 
   void changeDay(int offset) {
     setState(() {
@@ -83,24 +93,27 @@ class _MainPageState extends State<MainPage> {
         child: Padding(
           padding: const EdgeInsets.all(30.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               IconButton(
                   onPressed: () => DatabaseService.instance.delteDb(),
-                  icon: Icon(Icons.delete)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () => changeDay(-1),
-                      icon: const Icon(Icons.chevron_left)),
-                  Text(currentDate.toString()),
-                  IconButton(
-                      onPressed: () => changeDay(1),
-                      icon: const Icon(Icons.chevron_right)),
-                ],
+                  icon: const Icon(Icons.delete)),
+              Text(
+                currentDate.format(),
+                style: Font.h2,
               ),
-              Text(score.toString()),
+              StyledContainer(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ValueDisplay(value: positiveScore),
+                  Text(
+                    score.toString(),
+                    style: Font.h1,
+                  ),
+                  ValueDisplay(value: negativeScore, isDefaultNegative: true),
+                ],
+              )),
               Expanded(
                 child: ListView.builder(
                     shrinkWrap: true,

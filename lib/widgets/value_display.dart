@@ -3,11 +3,20 @@ import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 
 class ValueDisplay extends StatelessWidget {
-  const ValueDisplay({super.key, required this.value});
+  const ValueDisplay(
+      {super.key, required this.value, this.isDefaultNegative = false});
   final int value;
+  final bool isDefaultNegative;
 
-  Color get color => value >= 0 ? Themes.success : Themes.warning;
-  String get text => value >= 0 ? '+$value' : '$value';
+  Color get color {
+    if (value == 0) return isDefaultNegative ? Themes.warning : Themes.success;
+    return value > 0 ? Themes.success : Themes.warning;
+  }
+
+  String get text {
+    if (value == 0) return isDefaultNegative ? '-0' : '+0';
+    return value > 0 ? '+$value' : '$value';
+  }
 
   @override
   Widget build(BuildContext context) {
