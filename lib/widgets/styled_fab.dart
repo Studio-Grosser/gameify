@@ -9,12 +9,14 @@ class StyledFab extends StatelessWidget {
       this.text,
       this.onTap,
       this.height,
-      this.width});
+      this.width,
+      this.padding = const EdgeInsets.symmetric(vertical: 25, horizontal: 35)});
   final IconData icon;
   final String? text;
   final Function()? onTap;
   final double? height;
   final double? width;
+  final EdgeInsets padding;
 
   Widget get iconWidget => FaIcon(icon, color: Themes.surface, size: 18);
 
@@ -25,7 +27,7 @@ class StyledFab extends StatelessWidget {
         child: Container(
             height: height,
             width: width,
-            padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 35),
+            padding: padding,
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.circular(50),
@@ -35,20 +37,20 @@ class StyledFab extends StatelessWidget {
                       blurRadius: 20,
                       offset: const Offset(0, 10))
                 ]),
-            child: text == null
-                ? iconWidget
-                : Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(text!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: Themes.surface)),
-                      const SizedBox(width: 15),
-                      iconWidget
-                    ],
-                  )));
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (text != null) ...[
+                  Text(text!,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(color: Themes.surface)),
+                  const SizedBox(width: 15),
+                ],
+                iconWidget
+              ],
+            )));
   }
 }

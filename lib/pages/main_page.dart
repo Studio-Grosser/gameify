@@ -56,30 +56,34 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  void openAddTaskPage() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return AddTaskPage(
+        onTaskAdded: (task) async {
+          await TaskService().writeTask(task);
+          setState(() {
+            tasks.add(task);
+          });
+        },
+      );
+    }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: StyledFab(
+        padding: const EdgeInsets.all(0),
+        height: 70,
+        width: 70,
         icon: FontAwesomeIcons.plus,
-        width: 65,
-        height: 65,
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return AddTaskPage(
-              onTaskAdded: (task) async {
-                await TaskService().writeTask(task);
-                setState(() {
-                  tasks.add(task);
-                });
-              },
-            );
-          }));
-        },
+        onTap: openAddTaskPage,
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(30.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                   onPressed: () => DatabaseService.instance.delteDb(),
@@ -97,9 +101,9 @@ class _MainPageState extends State<MainPage> {
                 ],
               ),
               Text(score.toString()),
-              SizedBox(
-                height: 300,
+              Expanded(
                 child: ListView.builder(
+                    shrinkWrap: true,
                     itemCount: tasks.length,
                     itemBuilder: (context, index) {
                       Task task = tasks[index];
