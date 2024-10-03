@@ -19,6 +19,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController taskTextController = TextEditingController();
   final TextEditingController taskValueController =
       TextEditingController(text: '10');
+  final FocusNode taskValueFocusNode = FocusNode();
 
   bool isScorePositive = true;
 
@@ -31,19 +32,24 @@ class _AddTaskPageState extends State<AddTaskPage> {
     });
   }
 
+  void submitTask() {
+    if (taskTextController.text.isEmpty || taskValueController.text.isEmpty) {
+      return;
+    }
+    widget.onTaskAdded(Task(
+      name: taskTextController.text,
+      score: int.parse(taskValueController.text),
+    ));
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: StyledFab(
         text: 'add task',
         icon: FontAwesomeIcons.chevronUp,
-        onTap: () {
-          widget.onTaskAdded(Task(
-            name: taskTextController.text,
-            score: int.parse(taskValueController.text),
-          ));
-          Navigator.pop(context);
-        },
+        onTap: submitTask,
       ),
       body: SafeArea(
         child: Padding(
@@ -58,6 +64,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               ),
               const Spacer(flex: 1),
               TextField(
+                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
                   controller: taskTextController,
                   style: Font.h2,
                   maxLength: 30,
@@ -72,37 +79,46 @@ class _AddTaskPageState extends State<AddTaskPage> {
               const SizedBox(height: 30),
               Row(
                 children: [
-                  StyledContainer(
-                      height: 70,
-                      borderRadius: 50,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 5, horizontal: 25),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            width: 25,
-                            child: Text(
-                              scorePrefix,
-                              style: Font.h1,
+                  GestureDetector(
+                    onTap: () => taskValueFocusNode.requestFocus(),
+                    child: StyledContainer(
+                        height: 70,
+                        borderRadius: 50,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 25),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            SizedBox(
+                              width: 25,
+                              child: Text(
+                                scorePrefix,
+                                style: Font.h1,
+                              ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 50,
-                            child: TextField(
-                              cursorColor: Themes.accent,
-                              cursorWidth: 3,
-                              controller: taskValueController,
-                              style: Font.h1,
-                              maxLength: 2,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  counter: const SizedBox()),
-                            ),
-                          )
-                        ],
-                      )),
+                            SizedBox(
+                              width: 50,
+                              child: TextField(
+                                focusNode: taskValueFocusNode,
+                                onTapOutside: (_) =>
+                                    FocusScope.of(context).unfocus(),
+                                cursorColor: Themes.accent,
+                                cursorWidth: 3,
+                                controller: taskValueController,
+                                style: Font.h1,
+                                maxLength: 2,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                    hintText: '10',
+                                    hintStyle: Font.h1
+                                        .copyWith(color: Themes.secondary),
+                                    border: InputBorder.none,
+                                    counter: const SizedBox()),
+                              ),
+                            )
+                          ],
+                        )),
+                  ),
                   const SizedBox(width: 5),
                   GestureDetector(
                     onTap: () => changeScorePrefix(),
