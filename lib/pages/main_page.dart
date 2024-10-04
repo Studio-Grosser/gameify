@@ -1,4 +1,6 @@
+import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/pages/add_task_page.dart';
 import 'package:gameify/database/database_service.dart';
@@ -62,6 +64,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       value ? completedTasks.add(task.id) : completedTasks.remove(task.id);
     });
+    HapticFeedback.mediumImpact();
     DateService().writeDate(Date(
         id: currentDate.toId(),
         completedTaskIds: completedTasks,
@@ -155,17 +158,21 @@ class _MainPageState extends State<MainPage> {
               ),
               const SizedBox(height: 100),
               Expanded(
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: tasks.length,
-                    itemBuilder: (context, index) {
-                      Task task = tasks[index];
-                      bool isCompleted = completedTasks.contains(task.id);
-                      return TaskDisplay(
-                          task: task,
-                          isCompleted: isCompleted,
-                          onChanged: (value) => onTaskChange(value, task));
-                    }),
+                child: FadingEdgeScrollView.fromScrollView(
+                  child: ListView.builder(
+                      controller: ScrollController(),
+                      padding: const EdgeInsets.only(bottom: 60),
+                      shrinkWrap: true,
+                      itemCount: tasks.length,
+                      itemBuilder: (context, index) {
+                        Task task = tasks[index];
+                        bool isCompleted = completedTasks.contains(task.id);
+                        return TaskDisplay(
+                            task: task,
+                            isCompleted: isCompleted,
+                            onChanged: (value) => onTaskChange(value, task));
+                      }),
+                ),
               )
             ],
           ),

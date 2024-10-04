@@ -39,6 +39,7 @@ dependencies:
   sqflite: ^2.3.3+2
   font_awesome_flutter: ^10.7.0
   animated_list_plus: ^0.5.2
+  fading_edge_scrollview: ^4.1.1
 
 dev_dependencies:
   flutter_test:
