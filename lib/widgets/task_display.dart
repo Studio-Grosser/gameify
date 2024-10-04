@@ -17,26 +17,29 @@ class TaskDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StyledContainer(
-      hideBorder: true,
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      child: Row(
-        children: [
-          Checkbox(
-              activeColor: Themes.primary,
-              visualDensity: VisualDensity.comfortable,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5)),
-              side: WidgetStateBorderSide.resolveWith(
-                (states) => const BorderSide(width: 2, color: Themes.primary),
-              ),
-              value: isCompleted,
-              onChanged: (value) => onChanged(value ?? false)),
-          const SizedBox(width: 10),
-          Text(task.name, style: Font.b1),
-          const Spacer(),
-          ValueDisplay(value: task.score),
-        ],
+    return GestureDetector(
+      onTap: () => onChanged(!isCompleted),
+      child: StyledContainer(
+        hideBorder: true,
+        margin: const EdgeInsets.symmetric(vertical: 5),
+        child: Row(
+          children: [
+            Checkbox(
+                activeColor: Themes.primary,
+                visualDensity: VisualDensity.comfortable,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
+                side: WidgetStateBorderSide.resolveWith(
+                  (states) => const BorderSide(width: 2, color: Themes.primary),
+                ),
+                value: isCompleted,
+                onChanged: (value) => onChanged(value ?? false)),
+            const SizedBox(width: 10),
+            Text(task.name, style: Font.b1),
+            const Spacer(),
+            ValueDisplay(value: task.score),
+          ],
+        ),
       ),
     );
   }
