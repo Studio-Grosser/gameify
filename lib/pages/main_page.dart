@@ -112,7 +112,9 @@ class _MainPageState extends State<MainPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               IconButton(
-                  onPressed: () => DatabaseService.instance.delteDb(),
+                  onPressed: () {
+                    DatabaseService.instance.delteDb();
+                  },
                   icon: const Icon(Icons.delete)),
               Text(
                 currentDate.format(),
