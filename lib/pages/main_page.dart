@@ -1,4 +1,6 @@
+import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,9 +11,11 @@ import 'package:gameify/database/task_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/utils/font.dart';
+import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
+import 'package:gameify/widgets/styled_icon.dart';
 import 'package:gameify/widgets/task_display.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:gameify/widgets/value_display.dart';
@@ -34,6 +38,17 @@ class _MainPageState extends State<MainPage> {
           completedTasks.contains(task.id)) // Nur die erledigten Tasks filtern
       .fold(0, (sum, task) => sum + task.score);
 
+  List<Task> get filteredTasks {
+    switch (currentFilter) {
+      case Filter.positives:
+        return tasks.where((task) => task.score > 0).toList();
+      case Filter.negatives:
+        return tasks.where((task) => task.score < 0).toList();
+      default:
+        return tasks;
+    }
+  }
+
   List<Task> tasks = [];
   Set<String> completedTasks = {};
 
@@ -45,9 +60,9 @@ class _MainPageState extends State<MainPage> {
       .where((task) => completedTasks.contains(task.id) && task.score < 0)
       .fold(0, (sum, task) => sum + task.score);
 
-  void changeDay(int offset) {
+  void changeDate(DateTime date) {
     setState(() {
-      currentDate = currentDate.add(Duration(days: offset));
+      currentDate = date;
     });
     loadDate();
   }
@@ -59,6 +74,13 @@ class _MainPageState extends State<MainPage> {
       });
     });
   }
+
+  Filter currentFilter = Filter.all;
+  Map<Filter, String> filters = {
+    Filter.all: 'All',
+    Filter.positives: 'Positives',
+    Filter.negatives: 'Negatives',
+  };
 
   void onTaskChange(bool value, Task task) {
     setState(() {
@@ -108,6 +130,25 @@ class _MainPageState extends State<MainPage> {
     }));
   }
 
+  void showDatePicker() {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+              height: 450,
+              padding: const EdgeInsets.all(10),
+              child: DatePicker(
+                  onDateSelected: (newDate) => changeDate(newDate),
+                  padding: const EdgeInsets.all(20),
+                  enabledCellsTextStyle: Font.b1,
+                  selectedCellTextStyle:
+                      Font.b1.copyWith(color: Themes.surface),
+                  currentDateTextStyle: Font.b1.copyWith(color: Themes.accent),
+                  maxDate: DateTime(2024, 12, 31),
+                  minDate: DateTime(2021, 1, 1)));
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,14 +165,20 @@ class _MainPageState extends State<MainPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IconButton(
-                  onPressed: () {
-                    DatabaseService.instance.delteDb();
-                  },
-                  icon: const Icon(Icons.delete)),
-              Text(
-                currentDate.format(),
-                style: Font.h2,
+              Row(
+                children: [
+                  Text(
+                    currentDate.format(),
+                    style: Font.h2,
+                  ),
+                  const Spacer(),
+                  StyledIcon(
+                    icon: FontAwesomeIcons.trashCan,
+                    onTap: () => DatabaseService.instance.delteDb(),
+                  ),
+                  StyledIcon(
+                      icon: FontAwesomeIcons.calendar, onTap: showDatePicker)
+                ],
               ),
               const SizedBox(height: 20),
               StyledContainer(
@@ -157,15 +204,30 @@ class _MainPageState extends State<MainPage> {
                 ],
               ),
               const SizedBox(height: 100),
+              SizedBox(
+                width: double.infinity,
+                child: CupertinoSlidingSegmentedControl<Filter>(
+                    backgroundColor: Themes.tertiary,
+                    thumbColor: Themes.surface,
+                    groupValue: currentFilter,
+                    children: filters.map((key, value) =>
+                        MapEntry(key, Text(value, style: Font.b1.copyWith()))),
+                    onValueChanged: (value) {
+                      setState(() {
+                        currentFilter = value ?? Filter.all;
+                      });
+                    }),
+              ),
+              SizedBox(height: 10),
               Expanded(
                 child: FadingEdgeScrollView.fromScrollView(
                   child: ListView.builder(
                       controller: ScrollController(),
                       padding: const EdgeInsets.only(bottom: 60),
                       shrinkWrap: true,
-                      itemCount: tasks.length,
+                      itemCount: filteredTasks.length,
                       itemBuilder: (context, index) {
-                        Task task = tasks[index];
+                        Task task = filteredTasks[index];
                         bool isCompleted = completedTasks.contains(task.id);
                         return TaskDisplay(
                             task: task,

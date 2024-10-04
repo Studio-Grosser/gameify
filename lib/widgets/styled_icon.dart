@@ -13,9 +13,9 @@ class StyledIcon extends StatelessWidget {
       onTap: onTap,
       child: StyledContainer(
         borderRadius: 25,
-        width: 50,
-        height: 50,
-        child: Center(child: FaIcon(icon)),
+        width: 45,
+        height: 45,
+        child: Center(child: FaIcon(icon, size: 20)),
       ),
     );
   }
