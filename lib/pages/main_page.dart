@@ -58,6 +58,16 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
+  void onTaskChange(bool value, Task task) {
+    setState(() {
+      value ? completedTasks.add(task.id) : completedTasks.remove(task.id);
+    });
+    DateService().writeDate(Date(
+        id: currentDate.toId(),
+        completedTaskIds: completedTasks,
+        score: score));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -154,17 +164,7 @@ class _MainPageState extends State<MainPage> {
                       return TaskDisplay(
                           task: task,
                           isCompleted: isCompleted,
-                          onChanged: (value) {
-                            setState(() {
-                              value
-                                  ? completedTasks.add(task.id)
-                                  : completedTasks.remove(task.id);
-                            });
-                            DateService().writeDate(Date(
-                                id: currentDate.toId(),
-                                completedTaskIds: completedTasks,
-                                score: score));
-                          });
+                          onChanged: (value) => onTaskChange(value, task));
                     }),
               )
             ],
