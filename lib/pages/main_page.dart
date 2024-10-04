@@ -31,7 +31,7 @@ class _MainPageState extends State<MainPage> {
   late DateTime currentDate;
 
   int highscore = 0;
-  int average = 0;
+  double average = 0;
 
   int get score => tasks
       .where((task) =>
@@ -65,6 +65,8 @@ class _MainPageState extends State<MainPage> {
       currentDate = date;
     });
     loadDate();
+    loadAverage();
+    loadHighScore();
   }
 
   Future<void> loadDate() async {
@@ -82,37 +84,48 @@ class _MainPageState extends State<MainPage> {
     Filter.negatives: 'Negatives',
   };
 
-  void onTaskChange(bool value, Task task) {
+  Future<void> onTaskChange(bool value, Task task) async {
     setState(() {
       value ? completedTasks.add(task.id) : completedTasks.remove(task.id);
     });
     HapticFeedback.mediumImpact();
-    DateService().writeDate(Date(
+    await DateService().writeDate(Date(
         id: currentDate.toId(),
         completedTaskIds: completedTasks,
         score: score));
+
+    loadAverage();
+    loadHighScore();
   }
 
   @override
   void initState() {
     super.initState();
     currentDate = DateTime.now();
+
     loadDate();
+    loadAverage();
+    loadHighScore();
+
     TaskService().readTasks().then((value) {
       setState(() {
         tasks = value;
       });
     });
+  }
 
+  void loadHighScore() {
     DateService().getHighestScore().then((value) {
       setState(() {
         highscore = value ?? 0;
       });
     });
+  }
 
-    DateService().getHighestScore().then((value) {
+  void loadAverage() {
+    DateService().getAverageScore().then((value) {
       setState(() {
-        average = value ?? 0;
+        average = value ?? 0.0;
       });
     });
   }

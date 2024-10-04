@@ -37,13 +37,13 @@ class DateService {
     }
   }
 
-  Future<int?> getAverageScore() async {
+  Future<double?> getAverageScore() async {
     final db = await DatabaseService.instance.database;
     final List<Map<String, dynamic>> result = await db
         .rawQuery('SELECT AVG(score) as avg_score FROM ${Date.tableName}');
 
     if (result.isNotEmpty && result.first['avg_score'] != null) {
-      return result.first['avg_score'] as int;
+      return result.first['avg_score'] as double;
     } else {
       return null;
     }
