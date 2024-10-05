@@ -8,8 +8,9 @@ import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
 
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key, required this.onTaskAdded});
-  final Function(Task) onTaskAdded;
+  const AddTaskPage({super.key, required this.onSubmit, this.initialTask});
+  final Function(Task) onSubmit;
+  final Task? initialTask;
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
@@ -17,14 +18,15 @@ class AddTaskPage extends StatefulWidget {
 
 class _AddTaskPageState extends State<AddTaskPage> {
   final TextEditingController taskTextController = TextEditingController();
-  final TextEditingController taskValueController =
-      TextEditingController(text: '10');
+  final TextEditingController taskValueController = TextEditingController();
   final FocusNode taskValueFocusNode = FocusNode();
 
   bool isScorePositive = true;
 
   String get scorePrefix => isScorePositive ? '+' : '-';
   Color get scoreColor => isScorePositive ? Themes.success : Themes.warning;
+  String get submitText =>
+      widget.initialTask == null ? 'add task' : 'edit task';
 
   void changeScorePrefix() {
     setState(() {
@@ -36,7 +38,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if (taskTextController.text.isEmpty || taskValueController.text.isEmpty) {
       return;
     }
-    widget.onTaskAdded(Task(
+    widget.onSubmit(Task(
       name: taskTextController.text,
       score: int.parse(taskValueController.text) * (isScorePositive ? 1 : -1),
     ));
@@ -44,10 +46,22 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.initialTask != null) {
+      taskTextController.text = widget.initialTask!.name;
+      isScorePositive = widget.initialTask!.score >= 0;
+      taskValueController.text = widget.initialTask!.score.abs().toString();
+    } else {
+      taskValueController.text = '10';
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: StyledFab(
-        text: 'add task',
+        text: submitText,
         icon: FontAwesomeIcons.chevronUp,
         onTap: submitTask,
       ),

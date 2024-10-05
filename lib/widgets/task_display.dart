@@ -12,11 +12,13 @@ class TaskDisplay extends StatelessWidget {
       required this.task,
       required this.isCompleted,
       required this.onChanged,
-      required this.onDelete});
+      required this.onDelete,
+      required this.onEdit});
   final Task task;
   final bool isCompleted;
   final Function(bool value) onChanged;
   final VoidCallback onDelete;
+  final VoidCallback onEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +53,8 @@ class TaskDisplay extends StatelessWidget {
                   onSelected: (value) {
                     if (value == 2) {
                       onDelete();
+                    } else if (value == 1) {
+                      onEdit();
                     }
                   },
                   menuPadding: EdgeInsets.zero,

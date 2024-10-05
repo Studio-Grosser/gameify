@@ -101,11 +101,26 @@ class _MainPageState extends State<MainPage> {
     loadHighScore();
   }
 
-  void onTaskDelete(Task task) {
-    TaskService().updateActiveState(task.id, false);
+  Future<void> onTaskDelete(Task task) async {
+    await TaskService().updateActiveState(task.id, false);
     setState(() {
       task.toggleActive();
     });
+  }
+
+  void onTaskEdit(Task task) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return AddTaskPage(
+        initialTask: task,
+        onSubmit: (updatedTask) async {
+          await onTaskDelete(task);
+          await TaskService().writeTask(updatedTask);
+          setState(() {
+            rawTasks.add(updatedTask);
+          });
+        },
+      );
+    }));
   }
 
   @override
@@ -143,7 +158,7 @@ class _MainPageState extends State<MainPage> {
   void openAddTaskPage() {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return AddTaskPage(
-        onTaskAdded: (task) async {
+        onSubmit: (task) async {
           await TaskService().writeTask(task);
           setState(() {
             rawTasks.add(task);
@@ -255,6 +270,7 @@ class _MainPageState extends State<MainPage> {
                           isCompleted: isCompleted,
                           onChanged: (value) => onTaskChange(value, task),
                           onDelete: () => onTaskDelete(task),
+                          onEdit: () => onTaskEdit(task),
                         );
                       }),
                 ),
