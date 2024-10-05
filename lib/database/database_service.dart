@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:gameify/database/task_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
 import 'package:sqflite/sqflite.dart';
@@ -28,7 +27,8 @@ class DatabaseService {
       CREATE TABLE ${Task.tableName} (
         ${Task.id_} TEXT PRIMARY KEY,
         ${Task.name_} TEXT NOT NULL,
-        ${Task.score_} INTEGER NOT NULL
+        ${Task.score_} INTEGER NOT NULL,
+        ${Task.isActive_} INTEGER NOT NULL
       )
       ''');
 

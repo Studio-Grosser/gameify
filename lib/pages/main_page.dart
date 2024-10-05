@@ -49,7 +49,10 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  List<Task> tasks = [];
+  List<Task> rawTasks = [];
+  List<Task> get tasks => rawTasks
+      .where((task) => task.isActive || completedTasks.contains(task.id))
+      .toList();
   Set<String> completedTasks = {};
 
   int get positiveScore => tasks
@@ -98,6 +101,13 @@ class _MainPageState extends State<MainPage> {
     loadHighScore();
   }
 
+  void onTaskDelete(Task task) {
+    TaskService().updateActiveState(task.id, false);
+    setState(() {
+      task.toggleActive();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -109,7 +119,7 @@ class _MainPageState extends State<MainPage> {
 
     TaskService().readTasks().then((value) {
       setState(() {
-        tasks = value;
+        rawTasks = value;
       });
     });
   }
@@ -136,7 +146,7 @@ class _MainPageState extends State<MainPage> {
         onTaskAdded: (task) async {
           await TaskService().writeTask(task);
           setState(() {
-            tasks.add(task);
+            rawTasks.add(task);
           });
         },
       );
@@ -241,9 +251,11 @@ class _MainPageState extends State<MainPage> {
                         Task task = filteredTasks[index];
                         bool isCompleted = completedTasks.contains(task.id);
                         return TaskDisplay(
-                            task: task,
-                            isCompleted: isCompleted,
-                            onChanged: (value) => onTaskChange(value, task));
+                          task: task,
+                          isCompleted: isCompleted,
+                          onChanged: (value) => onTaskChange(value, task),
+                          onDelete: () => onTaskDelete(task),
+                        );
                       }),
                 ),
               )

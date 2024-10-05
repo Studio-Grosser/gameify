@@ -12,4 +12,9 @@ class TaskService {
     final db = await DatabaseService.instance.database;
     await db.insert(Task.tableName, task.toJson());
   }
+
+  Future<void> updateActiveState(String taskId, bool isActive) async {
+    final db = await DatabaseService.instance.database;
+    await db.update(Task.tableName, {Task.isActive_: isActive ? 1 : 0});
+  }
 }

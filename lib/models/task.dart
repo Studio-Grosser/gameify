@@ -4,8 +4,13 @@ class Task {
   final String id;
   final String name;
   final int score;
+  bool isActive;
 
-  Task({String? id, required this.name, required this.score})
+  Task(
+      {String? id,
+      required this.name,
+      required this.score,
+      this.isActive = true})
       : id = id ?? const Uuid().v4();
 
   // Identifier for database
@@ -14,16 +19,17 @@ class Task {
   static const String id_ = '_id';
   static const String name_ = 'name';
   static const String score_ = 'score';
+  static const String isActive_ = 'active';
 
-  Map<String, dynamic> toJson() => {
-        id_: id,
-        name_: name,
-        score_: score,
-      };
+  void toggleActive() => isActive = !isActive;
+
+  Map<String, dynamic> toJson() =>
+      {id_: id, name_: name, score_: score, isActive_: isActive ? 1 : 0};
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
         id: json[id_],
         name: json[name_],
         score: json[score_],
+        isActive: json[isActive_] == 1,
       );
 }
