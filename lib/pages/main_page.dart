@@ -13,6 +13,7 @@ import 'package:gameify/models/task.dart';
 import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/metric_display.dart';
+import 'package:gameify/widgets/no_task_info.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
@@ -256,24 +257,27 @@ class _MainPageState extends State<MainPage> {
               ),
               const SizedBox(height: 10),
               Expanded(
-                child: FadingEdgeScrollView.fromScrollView(
-                  child: ListView.builder(
-                      controller: ScrollController(),
-                      padding: const EdgeInsets.only(bottom: 60),
-                      shrinkWrap: true,
-                      itemCount: filteredTasks.length,
-                      itemBuilder: (context, index) {
-                        Task task = filteredTasks[index];
-                        bool isCompleted = completedTasks.contains(task.id);
-                        return TaskDisplay(
-                          task: task,
-                          isCompleted: isCompleted,
-                          onChanged: (value) => onTaskChange(value, task),
-                          onDelete: () => onTaskDelete(task),
-                          onEdit: () => onTaskEdit(task),
-                        );
-                      }),
-                ),
+                child: filteredTasks.isEmpty
+                    ? const NoTaskInfo()
+                    : FadingEdgeScrollView.fromScrollView(
+                        child: ListView.builder(
+                            controller: ScrollController(),
+                            padding: const EdgeInsets.only(bottom: 60),
+                            shrinkWrap: true,
+                            itemCount: filteredTasks.length,
+                            itemBuilder: (context, index) {
+                              Task task = filteredTasks[index];
+                              bool isCompleted =
+                                  completedTasks.contains(task.id);
+                              return TaskDisplay(
+                                task: task,
+                                isCompleted: isCompleted,
+                                onChanged: (value) => onTaskChange(value, task),
+                                onDelete: () => onTaskDelete(task),
+                                onEdit: () => onTaskEdit(task),
+                              );
+                            }),
+                      ),
               )
             ],
           ),

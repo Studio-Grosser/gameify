@@ -32,12 +32,28 @@ class TaskOptionMenu extends StatelessWidget {
         itemBuilder: (context) {
           return [
             const PopupMenuItem(
+              padding: EdgeInsets.all(20),
               value: TaskOption.edit,
-              child: Text('Edit', style: Font.b1),
+              child: Row(
+                children: [
+                  FaIcon(FontAwesomeIcons.pencil, size: 18),
+                  SizedBox(width: 20),
+                  Text('Edit', style: Font.b1),
+                ],
+              ),
             ),
-            const PopupMenuItem(
+            PopupMenuItem(
+              padding: const EdgeInsets.all(20),
               value: TaskOption.delete,
-              child: Text('Delete', style: Font.b1),
+              child: Row(
+                children: [
+                  const FaIcon(FontAwesomeIcons.trashCan,
+                      size: 18, color: Themes.warning),
+                  const SizedBox(width: 20),
+                  Text('Delete',
+                      style: Font.b1.copyWith(color: Themes.warning)),
+                ],
+              ),
             ),
           ];
         });
