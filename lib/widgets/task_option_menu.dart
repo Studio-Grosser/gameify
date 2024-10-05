@@ -16,46 +16,50 @@ class TaskOptionMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<TaskOption>(
-        enabled: isEnabled,
-        menuPadding: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        icon: const FaIcon(FontAwesomeIcons.ellipsisVertical,
-            size: 18, color: Themes.primary),
-        onSelected: (value) {
-          if (value == TaskOption.delete) {
-            onDelete();
-          } else if (value == TaskOption.edit) {
-            onEdit();
-          }
-        },
-        itemBuilder: (context) {
-          return [
-            const PopupMenuItem(
-              padding: EdgeInsets.all(20),
-              value: TaskOption.edit,
-              child: Row(
-                children: [
-                  FaIcon(FontAwesomeIcons.pencil, size: 18),
-                  SizedBox(width: 20),
-                  Text('Edit', style: Font.b1),
-                ],
+    return Opacity(
+      opacity: isEnabled ? 1 : 0,
+      child: PopupMenuButton<TaskOption>(
+          enabled: isEnabled,
+          menuPadding: EdgeInsets.zero,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+          icon: const FaIcon(FontAwesomeIcons.ellipsisVertical,
+              size: 18, color: Themes.primary),
+          onSelected: (value) {
+            if (value == TaskOption.delete) {
+              onDelete();
+            } else if (value == TaskOption.edit) {
+              onEdit();
+            }
+          },
+          itemBuilder: (context) {
+            return [
+              const PopupMenuItem(
+                padding: EdgeInsets.all(20),
+                value: TaskOption.edit,
+                child: Row(
+                  children: [
+                    FaIcon(FontAwesomeIcons.pencil, size: 18),
+                    SizedBox(width: 20),
+                    Text('Edit', style: Font.b1),
+                  ],
+                ),
               ),
-            ),
-            PopupMenuItem(
-              padding: const EdgeInsets.all(20),
-              value: TaskOption.delete,
-              child: Row(
-                children: [
-                  const FaIcon(FontAwesomeIcons.trashCan,
-                      size: 18, color: Themes.warning),
-                  const SizedBox(width: 20),
-                  Text('Delete',
-                      style: Font.b1.copyWith(color: Themes.warning)),
-                ],
+              PopupMenuItem(
+                padding: const EdgeInsets.all(20),
+                value: TaskOption.delete,
+                child: Row(
+                  children: [
+                    const FaIcon(FontAwesomeIcons.trashCan,
+                        size: 18, color: Themes.warning),
+                    const SizedBox(width: 20),
+                    Text('Delete',
+                        style: Font.b1.copyWith(color: Themes.warning)),
+                  ],
+                ),
               ),
-            ),
-          ];
-        });
+            ];
+          }),
+    );
   }
 }

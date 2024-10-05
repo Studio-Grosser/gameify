@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,6 +91,7 @@ class _MainPageState extends State<MainPage> {
   };
 
   Future<void> onTaskChange(bool value, Task task) async {
+    jump();
     setState(() {
       value ? completedTasks.add(task.id) : completedTasks.remove(task.id);
     });
@@ -188,6 +191,20 @@ class _MainPageState extends State<MainPage> {
         });
   }
 
+  double _jumpScale = 1;
+  final Duration _animationDuration = const Duration(milliseconds: 100);
+
+  Future<void> jump() async {
+    setState(() {
+      _jumpScale = 1.15;
+    });
+    Timer(_animationDuration, () {
+      setState(() {
+        _jumpScale = 1;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -220,18 +237,23 @@ class _MainPageState extends State<MainPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              StyledContainer(
-                  padding: const EdgeInsets.all(15),
-                  hideBorder: true,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ValueDisplay(value: positiveScore),
-                      Text(score.toString(), style: Font.h1),
-                      ValueDisplay(
-                          value: negativeScore, isDefaultNegative: true),
-                    ],
-                  )),
+              AnimatedScale(
+                scale: _jumpScale,
+                duration: _animationDuration,
+                curve: Curves.easeInOut,
+                child: StyledContainer(
+                    padding: const EdgeInsets.all(15),
+                    hideBorder: true,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ValueDisplay(value: positiveScore),
+                        Text(score.toString(), style: Font.h1),
+                        ValueDisplay(
+                            value: negativeScore, isDefaultNegative: true),
+                      ],
+                    )),
+              ),
               Row(
                 children: [
                   MetricDisplay(

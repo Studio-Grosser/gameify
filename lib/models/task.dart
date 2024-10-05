@@ -23,6 +23,8 @@ class Task {
 
   void toggleActive() => isActive = !isActive;
 
+  bool hasSameValues(Task? b) => name == b?.name && score == b?.score;
+
   Map<String, dynamic> toJson() =>
       {id_: id, name_: name, score_: score, isActive_: isActive ? 1 : 0};
 

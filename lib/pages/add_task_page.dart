@@ -54,10 +54,13 @@ class _AddTaskPageState extends State<AddTaskPage>
       taskValueFocusNode.requestFocus();
       return;
     }
-    widget.onSubmit(Task(
+    Task newTask = Task(
       name: taskTextController.text,
       score: int.parse(taskValueController.text) * (isScorePositive ? 1 : -1),
-    ));
+    );
+    if (!newTask.hasSameValues(widget.initialTask)) {
+      widget.onSubmit(newTask);
+    }
     Navigator.pop(context);
   }
 
