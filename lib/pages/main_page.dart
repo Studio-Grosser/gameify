@@ -178,7 +178,8 @@ class _MainPageState extends State<MainPage> {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return CustomDatePicker(onChanged: changeDate);
+          return CustomDatePicker(
+              onChanged: changeDate, selectedDate: currentDate);
         });
   }
 

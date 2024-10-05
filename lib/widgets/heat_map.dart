@@ -13,11 +13,9 @@ class HeatMap extends StatefulWidget {
     super.key,
     required this.onSelection,
     this.selectedDate,
-    required this.selectableDays,
   });
   final Function(DateTime?) onSelection;
   final DateTime? selectedDate;
-  final List<int> selectableDays;
 
   @override
   State<HeatMap> createState() => _HeatMapState();
@@ -120,8 +118,7 @@ class _HeatMapState extends State<HeatMap> {
         day: date.day,
         date: date,
         isSelected: date == widget.selectedDate,
-        isSelectable: widget.selectableDays.contains(date.weekday - 1) &&
-            date.isAfter(DateTime.now().subtract(const Duration(days: 1))),
+        isSelectable: true,
         onSelected: (newDate) => widget.onSelection(newDate),
       ));
     }
