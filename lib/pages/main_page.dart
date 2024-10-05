@@ -14,6 +14,8 @@ import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
+import 'package:gameify/widgets/custom_date_picker.dart';
+import 'package:gameify/widgets/heat_map.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_task_info.dart';
 import 'package:gameify/widgets/styled_container.dart';
@@ -176,18 +178,7 @@ class _MainPageState extends State<MainPage> {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return Container(
-              height: 450,
-              padding: const EdgeInsets.all(10),
-              child: DatePicker(
-                  onDateSelected: (newDate) => changeDate(newDate),
-                  padding: const EdgeInsets.all(20),
-                  enabledCellsTextStyle: Font.b1,
-                  selectedCellTextStyle:
-                      Font.b1.copyWith(color: Themes.surface),
-                  currentDateTextStyle: Font.b1.copyWith(color: Themes.accent),
-                  maxDate: DateTime(2024, 12, 31),
-                  minDate: DateTime(2021, 1, 1)));
+          return CustomDatePicker(onChanged: changeDate);
         });
   }
 
