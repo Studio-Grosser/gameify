@@ -17,9 +17,12 @@ class MetricDisplay extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(metric, style: Font.h2),
-            Padding(
-              padding: const EdgeInsets.only(left: 5.0, bottom: 4.0),
-              child: Text(unit, style: Font.b1),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5.0, bottom: 4.0),
+                child:
+                    Text(unit, style: Font.b1, overflow: TextOverflow.ellipsis),
+              ),
             ),
           ],
         ),

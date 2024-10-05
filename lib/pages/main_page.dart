@@ -201,17 +201,15 @@ class _MainPageState extends State<MainPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ValueDisplay(value: positiveScore),
-                      Text(
-                        score.toString(),
-                        style: Font.h1,
-                      ),
+                      Text(score.toString(), style: Font.h1),
                       ValueDisplay(
                           value: negativeScore, isDefaultNegative: true),
                     ],
                   )),
               Row(
                 children: [
-                  MetricDisplay(metric: average.toString(), unit: 'average'),
+                  MetricDisplay(
+                      metric: average.toStringAsFixed(2), unit: 'average'),
                   MetricDisplay(
                       metric: highscore.toString(), unit: 'highscore'),
                 ],
@@ -231,7 +229,7 @@ class _MainPageState extends State<MainPage> {
                       });
                     }),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Expanded(
                 child: FadingEdgeScrollView.fromScrollView(
                   child: ListView.builder(
