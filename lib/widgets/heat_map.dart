@@ -13,9 +13,11 @@ class HeatMap extends StatefulWidget {
     super.key,
     required this.onSelection,
     this.selectedDate,
+    required this.data,
   });
   final Function(DateTime?) onSelection;
   final DateTime? selectedDate;
+  final Map<DateTime, double> data;
 
   @override
   State<HeatMap> createState() => _HeatMapState();
@@ -117,6 +119,7 @@ class _HeatMapState extends State<HeatMap> {
       dateDayDisplays.add(DateDayDisplay(
         day: date.day,
         date: date,
+        heatFactor: widget.data[date] ?? 0.0,
         isSelected: date == widget.selectedDate,
         isSelectable: true,
         onSelected: (newDate) => widget.onSelection(newDate),
@@ -194,10 +197,12 @@ class _HeatMapState extends State<HeatMap> {
           const SizedBox(height: 30),
           GestureDetector(
             onHorizontalDragEnd: (details) => horizontalDrag(details),
-            child: Table(
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                defaultColumnWidth: const FlexColumnWidth(),
-                children: [weekDayTableRow, ...daysTableRows]),
+            child: Center(
+              child: Table(
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  defaultColumnWidth: const FlexColumnWidth(),
+                  children: [weekDayTableRow, ...daysTableRows]),
+            ),
           ),
         ]);
   }

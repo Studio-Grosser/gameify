@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
@@ -174,12 +175,17 @@ class _MainPageState extends State<MainPage> {
     }));
   }
 
-  void showDatePicker() {
+  void showDatePicker() async {
+    Map<DateTime, double> heatMapData = await DateService().getHeatMapData();
+    if (!mounted) return;
     showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (context) {
           return CustomDatePicker(
-              onChanged: changeDate, selectedDate: currentDate);
+              onChanged: changeDate,
+              selectedDate: currentDate,
+              heatFactors: heatMapData);
         });
   }
 

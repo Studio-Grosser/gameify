@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/models/date.dart';
+import 'package:gameify/utils/utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DateService {
@@ -47,5 +48,32 @@ class DateService {
     } else {
       return null;
     }
+  }
+
+  Future<Map<DateTime, double>> getHeatMapData() async {
+    final db = await DatabaseService.instance.database;
+    final List<Map<String, dynamic>> results = await db.query(Date.tableName);
+
+    int maxScore = 0;
+    for (var row in results) {
+      int score = row[Date.score_];
+      if (score > maxScore) {
+        maxScore = score;
+      }
+    }
+
+    Map<DateTime, double> scoreMap = {};
+
+    for (var row in results) {
+      String id = row[Date.id_];
+      int score = row[Date.score_] ?? 0;
+
+      DateTime dateTime = fromId(id);
+      double relativeScore = maxScore > 0 ? score / maxScore : 0.0;
+
+      scoreMap[dateTime] = relativeScore;
+    }
+
+    return scoreMap;
   }
 }

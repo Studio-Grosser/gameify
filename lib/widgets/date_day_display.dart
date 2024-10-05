@@ -9,11 +9,13 @@ class DateDayDisplay extends StatefulWidget {
       required this.isSelectable,
       this.date,
       this.isSelected = false,
-      this.onSelected});
+      this.onSelected,
+      this.heatFactor});
   final int? day;
   final DateTime? date;
   final bool isSelectable;
   final bool isSelected;
+  final double? heatFactor;
   final Function(DateTime?)? onSelected;
 
   @override
@@ -32,7 +34,7 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
 
   Color? get bubbleColor {
     if (widget.isSelected == true) return Themes.accent;
-    return widget.date == currentDate ? Themes.accent.withOpacity(0.2) : null;
+    return Themes.success.withValues(alpha: widget.heatFactor);
   }
 
   Color get textColor {
@@ -45,13 +47,13 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
   @override
   Widget build(BuildContext context) {
     if (widget.day == null) return const SizedBox();
-    double size = 35;
+    double size = 40;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 3),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(size),
+          borderRadius: BorderRadius.circular(5),
           onTap: widget.isSelectable
               ? () => widget.onSelected!(widget.date!)
               : null,
@@ -68,7 +70,7 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
                     height: size,
                     decoration: BoxDecoration(
                         color: bubbleColor,
-                        borderRadius: BorderRadius.circular(size)),
+                        borderRadius: BorderRadius.circular(40)),
                   ),
                 ),
                 Align(
