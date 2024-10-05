@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/utils/font.dart';
@@ -18,10 +19,15 @@ class AddTaskPage extends StatefulWidget {
   State<AddTaskPage> createState() => _AddTaskPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> {
+class _AddTaskPageState extends State<AddTaskPage>
+    with SingleTickerProviderStateMixin {
   final TextEditingController taskTextController = TextEditingController();
   final TextEditingController taskValueController = TextEditingController();
+  final FocusNode taskTextFocusNode = FocusNode();
   final FocusNode taskValueFocusNode = FocusNode();
+
+  AnimationController? _controller;
+  Animation<double>? _animation;
 
   bool isScorePositive = true;
 
@@ -38,7 +44,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   void submitTask() {
-    if (taskTextController.text.isEmpty || taskValueController.text.isEmpty) {
+    if (taskTextController.text.trim().isEmpty) {
+      taskTextController.text = '';
+      _shake();
+      taskTextFocusNode.requestFocus();
+      return;
+    }
+    if (taskValueController.text.isEmpty) {
+      taskValueFocusNode.requestFocus();
       return;
     }
     widget.onSubmit(Task(
@@ -58,6 +71,26 @@ class _AddTaskPageState extends State<AddTaskPage> {
     } else {
       taskValueController.text = '10';
     }
+
+    _controller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 400));
+    _animation = Tween<double>(begin: 0, end: 15)
+        .chain(CurveTween(curve: Curves.elasticIn))
+        .animate(_controller!);
+  }
+
+  @override
+  void dispose() {
+    _controller!.dispose();
+    super.dispose();
+  }
+
+  void _shake() {
+    HapticFeedback.lightImpact();
+    _controller?.forward().then((_) {
+      HapticFeedback.lightImpact();
+      _controller?.reverse();
+    });
   }
 
   double _jumpScale = 1;
@@ -94,19 +127,27 @@ class _AddTaskPageState extends State<AddTaskPage> {
                     onTap: () => Navigator.pop(context)),
               ),
               const Spacer(flex: 1),
-              TextField(
-                  onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                  controller: taskTextController,
-                  style: Font.h2,
-                  maxLength: 30,
-                  autofocus: true,
-                  cursorWidth: 3,
-                  cursorColor: Themes.accent,
-                  decoration: InputDecoration(
-                      counter: const SizedBox(),
-                      border: InputBorder.none,
-                      hintText: 'add task description',
-                      hintStyle: Font.h2.copyWith(color: Themes.secondary))),
+              AnimatedBuilder(
+                animation: _animation!,
+                builder: (context, child) {
+                  return Transform.translate(
+                      offset: Offset(_animation!.value, 0), child: child);
+                },
+                child: TextField(
+                    onTapOutside: (_) => FocusScope.of(context).unfocus(),
+                    controller: taskTextController,
+                    focusNode: taskTextFocusNode,
+                    style: Font.h2,
+                    maxLength: 30,
+                    autofocus: true,
+                    cursorWidth: 3,
+                    cursorColor: Themes.accent,
+                    decoration: InputDecoration(
+                        counter: const SizedBox(),
+                        border: InputBorder.none,
+                        hintText: 'add task description',
+                        hintStyle: Font.h2.copyWith(color: Themes.secondary))),
+              ),
               const SizedBox(height: 30),
               Row(
                 children: [
