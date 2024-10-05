@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
-import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +10,10 @@ import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/task_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
+import 'package:gameify/pages/intro_page.dart';
 import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/custom_date_picker.dart';
-import 'package:gameify/widgets/heat_map.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_task_info.dart';
 import 'package:gameify/widgets/styled_container.dart';
@@ -133,6 +130,26 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+
+    DatabaseService.instance.isInitialized.then((isInitialized) {
+      if (!isInitialized) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return IntroPage(
+              onSubmit: (initialTasks) {
+                setState(() {
+                  rawTasks = initialTasks;
+                });
+                for (var task in initialTasks) {
+                  TaskService().writeTask(task);
+                }
+              },
+            );
+          }));
+        });
+      }
+    });
+
     currentDate = DateTime.now();
 
     loadDate();
@@ -260,7 +277,7 @@ class _MainPageState extends State<MainPage> {
                       metric: highscore.toString(), unit: 'highscore'),
                 ],
               ),
-              const SizedBox(height: 100),
+              const Spacer(flex: 1),
               SizedBox(
                 width: double.infinity,
                 child: CupertinoSlidingSegmentedControl<Filter>(
@@ -277,6 +294,7 @@ class _MainPageState extends State<MainPage> {
               ),
               const SizedBox(height: 10),
               Expanded(
+                flex: 2,
                 child: filteredTasks.isEmpty
                     ? const NoTaskInfo()
                     : FadingEdgeScrollView.fromScrollView(

@@ -23,4 +23,11 @@ class Font {
     color: Themes.primary,
     fontSize: 32,
   );
+
+  static const TextStyle h3 = TextStyle(
+    fontFamily: 'Figtree',
+    fontWeight: FontWeight.w700,
+    color: Themes.primary,
+    fontSize: 22,
+  );
 }

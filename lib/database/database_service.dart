@@ -7,7 +7,7 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseService {
   static final DatabaseService instance = DatabaseService._init();
   static Database? _database;
-  static const dbPath = 'gameify2.db';
+  static const dbPath = 'gameify.db';
 
   DatabaseService._init();
 
@@ -17,6 +17,8 @@ class DatabaseService {
     _database = await _initDB(dbPath);
     return _database!;
   }
+
+  Future<bool> get isInitialized async => await databaseExists(dbPath);
 
   Future<Database> _initDB(String filePath) async {
     return await openDatabase(filePath, version: 1, onCreate: _createDB);

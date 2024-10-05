@@ -12,13 +12,15 @@ class TaskDisplay extends StatelessWidget {
       required this.task,
       required this.isCompleted,
       required this.onChanged,
-      required this.onDelete,
-      required this.onEdit});
+      this.onDelete,
+      this.onEdit});
   final Task task;
   final bool isCompleted;
   final Function(bool value) onChanged;
-  final VoidCallback onDelete;
-  final VoidCallback onEdit;
+  final VoidCallback? onDelete;
+  final VoidCallback? onEdit;
+
+  bool get hasOptions => onDelete != null || onEdit != null;
 
   @override
   Widget build(BuildContext context) {
@@ -46,11 +48,12 @@ class TaskDisplay extends StatelessWidget {
               Text(task.name, style: Font.b1),
               const Spacer(),
               ValueDisplay(value: task.score),
-              TaskOptionMenu(
-                isEnabled: task.isActive,
-                onDelete: onDelete,
-                onEdit: onEdit,
-              )
+              if (hasOptions)
+                TaskOptionMenu(
+                  isEnabled: task.isActive,
+                  onDelete: onDelete!,
+                  onEdit: onEdit!,
+                )
             ],
           ),
         ),
