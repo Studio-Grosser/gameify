@@ -83,9 +83,9 @@ class _MainPageState extends State<MainPage> {
 
   Filter currentFilter = Filter.all;
   Map<Filter, String> filters = {
-    Filter.all: 'All',
-    Filter.positives: 'Positives',
-    Filter.negatives: 'Negatives',
+    Filter.all: 'all',
+    Filter.positives: 'positives',
+    Filter.negatives: 'negatives',
   };
 
   Future<void> onTaskChange(bool value, Task task) async {

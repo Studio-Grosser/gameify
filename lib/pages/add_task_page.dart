@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/task.dart';
@@ -32,6 +34,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     setState(() {
       isScorePositive = !isScorePositive;
     });
+    jump();
   }
 
   void submitTask() {
@@ -55,6 +58,20 @@ class _AddTaskPageState extends State<AddTaskPage> {
     } else {
       taskValueController.text = '10';
     }
+  }
+
+  double _jumpScale = 1;
+  final Duration _animationDuration = const Duration(milliseconds: 50);
+
+  Future<void> jump() async {
+    setState(() {
+      _jumpScale = 1.1;
+    });
+    Timer(_animationDuration, () {
+      setState(() {
+        _jumpScale = 1;
+      });
+    });
   }
 
   @override
@@ -105,9 +122,13 @@ class _AddTaskPageState extends State<AddTaskPage> {
                           children: [
                             SizedBox(
                               width: 25,
-                              child: Text(
-                                scorePrefix,
-                                style: Font.h1,
+                              child: AnimatedScale(
+                                scale: _jumpScale,
+                                duration: _animationDuration,
+                                child: Text(
+                                  scorePrefix,
+                                  style: Font.h1,
+                                ),
                               ),
                             ),
                             SizedBox(
@@ -141,11 +162,16 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         width: 70,
                         borderRadius: 50,
                         padding: const EdgeInsets.all(16),
-                        child: Container(
-                            decoration: BoxDecoration(
-                          color: scoreColor,
-                          shape: BoxShape.circle,
-                        ))),
+                        child: AnimatedScale(
+                          scale: _jumpScale,
+                          duration: _animationDuration,
+                          curve: Curves.linear,
+                          child: Container(
+                              decoration: BoxDecoration(
+                            color: scoreColor,
+                            shape: BoxShape.circle,
+                          )),
+                        )),
                   ),
                 ],
               ),
