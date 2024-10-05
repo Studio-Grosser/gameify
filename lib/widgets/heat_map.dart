@@ -185,14 +185,26 @@ class _HeatMapState extends State<HeatMap> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            StyledIcon(
-                icon: FontAwesomeIcons.chevronLeft,
-                onTap: () => changeMonth(Direction.backward)),
+          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            IconButton(
+                onPressed: () => changeMonth(Direction.backward),
+                icon: const FaIcon(
+                  FontAwesomeIcons.chevronLeft,
+                  size: 16,
+                  color: Themes.accent,
+                )),
             Text(calendarTitle, style: Font.b1.copyWith(color: Themes.accent)),
+            IconButton(
+                onPressed: () => changeMonth(Direction.forward),
+                icon: const FaIcon(
+                  FontAwesomeIcons.chevronRight,
+                  size: 16,
+                  color: Themes.accent,
+                )),
+            const Spacer(),
             StyledIcon(
-                icon: FontAwesomeIcons.chevronRight,
-                onTap: () => changeMonth(Direction.forward)),
+                icon: FontAwesomeIcons.xmark,
+                onTap: () => Navigator.pop(context))
           ]),
           const SizedBox(height: 30),
           GestureDetector(

@@ -39,9 +39,7 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
 
   Color get textColor {
     if (widget.isSelected == true) return Themes.surface;
-    if (widget.date == currentDate) return Themes.accent;
-    if (widget.isSelectable) return Themes.secondary;
-    return Themes.tertiary;
+    return Themes.secondary;
   }
 
   @override

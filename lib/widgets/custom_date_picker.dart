@@ -29,18 +29,10 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              alignment: Alignment.topCenter,
-              width: MediaQuery.of(context).size.width / 3,
-              height: 5,
-              decoration: BoxDecoration(
-                  color: Themes.secondary,
-                  borderRadius: BorderRadius.circular(15)),
-            ),
             const SizedBox(height: 20),
             HeatMap(
               data: widget.heatFactors,
