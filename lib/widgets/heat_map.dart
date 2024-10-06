@@ -126,19 +126,6 @@ class _HeatMapState extends State<HeatMap> {
       ));
     }
 
-    //If no date is selected (when opening the date picker the first time)
-    //then the first available date will be selected
-    if (widget.selectedDate == null) {
-      DateTime? firstAvailableDate =
-          dateDayDisplays.firstWhereOrNull((date) => date.isSelectable)?.date;
-      if (firstAvailableDate != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          widget.onSelection(
-              dateDayDisplays.firstWhere((date) => date.isSelectable).date);
-        });
-      }
-    }
-
     int remaining = totalWeekdays - (dateDayDisplays.length % totalWeekdays);
     if (remaining != totalWeekdays) {
       for (int i = 0; i < remaining; i++) {
