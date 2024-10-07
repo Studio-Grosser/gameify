@@ -45,8 +45,11 @@ class TaskDisplay extends StatelessWidget {
                   value: isCompleted,
                   onChanged: (value) => onChanged(value ?? false)),
               const SizedBox(width: 10),
-              Text(task.name, style: Font.b1),
-              const Spacer(),
+              Expanded(
+                  child: Text(task.name,
+                      style: Font.b1,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1)),
               const SizedBox(width: 10),
               ValueDisplay(value: task.score),
               if (hasOptions)

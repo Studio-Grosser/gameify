@@ -195,7 +195,7 @@ class _MainPageState extends State<MainPage> {
       body: SafeArea(
         bottom: false,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0),
+          padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

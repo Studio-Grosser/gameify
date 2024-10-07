@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/date_day_display.dart';
-import 'package:collection/collection.dart';
 import 'package:gameify/widgets/styled_icon.dart';
 
 enum Direction { forward, backward }
