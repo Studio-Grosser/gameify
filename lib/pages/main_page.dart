@@ -33,13 +33,15 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late DateTime currentDate;
 
-  int highscore = 0;
-  double average = 0;
+  Future<int?>? highscore;
+  Future<double?>? average;
 
-  int get score => tasks
-      .where((task) =>
-          completedTasks.contains(task.id)) // Nur die erledigten Tasks filtern
-      .fold(0, (sum, task) => sum + task.score);
+  Filter currentFilter = Filter.all;
+  Map<Filter, String> filters = {
+    Filter.all: 'all',
+    Filter.positives: 'positives',
+    Filter.negatives: 'negatives',
+  };
 
   List<Task> get filteredTasks {
     switch (currentFilter) {
@@ -58,6 +60,8 @@ class _MainPageState extends State<MainPage> {
       .toList();
   Set<String> completedTasks = {};
 
+  int get score => positiveScore + negativeScore;
+
   int get positiveScore => tasks
       .where((task) => completedTasks.contains(task.id) && task.score > 0)
       .fold(0, (sum, task) => sum + task.score);
@@ -71,8 +75,7 @@ class _MainPageState extends State<MainPage> {
       currentDate = date;
     });
     loadDate();
-    loadAverage();
-    loadHighScore();
+    loadMetrics();
   }
 
   Future<void> loadDate() async {
@@ -82,13 +85,6 @@ class _MainPageState extends State<MainPage> {
       });
     });
   }
-
-  Filter currentFilter = Filter.all;
-  Map<Filter, String> filters = {
-    Filter.all: 'all',
-    Filter.positives: 'positives',
-    Filter.negatives: 'negatives',
-  };
 
   Future<void> onTaskChange(bool value, Task task) async {
     jump();
@@ -101,8 +97,7 @@ class _MainPageState extends State<MainPage> {
         completedTaskIds: completedTasks,
         score: score));
 
-    loadAverage();
-    loadHighScore();
+    loadMetrics();
   }
 
   Future<void> onTaskDelete(Task task) async {
@@ -153,8 +148,7 @@ class _MainPageState extends State<MainPage> {
     currentDate = DateTime.now();
 
     loadDate();
-    loadAverage();
-    loadHighScore();
+    loadMetrics();
 
     TaskService().readTasks().then((value) {
       setState(() {
@@ -163,20 +157,9 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  void loadHighScore() {
-    DateService().getHighestScore().then((value) {
-      setState(() {
-        highscore = value ?? 0;
-      });
-    });
-  }
-
-  void loadAverage() {
-    DateService().getAverageScore().then((value) {
-      setState(() {
-        average = value ?? 0.0;
-      });
-    });
+  void loadMetrics() {
+    highscore = DateService().getHighestScore();
+    average = DateService().getAverageScore();
   }
 
   void openAddTaskPage() {
@@ -271,13 +254,11 @@ class _MainPageState extends State<MainPage> {
               ),
               Row(
                 children: [
-                  MetricDisplay(
-                      metric: average.toStringAsFixed(2), unit: 'average'),
-                  MetricDisplay(
-                      metric: highscore.toString(), unit: 'highscore'),
+                  MetricDisplay(metric: average, unit: 'average'),
+                  MetricDisplay(metric: highscore, unit: 'highscore'),
                 ],
               ),
-              const Spacer(flex: 1),
+              const SizedBox(height: 100),
               SizedBox(
                 width: double.infinity,
                 child: CupertinoSlidingSegmentedControl<Filter>(
@@ -294,7 +275,6 @@ class _MainPageState extends State<MainPage> {
               ),
               const SizedBox(height: 10),
               Expanded(
-                flex: 2,
                 child: filteredTasks.isEmpty
                     ? const NoTaskInfo()
                     : FadingEdgeScrollView.fromScrollView(
