@@ -50,17 +50,9 @@ class DateService {
     }
   }
 
-  Future<Map<DateTime, double>> getHeatMapData() async {
+  Future<Map<DateTime, double>> getHeatMapData(int highscore) async {
     final db = await DatabaseService.instance.database;
     final List<Map<String, dynamic>> results = await db.query(Date.tableName);
-
-    int maxScore = 0;
-    for (var row in results) {
-      int score = row[Date.score_];
-      if (score > maxScore) {
-        maxScore = score;
-      }
-    }
 
     Map<DateTime, double> scoreMap = {};
 
@@ -69,7 +61,7 @@ class DateService {
       int score = row[Date.score_] ?? 0;
 
       DateTime dateTime = fromId(id);
-      double relativeScore = maxScore > 0 ? score / maxScore : 0.0;
+      double relativeScore = highscore > 0 ? score / highscore : 0.0;
 
       scoreMap[dateTime] = relativeScore;
     }

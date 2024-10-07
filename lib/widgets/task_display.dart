@@ -47,6 +47,7 @@ class TaskDisplay extends StatelessWidget {
               const SizedBox(width: 10),
               Text(task.name, style: Font.b1),
               const Spacer(),
+              const SizedBox(width: 10),
               ValueDisplay(value: task.score),
               if (hasOptions)
                 TaskOptionMenu(

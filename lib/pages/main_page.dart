@@ -31,17 +31,13 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  late DateTime currentDate;
+  final ScrollController _scrollController = ScrollController();
+  DateTime currentDate = DateTime.now();
 
   Future<int?>? highscore;
   Future<double?>? average;
 
   Filter currentFilter = Filter.all;
-  Map<Filter, String> filters = {
-    Filter.all: 'all',
-    Filter.positives: 'positives',
-    Filter.negatives: 'negatives',
-  };
 
   List<Task> get filteredTasks {
     switch (currentFilter) {
@@ -56,24 +52,23 @@ class _MainPageState extends State<MainPage> {
 
   List<Task> rawTasks = [];
   List<Task> get tasks => rawTasks
-      .where((task) => task.isActive || completedTasks.contains(task.id))
+      .where((task) => task.isActive || isTaskCompleted(task.id))
       .toList();
-  Set<String> completedTasks = {};
+  Set<String> completedTaskIds = {};
+  bool isTaskCompleted(String id) => completedTaskIds.contains(id);
 
   int get score => positiveScore + negativeScore;
 
   int get positiveScore => tasks
-      .where((task) => completedTasks.contains(task.id) && task.score > 0)
+      .where((task) => isTaskCompleted(task.id) && task.score > 0)
       .fold(0, (sum, task) => sum + task.score);
 
   int get negativeScore => tasks
-      .where((task) => completedTasks.contains(task.id) && task.score < 0)
+      .where((task) => isTaskCompleted(task.id) && task.score < 0)
       .fold(0, (sum, task) => sum + task.score);
 
   void changeDate(DateTime date) {
-    setState(() {
-      currentDate = date;
-    });
+    setState(() => currentDate = date);
     loadDate();
     loadMetrics();
   }
@@ -81,7 +76,7 @@ class _MainPageState extends State<MainPage> {
   Future<void> loadDate() async {
     DateService().readDate(currentDate.toId()).then((value) {
       setState(() {
-        completedTasks = value?.completedTaskIds ?? {};
+        completedTaskIds = value?.completedTaskIds ?? {};
       });
     });
   }
@@ -89,22 +84,20 @@ class _MainPageState extends State<MainPage> {
   Future<void> onTaskChange(bool value, Task task) async {
     jump();
     setState(() {
-      value ? completedTasks.add(task.id) : completedTasks.remove(task.id);
+      value ? completedTaskIds.add(task.id) : completedTaskIds.remove(task.id);
     });
     HapticFeedback.mediumImpact();
     await DateService().writeDate(Date(
-        id: currentDate.toId(),
-        completedTaskIds: completedTasks,
-        score: score));
-
+      id: currentDate.toId(),
+      completedTaskIds: completedTaskIds,
+      score: score,
+    ));
     loadMetrics();
   }
 
   Future<void> onTaskDelete(Task task) async {
     await TaskService().updateActiveState(task.id, false);
-    setState(() {
-      task.toggleActive();
-    });
+    setState(() => task.toggleActive());
   }
 
   void onTaskEdit(Task task) {
@@ -114,9 +107,7 @@ class _MainPageState extends State<MainPage> {
         onSubmit: (updatedTask) async {
           await onTaskDelete(task);
           await TaskService().writeTask(updatedTask);
-          setState(() {
-            rawTasks.add(updatedTask);
-          });
+          setState(() => rawTasks.add(updatedTask));
         },
       );
     }));
@@ -132,9 +123,7 @@ class _MainPageState extends State<MainPage> {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return IntroPage(
               onSubmit: (initialTasks) {
-                setState(() {
-                  rawTasks = initialTasks;
-                });
+                setState(() => rawTasks = initialTasks);
                 for (var task in initialTasks) {
                   TaskService().writeTask(task);
                 }
@@ -145,16 +134,10 @@ class _MainPageState extends State<MainPage> {
       }
     });
 
-    currentDate = DateTime.now();
-
     loadDate();
     loadMetrics();
 
-    TaskService().readTasks().then((value) {
-      setState(() {
-        rawTasks = value;
-      });
-    });
+    TaskService().readTasks().then((value) => setState(() => rawTasks = value));
   }
 
   void loadMetrics() {
@@ -176,7 +159,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   void showDatePicker() async {
-    Map<DateTime, double> heatMapData = await DateService().getHeatMapData();
+    Map<DateTime, double> heatMapData =
+        await DateService().getHeatMapData(await highscore ?? 0);
     if (!mounted) return;
     showModalBottomSheet(
         isScrollControlled: true,
@@ -193,45 +177,40 @@ class _MainPageState extends State<MainPage> {
   final Duration _animationDuration = const Duration(milliseconds: 100);
 
   Future<void> jump() async {
-    setState(() {
-      _jumpScale = 1.15;
-    });
-    Timer(_animationDuration, () {
-      setState(() {
-        _jumpScale = 1;
-      });
-    });
+    setState(() => _jumpScale = 1.15);
+    await Future.delayed(_animationDuration);
+    setState(() => _jumpScale = 1);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: StyledFab(
-        padding: const EdgeInsets.all(0),
+        padding: EdgeInsets.zero,
         height: 70,
         width: 70,
         icon: FontAwesomeIcons.plus,
         onTap: openAddTaskPage,
       ),
       body: SafeArea(
+        bottom: false,
         child: Padding(
-          padding: const EdgeInsets.all(30.0),
+          padding: const EdgeInsets.fromLTRB(30.0, 30.0, 30.0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 children: [
-                  Text(
-                    currentDate.format(),
-                    style: Font.h2,
-                  ),
+                  Text(currentDate.format(), style: Font.h2),
                   const Spacer(),
                   StyledIcon(
                     icon: FontAwesomeIcons.trashCan,
                     onTap: () => DatabaseService.instance.delteDb(),
                   ),
                   StyledIcon(
-                      icon: FontAwesomeIcons.calendar, onTap: showDatePicker)
+                    icon: FontAwesomeIcons.calendar,
+                    onTap: showDatePicker,
+                  )
                 ],
               ),
               const SizedBox(height: 20),
@@ -265,12 +244,10 @@ class _MainPageState extends State<MainPage> {
                     backgroundColor: Themes.tertiary,
                     thumbColor: Themes.surface,
                     groupValue: currentFilter,
-                    children: filters.map((key, value) =>
+                    children: Task.filters.map((key, value) =>
                         MapEntry(key, Text(value, style: Font.b1.copyWith()))),
                     onValueChanged: (value) {
-                      setState(() {
-                        currentFilter = value ?? Filter.all;
-                      });
+                      setState(() => currentFilter = value ?? Filter.all);
                     }),
               ),
               const SizedBox(height: 10),
@@ -279,14 +256,13 @@ class _MainPageState extends State<MainPage> {
                     ? const NoTaskInfo()
                     : FadingEdgeScrollView.fromScrollView(
                         child: ListView.builder(
-                            controller: ScrollController(),
+                            controller: _scrollController,
                             padding: const EdgeInsets.only(bottom: 60),
                             shrinkWrap: true,
                             itemCount: filteredTasks.length,
                             itemBuilder: (context, index) {
                               Task task = filteredTasks[index];
-                              bool isCompleted =
-                                  completedTasks.contains(task.id);
+                              bool isCompleted = isTaskCompleted(task.id);
                               return TaskDisplay(
                                 task: task,
                                 isCompleted: isCompleted,

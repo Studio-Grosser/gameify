@@ -1,3 +1,4 @@
+import 'package:gameify/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class Task {
@@ -12,6 +13,12 @@ class Task {
       required this.score,
       this.isActive = true})
       : id = id ?? const Uuid().v4();
+
+  static const Map<Filter, String> filters = {
+    Filter.all: 'all',
+    Filter.positives: 'positives',
+    Filter.negatives: 'negatives',
+  };
 
   // Identifier for database
   static const String tableName = 'tasks';
