@@ -25,6 +25,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Gameify',
       theme: Themes.lightTheme,
       home: const MainPage(),

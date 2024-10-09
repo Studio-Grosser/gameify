@@ -219,7 +219,8 @@ class _MainPageState extends State<MainPage> {
                 duration: _animationDuration,
                 curve: Curves.easeInOut,
                 child: StyledContainer(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 10),
                     hideBorder: true,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -231,46 +232,58 @@ class _MainPageState extends State<MainPage> {
                       ],
                     )),
               ),
-              Row(
-                children: [
-                  MetricDisplay(metric: average, unit: 'average'),
-                  MetricDisplay(metric: highscore, unit: 'highscore'),
-                ],
-              ),
-              const SizedBox(height: 100),
-              SizedBox(
-                width: double.infinity,
-                child: CupertinoSlidingSegmentedControl<Filter>(
-                    backgroundColor: Themes.tertiary,
-                    thumbColor: Themes.surface,
-                    groupValue: currentFilter,
-                    children: Task.filters.map((key, value) =>
-                        MapEntry(key, Text(value, style: Font.b1.copyWith()))),
-                    onValueChanged: (value) {
-                      setState(() => currentFilter = value ?? Filter.all);
-                    }),
-              ),
-              const SizedBox(height: 10),
               Expanded(
                 child: filteredTasks.isEmpty
                     ? const NoTaskInfo()
                     : FadingEdgeScrollView.fromScrollView(
-                        child: ListView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.only(bottom: 60),
-                            shrinkWrap: true,
-                            itemCount: filteredTasks.length,
-                            itemBuilder: (context, index) {
-                              Task task = filteredTasks[index];
-                              bool isCompleted = isTaskCompleted(task.id);
-                              return TaskDisplay(
-                                task: task,
-                                isCompleted: isCompleted,
-                                onChanged: (value) => onTaskChange(value, task),
-                                onDelete: () => onTaskDelete(task),
-                                onEdit: () => onTaskEdit(task),
-                              );
-                            }),
+                        gradientFractionOnStart: 0.5,
+                        child: ListView(
+                          controller: _scrollController,
+                          children: [
+                            Row(
+                              children: [
+                                MetricDisplay(metric: average, unit: 'average'),
+                                MetricDisplay(
+                                    metric: highscore, unit: 'highscore'),
+                              ],
+                            ),
+                            const SizedBox(height: 100),
+                            SizedBox(
+                              width: double.infinity,
+                              child: CupertinoSlidingSegmentedControl<Filter>(
+                                  backgroundColor: Themes.tertiary,
+                                  thumbColor: Themes.surface,
+                                  groupValue: currentFilter,
+                                  children: Task.filters.map((key, value) =>
+                                      MapEntry(
+                                          key,
+                                          Text(value,
+                                              style: Font.b1.copyWith()))),
+                                  onValueChanged: (value) {
+                                    setState(() =>
+                                        currentFilter = value ?? Filter.all);
+                                  }),
+                            ),
+                            const SizedBox(height: 10),
+                            ListView.builder(
+                                controller: _scrollController,
+                                padding: const EdgeInsets.only(bottom: 60),
+                                shrinkWrap: true,
+                                itemCount: filteredTasks.length,
+                                itemBuilder: (context, index) {
+                                  Task task = filteredTasks[index];
+                                  bool isCompleted = isTaskCompleted(task.id);
+                                  return TaskDisplay(
+                                    task: task,
+                                    isCompleted: isCompleted,
+                                    onChanged: (value) =>
+                                        onTaskChange(value, task),
+                                    onDelete: () => onTaskDelete(task),
+                                    onEdit: () => onTaskEdit(task),
+                                  );
+                                }),
+                          ],
+                        ),
                       ),
               )
             ],

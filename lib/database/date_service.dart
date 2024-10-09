@@ -26,7 +26,7 @@ class DateService {
     log('date added');
   }
 
-  Future<int?> getHighestScore() async {
+  Future<int> getHighestScore() async {
     final db = await DatabaseService.instance.database;
     final List<Map<String, dynamic>> result = await db
         .rawQuery('SELECT MAX(score) as max_score FROM ${Date.tableName}');
@@ -34,11 +34,11 @@ class DateService {
     if (result.isNotEmpty && result.first['max_score'] != null) {
       return result.first['max_score'] as int;
     } else {
-      return null;
+      return 0;
     }
   }
 
-  Future<double?> getAverageScore() async {
+  Future<double> getAverageScore() async {
     final db = await DatabaseService.instance.database;
     final List<Map<String, dynamic>> result = await db
         .rawQuery('SELECT AVG(score) as avg_score FROM ${Date.tableName}');
@@ -46,7 +46,7 @@ class DateService {
     if (result.isNotEmpty && result.first['avg_score'] != null) {
       return result.first['avg_score'] as double;
     } else {
-      return null;
+      return 0;
     }
   }
 
