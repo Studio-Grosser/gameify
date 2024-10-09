@@ -96,6 +96,8 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> onTaskDelete(Task task) async {
+    bool confirmed = await confirmDelete(context, task);
+    if (!confirmed) return;
     await TaskService().updateActiveState(task.id, false);
     setState(() => task.toggleActive());
   }

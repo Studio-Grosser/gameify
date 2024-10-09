@@ -1,3 +1,8 @@
+import 'package:flutter/material.dart';
+import 'package:gameify/models/task.dart';
+import 'package:gameify/widgets/confirm_dialog.dart';
+import 'package:gameify/widgets/task_display.dart';
+
 enum Filter { all, positives, negatives }
 
 enum TaskOption { edit, delete }
@@ -20,4 +25,19 @@ extension DateExtension on DateTime {
     if (isToday) return 'today';
     return '$day/$month/$year';
   }
+}
+
+Future<bool> confirmDelete(BuildContext context, Task task) async {
+  return await showModalBottomSheet<bool>(
+          showDragHandle: true,
+          context: context,
+          builder: (context) => ConfirmDialog(
+                title: 'Delete task',
+                message: 'You cannot undo this action',
+                confirmText: 'Delete',
+                cancelText: 'Cancel',
+                body: TaskDisplay(
+                    task: task, isCompleted: false, onChanged: (value) {}),
+              )) ??
+      false;
 }
