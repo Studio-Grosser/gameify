@@ -28,23 +28,20 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const SizedBox(height: 20),
-            HeatMap(
-              data: widget.heatFactors,
-              selectedDate: currentDate,
-              onSelection: (newDate) {
-                if (newDate == null) return;
-                setState(() {
-                  currentDate = newDate;
-                });
-                widget.onChanged(newDate);
-              },
-            ),
-          ],
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: SizedBox(
+          height: 405,
+          child: HeatMap(
+            data: widget.heatFactors,
+            selectedDate: currentDate,
+            onSelection: (newDate) {
+              if (newDate == null) return;
+              setState(() {
+                currentDate = newDate;
+              });
+              widget.onChanged(newDate);
+            },
+          ),
         ),
       ),
     );

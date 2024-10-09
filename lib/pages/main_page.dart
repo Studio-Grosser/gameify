@@ -165,12 +165,13 @@ class _MainPageState extends State<MainPage> {
         await DateService().getHeatMapData(await highscore ?? 0);
     if (!mounted) return;
     showModalBottomSheet(
+        showDragHandle: true,
         isScrollControlled: true,
         context: context,
         builder: (context) {
           return CustomDatePicker(
               onChanged: changeDate,
-              selectedDate: currentDate,
+              selectedDate: currentDate.startOfDay,
               heatFactors: heatMapData);
         });
   }

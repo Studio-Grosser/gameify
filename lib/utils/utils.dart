@@ -21,6 +21,8 @@ extension DateExtension on DateTime {
     return year == now.year && month == now.month && day == now.day;
   }
 
+  DateTime get startOfDay => DateTime(year, month, day);
+
   String format() {
     if (isToday) return 'today';
     return '$day/$month/$year';

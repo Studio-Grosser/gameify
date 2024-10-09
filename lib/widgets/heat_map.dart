@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/date_day_display.dart';
-import 'package:gameify/widgets/styled_icon.dart';
 
 enum Direction { forward, backward }
 
@@ -154,6 +153,7 @@ class _HeatMapState extends State<HeatMap> {
 
   @override
   void initState() {
+    super.initState();
     selectedMonthAndYear = DateTime(DateTime.now().year, DateTime.now().month);
     minimumDate =
         DateTime(selectedMonthAndYear.year - 3, selectedMonthAndYear.month);
@@ -162,7 +162,6 @@ class _HeatMapState extends State<HeatMap> {
       selectedMonthAndYear =
           DateTime(widget.selectedDate!.year, widget.selectedDate!.month);
     }
-    super.initState();
   }
 
   @override
@@ -171,26 +170,28 @@ class _HeatMapState extends State<HeatMap> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             IconButton(
-                onPressed: () => changeMonth(Direction.backward),
+                onPressed: !goBackMonthLimit
+                    ? null
+                    : () => changeMonth(Direction.backward),
+                disabledColor: Themes.secondary,
+                color: Themes.accent,
                 icon: const FaIcon(
                   FontAwesomeIcons.chevronLeft,
                   size: 16,
-                  color: Themes.accent,
                 )),
             Text(calendarTitle, style: Font.b1.copyWith(color: Themes.accent)),
             IconButton(
-                onPressed: () => changeMonth(Direction.forward),
+                onPressed: !goNextMonthLimit
+                    ? null
+                    : () => changeMonth(Direction.forward),
+                disabledColor: Themes.secondary,
+                color: Themes.accent,
                 icon: const FaIcon(
                   FontAwesomeIcons.chevronRight,
                   size: 16,
-                  color: Themes.accent,
                 )),
-            const Spacer(),
-            StyledIcon(
-                icon: FontAwesomeIcons.xmark,
-                onTap: () => Navigator.pop(context))
           ]),
           const SizedBox(height: 30),
           GestureDetector(

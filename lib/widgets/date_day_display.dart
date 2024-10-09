@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
+import 'package:gameify/utils/utils.dart';
 
 class DateDayDisplay extends StatefulWidget {
   const DateDayDisplay(
@@ -23,22 +24,19 @@ class DateDayDisplay extends StatefulWidget {
 }
 
 class _DateDayDisplayState extends State<DateDayDisplay> {
-  late DateTime currentDate;
-
-  @override
-  void initState() {
-    final DateTime now = DateTime.now();
-    currentDate = DateTime(now.year, now.month, now.day);
-    super.initState();
-  }
-
   Color? get bubbleColor {
     if (widget.isSelected == true) return Themes.accent;
+    if (widget.date!.isToday) {
+      return Themes.accent.withValues(alpha: widget.heatFactor);
+    }
     return Themes.success.withValues(alpha: widget.heatFactor);
   }
 
   Color get textColor {
     if (widget.isSelected == true) return Themes.surface;
+    if ((widget.heatFactor ?? 0) > 0) {
+      return Themes.surface;
+    }
     return Themes.secondary;
   }
 
@@ -68,7 +66,10 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
                     height: size,
                     decoration: BoxDecoration(
                         color: bubbleColor,
-                        borderRadius: BorderRadius.circular(40)),
+                        borderRadius: BorderRadius.circular(40),
+                        border: widget.date!.isToday
+                            ? Border.all(width: 2, color: Themes.accent)
+                            : null),
                   ),
                 ),
                 Align(
