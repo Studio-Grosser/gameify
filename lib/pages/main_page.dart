@@ -12,6 +12,7 @@ import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/pages/intro_page.dart';
 import 'package:gameify/utils/font.dart';
+import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/custom_date_picker.dart';
 import 'package:gameify/widgets/metric_display.dart';
@@ -22,6 +23,7 @@ import 'package:gameify/widgets/styled_icon.dart';
 import 'package:gameify/widgets/task_display.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:gameify/widgets/value_display.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -187,6 +189,8 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeProvider themeProvider =
+        Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
       floatingActionButton: StyledFab(
         padding: EdgeInsets.zero,
@@ -206,6 +210,16 @@ class _MainPageState extends State<MainPage> {
                 children: [
                   Text(currentDate.format(), style: Font.h2),
                   const Spacer(),
+                  StyledIcon(
+                    icon: themeProvider.isLightTheme
+                        ? FontAwesomeIcons.sun
+                        : FontAwesomeIcons.moon,
+                    onTap: () {
+                      setState(() {
+                        themeProvider.toggleThemeMode();
+                      });
+                    },
+                  ),
                   StyledIcon(
                     icon: FontAwesomeIcons.trashCan,
                     onTap: () => DatabaseService.instance.delteDb(),

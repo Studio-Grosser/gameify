@@ -43,6 +43,7 @@ dependencies:
   date_picker_plus: ^4.1.0
 
   flutter_launcher_icons: ^0.14.1
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test:

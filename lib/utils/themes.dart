@@ -35,4 +35,30 @@ class Themes {
           fontSize: 18,
         ),
       ));
+
+  static ThemeData darkTheme = ThemeData(
+      brightness: Brightness.dark,
+      scaffoldBackgroundColor: surface,
+      colorScheme: const ColorScheme.dark(
+        primary: accent,
+        secondary: secondary,
+        tertiary: tertiary,
+        surface: surface,
+      ),
+      textTheme: const TextTheme(
+        bodyMedium: TextStyle(
+          fontFamily: 'Figtree',
+          fontWeight: FontWeight.w600,
+          color: primary,
+          height: 1,
+          fontSize: 14,
+        ),
+        bodyLarge: TextStyle(
+          fontFamily: 'Figtree',
+          fontWeight: FontWeight.w600,
+          color: primary,
+          height: 1,
+          fontSize: 18,
+        ),
+      ));
 }

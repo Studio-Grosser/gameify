@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gameify/pages/main_page.dart';
+import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/utils/themes.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => ThemeProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -28,6 +31,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'Gameify',
       theme: Themes.lightTheme,
+      darkTheme: Themes.darkTheme,
+      themeMode: Provider.of<ThemeProvider>(context).themeMode,
       home: const MainPage(),
     );
   }
