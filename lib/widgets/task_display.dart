@@ -10,40 +10,42 @@ class TaskDisplay extends StatelessWidget {
   const TaskDisplay(
       {super.key,
       required this.task,
-      required this.isCompleted,
-      required this.onChanged,
+      this.isCompleted,
+      this.onChanged,
       this.onDelete,
       this.onEdit});
   final Task task;
-  final bool isCompleted;
-  final Function(bool value) onChanged;
+  final bool? isCompleted;
+  final Function(bool value)? onChanged;
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
 
   bool get hasOptions => onDelete != null || onEdit != null;
+  bool get isTappable => onChanged != null || isCompleted != null;
 
   @override
   Widget build(BuildContext context) {
     return Opacity(
       opacity: task.isActive ? 1 : 0.75,
       child: GestureDetector(
-        onTap: () => onChanged(!isCompleted),
+        onTap: isTappable ? () => onChanged!(!isCompleted!) : null,
         child: StyledContainer(
           hideBorder: true,
           margin: const EdgeInsets.symmetric(vertical: 5),
           child: Row(
             children: [
-              Checkbox(
-                  activeColor: Themes.primary,
-                  visualDensity: VisualDensity.comfortable,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5)),
-                  side: WidgetStateBorderSide.resolveWith(
-                    (states) =>
-                        const BorderSide(width: 2, color: Themes.primary),
-                  ),
-                  value: isCompleted,
-                  onChanged: (value) => onChanged(value ?? false)),
+              if (isTappable)
+                Checkbox(
+                    activeColor: Themes.primary,
+                    visualDensity: VisualDensity.comfortable,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5)),
+                    side: WidgetStateBorderSide.resolveWith(
+                      (states) =>
+                          const BorderSide(width: 2, color: Themes.primary),
+                    ),
+                    value: isCompleted,
+                    onChanged: (value) => onChanged!(value ?? false)),
               const SizedBox(width: 10),
               Expanded(
                   child: Text(task.name,

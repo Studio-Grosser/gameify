@@ -8,12 +8,15 @@ class NoTaskInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
-      const FaIcon(FontAwesomeIcons.folderOpen,
-          size: 20, color: Themes.secondary),
-      const SizedBox(height: 10),
-      Text('no tasks yet', style: Font.b1.copyWith(color: Themes.secondary)),
-    ]));
+    return Container(
+      constraints: const BoxConstraints(maxHeight: 250),
+      alignment: Alignment.center,
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const FaIcon(FontAwesomeIcons.folderOpen,
+            size: 20, color: Themes.secondary),
+        const SizedBox(height: 10),
+        Text('no tasks yet', style: Font.b1.copyWith(color: Themes.secondary)),
+      ]),
+    );
   }
 }

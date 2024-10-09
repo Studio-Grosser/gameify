@@ -38,8 +38,7 @@ Future<bool> confirmDelete(BuildContext context, Task task) async {
                 message: 'You cannot undo this action',
                 confirmText: 'Delete',
                 cancelText: 'Cancel',
-                body: TaskDisplay(
-                    task: task, isCompleted: false, onChanged: (value) {}),
+                body: TaskDisplay(task: task),
               )) ??
       false;
 }
