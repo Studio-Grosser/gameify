@@ -13,18 +13,14 @@ class ValueDisplay extends StatelessWidget {
     return value > 0 ? Themes.success : Themes.warning;
   }
 
-  String get text {
-    if (value == 0) return isDefaultNegative ? '-0' : '+0';
-    return value > 0 ? '+$value' : '$value';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(5), color: color),
         child: Center(
-            child: Text(text, style: Font.b1.copyWith(color: Themes.surface))));
+            child: Text(value.abs().toString(),
+                style: Font.b1.copyWith(color: Themes.surface))));
   }
 }
