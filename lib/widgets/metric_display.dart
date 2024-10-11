@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/utils/font.dart';
 import 'package:gameify/widgets/styled_container.dart';
 
 class MetricDisplay extends StatelessWidget {

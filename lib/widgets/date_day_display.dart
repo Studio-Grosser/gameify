@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/utils/utils.dart';
 

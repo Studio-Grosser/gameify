@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:fading_edge_scrollview/fading_edge_scrollview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,9 +10,7 @@ import 'package:gameify/database/task_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/pages/intro_page.dart';
-import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/theme_provider.dart';
-import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/custom_date_picker.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_task_info.dart';

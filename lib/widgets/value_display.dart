@@ -16,7 +16,8 @@ class ValueDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+        width: 40,
+        padding: const EdgeInsets.symmetric(vertical: 3),
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(5), color: color),
         child: Center(

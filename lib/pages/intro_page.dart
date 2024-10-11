@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/task.dart';
-import 'package:gameify/utils/font.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/task_display.dart';
+import 'package:gap/gap.dart';
 
 class IntroPage extends StatefulWidget {
   const IntroPage({super.key, required this.onSubmit});
@@ -26,6 +26,7 @@ class _IntroPageState extends State<IntroPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       floatingActionButton: StyledFab(
         padding: const EdgeInsets.all(0),
@@ -43,8 +44,8 @@ class _IntroPageState extends State<IntroPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('choose your first tasks', style: Font.h3),
-            const SizedBox(height: 60),
+            Text('choose your first tasks', style: theme.textTheme.bodyLarge),
+            const Gap(60),
             ...tasks.map((task) => TaskDisplay(
                   task: task,
                   isCompleted: taskIds.contains(task.id),

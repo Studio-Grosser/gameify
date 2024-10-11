@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/widgets/confirm_dialog.dart';
-import 'package:gameify/widgets/task_display.dart';
 import 'package:gameify/widgets/task_dummy.dart';
 
 enum Filter { all, positives, negatives }
