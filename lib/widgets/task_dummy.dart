@@ -8,10 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 class TaskDummy extends StatelessWidget {
-  const TaskDummy({
-    super.key,
-    required this.task,
-  });
+  const TaskDummy({super.key, required this.task});
   final Task task;
 
   @override

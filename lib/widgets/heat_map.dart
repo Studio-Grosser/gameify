@@ -93,7 +93,7 @@ class _HeatMapState extends State<HeatMap> {
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(
             weekdays[i],
-            style: Font.b1,
+            style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
         )
@@ -181,7 +181,11 @@ class _HeatMapState extends State<HeatMap> {
                   FontAwesomeIcons.chevronLeft,
                   size: 16,
                 )),
-            Text(calendarTitle, style: Font.b1.copyWith(color: Themes.accent)),
+            Text(calendarTitle,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
+                    ?.copyWith(color: Themes.accent)),
             IconButton(
                 onPressed: !goNextMonthLimit
                     ? null

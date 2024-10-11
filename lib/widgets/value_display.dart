@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 
 class ValueDisplay extends StatelessWidget {
@@ -15,12 +14,14 @@ class ValueDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(5), color: color),
         child: Center(
             child: Text(value.abs().toString(),
-                style: Font.b1.copyWith(color: Themes.surface))));
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(color: Themes.surface))));
   }
 }

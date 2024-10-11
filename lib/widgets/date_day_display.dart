@@ -42,6 +42,7 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     if (widget.day == null) return const SizedBox();
     double size = 40;
     return Padding(
@@ -76,7 +77,8 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
                   alignment: Alignment.center,
                   child: Text(
                     widget.day.toString(),
-                    style: Font.b1.copyWith(color: textColor),
+                    style:
+                        theme.textTheme.bodyMedium?.copyWith(color: textColor),
                     textAlign: TextAlign.center,
                   ),
                 ),
