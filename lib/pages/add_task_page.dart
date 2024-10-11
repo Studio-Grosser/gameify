@@ -31,7 +31,7 @@ class _AddTaskPageState extends State<AddTaskPage>
   bool isScorePositive = true;
 
   String get scorePrefix => isScorePositive ? '+' : '-';
-  Color get scoreColor => isScorePositive ? Themes.success : Themes.warning;
+  Color get scoreColor => isScorePositive ? Themes.success : Themes.danger;
   String get submitText =>
       widget.initialTask == null ? 'add task' : 'edit task';
 

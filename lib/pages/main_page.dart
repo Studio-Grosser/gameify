@@ -20,6 +20,7 @@ import 'package:gameify/widgets/styled_icon.dart';
 import 'package:gameify/widgets/task_display.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:gameify/widgets/value_display.dart';
+import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
@@ -241,11 +242,11 @@ class _MainPageState extends State<MainPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        ValueDisplay(value: positiveScore),
-                        Text(score.toString(),
-                            style: theme.textTheme.titleLarge),
                         ValueDisplay(
                             value: negativeScore, isDefaultNegative: true),
+                        Text(score.toString(),
+                            style: theme.textTheme.titleLarge),
+                        ValueDisplay(value: positiveScore),
                       ],
                     )),
               ),
@@ -259,7 +260,7 @@ class _MainPageState extends State<MainPage> {
                         MetricDisplay(metric: highscore, unit: 'highscore'),
                       ],
                     ),
-                    const SizedBox(height: 100),
+                    const Gap(100),
                     SizedBox(
                       width: double.infinity,
                       child: CupertinoSlidingSegmentedControl<Filter>(
@@ -273,12 +274,12 @@ class _MainPageState extends State<MainPage> {
                             setState(() => currentFilter = value ?? Filter.all);
                           }),
                     ),
-                    const SizedBox(height: 10),
+                    const Gap(10),
                     filteredTasks.isEmpty
                         ? const NoTaskInfo()
                         : ListView.builder(
                             controller: _scrollController,
-                            padding: const EdgeInsets.only(bottom: 60),
+                            padding: const EdgeInsets.only(bottom: 100),
                             shrinkWrap: true,
                             itemCount: filteredTasks.length,
                             itemBuilder: (context, index) {

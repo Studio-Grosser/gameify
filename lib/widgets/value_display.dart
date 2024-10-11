@@ -8,8 +8,8 @@ class ValueDisplay extends StatelessWidget {
   final bool isDefaultNegative;
 
   Color get color {
-    if (value == 0) return isDefaultNegative ? Themes.warning : Themes.success;
-    return value > 0 ? Themes.success : Themes.warning;
+    if (value == 0) return isDefaultNegative ? Themes.danger : Themes.success;
+    return value > 0 ? Themes.success : Themes.danger;
   }
 
   @override
@@ -23,6 +23,6 @@ class ValueDisplay extends StatelessWidget {
         child: Center(
             child: Text(value.abs().toString(),
                 style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: Themes.surface))));
+                    ?.copyWith(color: Themes.shade1))));
   }
 }

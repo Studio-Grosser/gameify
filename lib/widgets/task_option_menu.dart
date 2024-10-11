@@ -23,8 +23,8 @@ class TaskOptionMenu extends StatelessWidget {
           menuPadding: EdgeInsets.zero,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          icon: const FaIcon(FontAwesomeIcons.ellipsisVertical,
-              size: 18, color: Themes.primary),
+          icon: FaIcon(FontAwesomeIcons.ellipsisVertical,
+              size: 18, color: theme.colorScheme.secondary),
           onSelected: (value) {
             if (value == TaskOption.delete) {
               onDelete();
@@ -51,11 +51,11 @@ class TaskOptionMenu extends StatelessWidget {
                 child: Row(
                   children: [
                     const FaIcon(FontAwesomeIcons.trashCan,
-                        size: 18, color: Themes.warning),
+                        size: 18, color: Themes.danger),
                     const SizedBox(width: 20),
                     Text('Delete',
                         style: theme.textTheme.bodyMedium
-                            ?.copyWith(color: Themes.warning)),
+                            ?.copyWith(color: Themes.danger)),
                   ],
                 ),
               ),

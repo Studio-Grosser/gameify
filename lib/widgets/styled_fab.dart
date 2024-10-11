@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/utils/themes.dart';
+import 'package:gap/gap.dart';
 
 class StyledFab extends StatelessWidget {
   const StyledFab(
@@ -18,7 +19,7 @@ class StyledFab extends StatelessWidget {
   final double? width;
   final EdgeInsets padding;
 
-  Widget get iconWidget => FaIcon(icon, color: Themes.surface, size: 18);
+  Widget get iconWidget => FaIcon(icon, color: Themes.shade1, size: 18);
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +46,8 @@ class StyledFab extends StatelessWidget {
                 if (text != null) ...[
                   Text(text!,
                       style: theme.textTheme.bodyLarge
-                          ?.copyWith(color: Themes.surface)),
-                  const SizedBox(width: 15),
+                          ?.copyWith(color: Themes.shade1)),
+                  const Gap(15)
                 ],
                 iconWidget
               ],

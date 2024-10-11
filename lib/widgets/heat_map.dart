@@ -165,6 +165,7 @@ class _HeatMapState extends State<HeatMap> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -174,7 +175,7 @@ class _HeatMapState extends State<HeatMap> {
                 onPressed: !goBackMonthLimit
                     ? null
                     : () => changeMonth(Direction.backward),
-                disabledColor: Themes.secondary,
+                disabledColor: theme.colorScheme.tertiary,
                 color: Themes.accent,
                 icon: const FaIcon(
                   FontAwesomeIcons.chevronLeft,
@@ -189,7 +190,7 @@ class _HeatMapState extends State<HeatMap> {
                 onPressed: !goNextMonthLimit
                     ? null
                     : () => changeMonth(Direction.forward),
-                disabledColor: Themes.secondary,
+                disabledColor: theme.colorScheme.tertiary,
                 color: Themes.accent,
                 icon: const FaIcon(
                   FontAwesomeIcons.chevronRight,

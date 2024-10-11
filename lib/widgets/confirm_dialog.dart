@@ -38,8 +38,8 @@ class ConfirmDialog extends StatelessWidget {
               ),
               const SizedBox(width: 15),
               StyledButton(
-                color: Themes.danger_,
-                textColor: Themes.white,
+                color: Themes.danger,
+                textColor: Themes.shade1,
                 text: confirmText,
                 onTap: () => Navigator.pop(context, true),
               ),

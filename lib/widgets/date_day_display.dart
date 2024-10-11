@@ -32,11 +32,11 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
   }
 
   Color get textColor {
-    if (widget.isSelected == true) return Themes.surface;
+    if (widget.isSelected == true) return Themes.shade1;
     if ((widget.heatFactor ?? 0) > 0) {
-      return Themes.surface;
+      return Themes.shade1;
     }
-    return Themes.secondary;
+    return Themes.shade3;
   }
 
   @override
