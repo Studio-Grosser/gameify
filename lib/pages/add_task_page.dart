@@ -112,6 +112,7 @@ class _AddTaskPageState extends State<AddTaskPage>
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Scaffold(
       floatingActionButton: StyledFab(
         text: submitText,
@@ -140,7 +141,7 @@ class _AddTaskPageState extends State<AddTaskPage>
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
                     controller: taskTextController,
                     focusNode: taskTextFocusNode,
-                    style: Font.h2,
+                    style: theme.textTheme.titleLarge,
                     maxLength: 30,
                     autofocus: true,
                     cursorWidth: 3,
@@ -149,7 +150,8 @@ class _AddTaskPageState extends State<AddTaskPage>
                         counter: const SizedBox(),
                         border: InputBorder.none,
                         hintText: 'add task description',
-                        hintStyle: Font.h2.copyWith(color: Themes.secondary))),
+                        hintStyle: theme.textTheme.titleLarge
+                            ?.copyWith(color: theme.colorScheme.secondary))),
               ),
               const SizedBox(height: 30),
               Row(
@@ -171,7 +173,7 @@ class _AddTaskPageState extends State<AddTaskPage>
                                 duration: _animationDuration,
                                 child: Text(
                                   scorePrefix,
-                                  style: Font.h1,
+                                  style: theme.textTheme.titleLarge,
                                 ),
                               ),
                             ),
@@ -184,13 +186,16 @@ class _AddTaskPageState extends State<AddTaskPage>
                                 cursorColor: Themes.accent,
                                 cursorWidth: 3,
                                 controller: taskValueController,
-                                style: Font.h1,
+                                style: theme.textTheme.titleLarge,
                                 maxLength: 2,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
+                                    isCollapsed: true,
                                     hintText: '10',
-                                    hintStyle: Font.h1
-                                        .copyWith(color: Themes.secondary),
+                                    hintStyle: theme.textTheme.titleLarge
+                                        ?.copyWith(
+                                            color: theme.colorScheme.secondary,
+                                            fontWeight: FontWeight.w900),
                                     border: InputBorder.none,
                                     counter: const SizedBox()),
                               ),

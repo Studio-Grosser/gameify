@@ -189,6 +189,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     ThemeProvider themeProvider =
         Provider.of<ThemeProvider>(context, listen: false);
     return Scaffold(
@@ -208,7 +209,8 @@ class _MainPageState extends State<MainPage> {
             children: [
               Row(
                 children: [
-                  Text(currentDate.format(), style: Font.h2),
+                  Text(currentDate.format(),
+                      style: theme.textTheme.titleMedium),
                   const Spacer(),
                   StyledIcon(
                     icon: themeProvider.isLightTheme
@@ -243,7 +245,8 @@ class _MainPageState extends State<MainPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         ValueDisplay(value: positiveScore),
-                        Text(score.toString(), style: Font.h1),
+                        Text(score.toString(),
+                            style: theme.textTheme.titleLarge),
                         ValueDisplay(
                             value: negativeScore, isDefaultNegative: true),
                       ],
@@ -263,11 +266,12 @@ class _MainPageState extends State<MainPage> {
                     SizedBox(
                       width: double.infinity,
                       child: CupertinoSlidingSegmentedControl<Filter>(
-                          backgroundColor: Themes.tertiary,
-                          thumbColor: Themes.surface,
+                          backgroundColor: theme.colorScheme.primaryContainer,
+                          thumbColor: theme.colorScheme.secondaryContainer,
                           groupValue: currentFilter,
                           children: Task.filters.map((key, value) => MapEntry(
-                              key, Text(value, style: Font.b1.copyWith()))),
+                              key,
+                              Text(value, style: theme.textTheme.bodyMedium))),
                           onValueChanged: (value) {
                             setState(() => currentFilter = value ?? Filter.all);
                           }),

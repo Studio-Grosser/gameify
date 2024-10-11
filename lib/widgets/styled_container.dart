@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/utils/themes.dart';
 
 class StyledContainer extends StatelessWidget {
   const StyledContainer(
@@ -10,7 +9,8 @@ class StyledContainer extends StatelessWidget {
       this.margin = const EdgeInsets.all(2),
       this.height,
       this.width,
-      this.hideBorder = false});
+      this.hideBorder = false,
+      this.color});
   final Widget child;
   final double borderRadius;
   final EdgeInsets padding;
@@ -18,19 +18,23 @@ class StyledContainer extends StatelessWidget {
   final bool hideBorder;
   final double? height;
   final double? width;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
+    ColorScheme colorScheme = Theme.of(context).colorScheme;
     return Container(
         height: height,
         width: width,
         padding: padding,
         margin: margin,
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.tertiary,
+          color: color ?? colorScheme.primaryContainer,
           border: Border.all(
               width: 2,
-              color: hideBorder ? Colors.transparent : Themes.secondary),
+              color: hideBorder
+                  ? Colors.transparent
+                  : colorScheme.secondaryContainer),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: child);

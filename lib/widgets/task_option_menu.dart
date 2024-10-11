@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/utils/utils.dart';
 
@@ -16,6 +15,7 @@ class TaskOptionMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Opacity(
       opacity: isEnabled ? 1 : 0,
       child: PopupMenuButton<TaskOption>(
@@ -34,14 +34,14 @@ class TaskOptionMenu extends StatelessWidget {
           },
           itemBuilder: (context) {
             return [
-              const PopupMenuItem(
-                padding: EdgeInsets.all(20),
+              PopupMenuItem(
+                padding: const EdgeInsets.all(20),
                 value: TaskOption.edit,
                 child: Row(
                   children: [
-                    FaIcon(FontAwesomeIcons.pencil, size: 18),
-                    SizedBox(width: 20),
-                    Text('Edit', style: Font.b1),
+                    const FaIcon(FontAwesomeIcons.pencil, size: 18),
+                    const SizedBox(width: 20),
+                    Text('Edit', style: theme.textTheme.bodyMedium),
                   ],
                 ),
               ),
@@ -54,7 +54,8 @@ class TaskOptionMenu extends StatelessWidget {
                         size: 18, color: Themes.warning),
                     const SizedBox(width: 20),
                     Text('Delete',
-                        style: Font.b1.copyWith(color: Themes.warning)),
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(color: Themes.warning)),
                   ],
                 ),
               ),

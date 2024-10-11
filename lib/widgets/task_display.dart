@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gameify/models/task.dart';
-import 'package:gameify/utils/font.dart';
-import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/task_option_menu.dart';
 import 'package:gameify/widgets/value_display.dart';
@@ -25,6 +23,7 @@ class TaskDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Opacity(
       opacity: task.isActive ? 1 : 0.75,
       child: GestureDetector(
@@ -36,20 +35,12 @@ class TaskDisplay extends StatelessWidget {
             children: [
               if (isTappable)
                 Checkbox(
-                    activeColor: Themes.primary,
-                    visualDensity: VisualDensity.comfortable,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5)),
-                    side: WidgetStateBorderSide.resolveWith(
-                      (states) =>
-                          const BorderSide(width: 2, color: Themes.primary),
-                    ),
                     value: isCompleted,
                     onChanged: (value) => onChanged!(value ?? false)),
               const SizedBox(width: 10),
               Expanded(
                   child: Text(task.name,
-                      style: Font.b1,
+                      style: theme.textTheme.bodyMedium,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1)),
               const SizedBox(width: 10),

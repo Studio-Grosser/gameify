@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/utils/font.dart';
 
 class StyledButton extends StatelessWidget {
   const StyledButton(
@@ -17,13 +16,15 @@ class StyledButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return GestureDetector(
       onTap: enabled ? onTap : null,
       child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
           decoration: BoxDecoration(
-              color: color, borderRadius: BorderRadius.circular(10)),
-          child: Text(text, style: Font.h3.copyWith(color: textColor))),
+              color: color, borderRadius: BorderRadius.circular(12)),
+          child: Text(text,
+              style: theme.textTheme.bodyMedium?.copyWith(color: textColor))),
     );
   }
 }

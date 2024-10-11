@@ -9,6 +9,7 @@ class MetricDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Expanded(
       child: StyledContainer(
         height: 65,
@@ -24,13 +25,14 @@ class MetricDisplay extends StatelessWidget {
                     return const CircularProgressIndicator.adaptive();
                   }
                   int? value = (snapshot.data)?.toInt();
-                  return Text('$value', style: Font.h2.copyWith(fontSize: 26));
+                  return Text('$value', style: theme.textTheme.titleMedium);
                 }),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(left: 5.0, bottom: 2.0),
-                child:
-                    Text(unit, style: Font.b1, overflow: TextOverflow.ellipsis),
+                padding: const EdgeInsets.only(left: 5.0),
+                child: Text(unit,
+                    style: theme.textTheme.bodyMedium,
+                    overflow: TextOverflow.ellipsis),
               ),
             ),
           ],

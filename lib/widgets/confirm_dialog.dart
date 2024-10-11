@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:gameify/utils/font.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/styled_button.dart';
+import 'package:gap/gap.dart';
 
 class ConfirmDialog extends StatelessWidget {
   const ConfirmDialog(
@@ -19,27 +21,27 @@ class ConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return SafeArea(
       child: Container(
           padding: const EdgeInsets.all(20),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text(title, style: Font.h3),
-            const SizedBox(height: 10),
-            Text(message, style: Font.b1),
-            const SizedBox(height: 40),
+            Text(title, style: theme.textTheme.bodyLarge),
+            Text(message, style: theme.textTheme.bodyMedium),
+            const Gap(50),
             body,
-            const SizedBox(height: 50),
+            const Gap(50),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               StyledButton(
-                color: Themes.secondary,
-                textColor: Themes.primary,
+                color: Colors.transparent,
+                textColor: theme.colorScheme.onPrimaryContainer,
                 text: cancelText,
                 onTap: () => Navigator.pop(context, false),
               ),
               const SizedBox(width: 15),
               StyledButton(
-                color: Themes.warning,
-                textColor: Themes.surface,
+                color: Themes.danger_,
+                textColor: Themes.white,
                 text: confirmText,
                 onTap: () => Navigator.pop(context, true),
               ),

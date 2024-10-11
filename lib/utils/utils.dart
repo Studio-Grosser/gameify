@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gameify/models/task.dart';
 import 'package:gameify/widgets/confirm_dialog.dart';
 import 'package:gameify/widgets/task_display.dart';
+import 'package:gameify/widgets/task_dummy.dart';
 
 enum Filter { all, positives, negatives }
 
@@ -34,11 +35,11 @@ Future<bool> confirmDelete(BuildContext context, Task task) async {
           showDragHandle: true,
           context: context,
           builder: (context) => ConfirmDialog(
-                title: 'Delete task',
+                title: 'Delete task?',
                 message: 'You cannot undo this action',
                 confirmText: 'Delete',
                 cancelText: 'Cancel',
-                body: TaskDisplay(task: task),
+                body: TaskDummy(task: task),
               )) ??
       false;
 }

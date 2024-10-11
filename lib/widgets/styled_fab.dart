@@ -22,6 +22,7 @@ class StyledFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return GestureDetector(
         onTap: onTap,
         child: Container(
@@ -43,9 +44,7 @@ class StyledFab extends StatelessWidget {
               children: [
                 if (text != null) ...[
                   Text(text!,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
+                      style: theme.textTheme.bodyLarge
                           ?.copyWith(color: Themes.surface)),
                   const SizedBox(width: 15),
                 ],
