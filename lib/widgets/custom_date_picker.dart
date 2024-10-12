@@ -30,7 +30,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: SizedBox(
-          height: 405,
+          height: 410,
           child: HeatMap(
             data: widget.heatFactors,
             selectedDate: currentDate,

@@ -222,6 +222,21 @@ class _AddHabitPageState extends State<AddHabitPage>
                           )),
                         )),
                   ),
+                  const SizedBox(width: 5),
+                  GestureDetector(
+                    onTap: () => changeScorePrefix(),
+                    child: StyledContainer(
+                        height: 70,
+                        width: 70,
+                        borderRadius: 50,
+                        padding: const EdgeInsets.all(16),
+                        child: AnimatedScale(
+                            scale: _jumpScale,
+                            duration: _animationDuration,
+                            curve: Curves.linear,
+                            child: Center(
+                                child: FaIcon(FontAwesomeIcons.chevronDown)))),
+                  ),
                 ],
               ),
               const Spacer(flex: 3)
