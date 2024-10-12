@@ -10,12 +10,12 @@ class ConfirmDialog extends StatelessWidget {
       required this.message,
       required this.confirmText,
       required this.cancelText,
-      required this.body});
+      this.body});
   final String title;
   final String message;
   final String confirmText;
   final String cancelText;
-  final Widget body;
+  final Widget? body;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ConfirmDialog extends StatelessWidget {
             Text(title, style: theme.textTheme.bodyLarge),
             Text(message, style: theme.textTheme.bodyMedium),
             const Gap(50),
-            body,
+            if (body != null) body!,
             const Gap(50),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
               StyledButton(

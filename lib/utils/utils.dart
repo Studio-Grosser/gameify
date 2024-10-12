@@ -42,3 +42,16 @@ Future<bool> confirmDelete(BuildContext context, Task task) async {
               )) ??
       false;
 }
+
+Future<bool> confirmReset(BuildContext context) async {
+  return await showModalBottomSheet<bool>(
+          showDragHandle: true,
+          context: context,
+          builder: (context) => const ConfirmDialog(
+                title: 'Reset App?',
+                message: 'You cannot undo this action',
+                confirmText: 'Reset',
+                cancelText: 'Cancel',
+              )) ??
+      false;
+}

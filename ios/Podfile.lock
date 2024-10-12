@@ -2,6 +2,8 @@ PODS:
   - Flutter (1.0.0)
   - package_info_plus (0.4.5):
     - Flutter
+  - restart_app (0.0.1):
+    - Flutter
   - Sentry/HybridSDK (8.36.0)
   - sentry_flutter (8.9.0):
     - Flutter
@@ -17,6 +19,7 @@ PODS:
 DEPENDENCIES:
   - Flutter (from `Flutter`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - restart_app (from `.symlinks/plugins/restart_app/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/darwin`)
@@ -30,6 +33,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
+  restart_app:
+    :path: ".symlinks/plugins/restart_app/ios"
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
   shared_preferences_foundation:
@@ -40,6 +45,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
+  restart_app: 806659942bf932f6ce51c5372f91ce5e81c8c14a
   Sentry: f8374b5415bc38dfb5645941b3ae31230fbeae57
   sentry_flutter: 0eb93e5279eb41e2392212afe1ccd2fecb4f8cbe
   shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78

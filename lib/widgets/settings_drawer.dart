@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gameify/database/database_service.dart';
+import 'package:gameify/utils/logger.dart';
 import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/utils/themes.dart';
+import 'package:gameify/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:restart_app/restart_app.dart';
 
 class SettingsDrawer extends StatefulWidget {
   const SettingsDrawer({super.key});
@@ -12,6 +16,17 @@ class SettingsDrawer extends StatefulWidget {
 }
 
 class _SettingsDrawerState extends State<SettingsDrawer> {
+  Future<void> resetApp() async {
+    bool confirmed = await confirmReset(context);
+    if (!mounted || !confirmed) return;
+    await DatabaseService.instance.delteDb();
+    Logger.i('Restarting App');
+    Restart.restartApp(
+      notificationTitle: 'Restarting App',
+      notificationBody: 'Please tap here to open the app again.',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -34,6 +49,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
                   style: theme.textTheme.bodyLarge),
             ),
             ListTile(
+              onTap: resetApp,
               leading:
                   const FaIcon(FontAwesomeIcons.trashCan, color: Themes.danger),
               title: Text(

@@ -212,10 +212,6 @@ class _MainPageState extends State<MainPage> {
                       style: theme.textTheme.titleMedium),
                   const Spacer(),
                   StyledIcon(
-                    icon: FontAwesomeIcons.trashCan,
-                    onTap: () => DatabaseService.instance.delteDb(),
-                  ),
-                  StyledIcon(
                     icon: FontAwesomeIcons.calendar,
                     onTap: showDatePicker,
                   ),
