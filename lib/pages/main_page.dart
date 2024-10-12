@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,6 +11,7 @@ import 'package:gameify/models/task.dart';
 import 'package:gameify/pages/intro_page.dart';
 import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/widgets/custom_date_picker.dart';
+import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_task_info.dart';
 import 'package:gameify/widgets/styled_container.dart';
@@ -259,19 +259,13 @@ class _MainPageState extends State<MainPage> {
                       ],
                     ),
                     const Gap(100),
-                    SizedBox(
-                      width: double.infinity,
-                      child: CupertinoSlidingSegmentedControl<Filter>(
-                          backgroundColor: theme.colorScheme.primaryContainer,
-                          thumbColor: theme.colorScheme.secondaryContainer,
-                          groupValue: currentFilter,
-                          children: Task.filters.map((key, value) => MapEntry(
-                              key,
-                              Text(value, style: theme.textTheme.bodyMedium))),
-                          onValueChanged: (value) {
-                            setState(() => currentFilter = value ?? Filter.all);
-                          }),
-                    ),
+                    FilterSlider(
+                        currentFilter: currentFilter,
+                        onChanged: (newFilter) {
+                          setState(() {
+                            currentFilter = newFilter ?? Filter.all;
+                          });
+                        }),
                     const Gap(10),
                     filteredTasks.isEmpty
                         ? const NoTaskInfo()
