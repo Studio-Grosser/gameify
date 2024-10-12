@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/habit.dart';
+import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
@@ -29,6 +30,15 @@ class _AddHabitPageState extends State<AddHabitPage>
   Animation<double>? _animation;
 
   bool isScorePositive = true;
+  HabitMode currentHabitMode = HabitMode.checkbox;
+
+  void toggleHabitMode() {
+    setState(() {
+      currentHabitMode = HabitMode
+          .values[(currentHabitMode.index + 1) % HabitMode.values.length];
+    });
+    jump();
+  }
 
   String get scorePrefix => isScorePositive ? '+' : '-';
   Color get scoreColor => isScorePositive ? Themes.success : Themes.danger;
@@ -203,7 +213,6 @@ class _AddHabitPageState extends State<AddHabitPage>
                           ],
                         )),
                   ),
-                  const SizedBox(width: 5),
                   GestureDetector(
                     onTap: () => changeScorePrefix(),
                     child: StyledContainer(
@@ -222,20 +231,19 @@ class _AddHabitPageState extends State<AddHabitPage>
                           )),
                         )),
                   ),
-                  const SizedBox(width: 5),
                   GestureDetector(
-                    onTap: () => changeScorePrefix(),
+                    onTap: () => toggleHabitMode(),
                     child: StyledContainer(
                         height: 70,
                         width: 70,
                         borderRadius: 50,
-                        padding: const EdgeInsets.all(16),
                         child: AnimatedScale(
                             scale: _jumpScale,
                             duration: _animationDuration,
                             curve: Curves.linear,
                             child: Center(
-                                child: FaIcon(FontAwesomeIcons.chevronDown)))),
+                                child:
+                                    FaIcon(currentHabitMode.icon, size: 30)))),
                   ),
                 ],
               ),

@@ -21,7 +21,7 @@ extension HabitModeExtension on HabitMode {
       }[this]!;
 
   IconData get icon => <HabitMode, IconData>{
-        HabitMode.checkbox: FontAwesomeIcons.squareCheck,
-        HabitMode.count: FontAwesomeIcons.arrowDown91,
+        HabitMode.checkbox: FontAwesomeIcons.circleCheck,
+        HabitMode.count: FontAwesomeIcons.arrowUp91,
       }[this]!;
 }
