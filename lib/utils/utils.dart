@@ -5,7 +5,7 @@ import 'package:gameify/widgets/habit_dummy.dart';
 
 enum Filter { all, positives, negatives }
 
-enum HabitOption { edit, delete }
+enum HabitOption { edit, delete, reset }
 
 DateTime fromId(String id) {
   final parts = id.split('-');

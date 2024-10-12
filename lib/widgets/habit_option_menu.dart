@@ -8,10 +8,12 @@ class HabitOptionMenu extends StatelessWidget {
       {super.key,
       required this.isEnabled,
       required this.onDelete,
-      required this.onEdit});
+      required this.onEdit,
+      required this.onReset});
   final bool isEnabled;
   final VoidCallback onDelete;
   final VoidCallback onEdit;
+  final VoidCallback onReset;
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +32,23 @@ class HabitOptionMenu extends StatelessWidget {
               onDelete();
             } else if (value == HabitOption.edit) {
               onEdit();
+            } else if (value == HabitOption.reset) {
+              onReset();
             }
           },
           itemBuilder: (context) {
             return [
+              PopupMenuItem(
+                padding: const EdgeInsets.all(20),
+                value: HabitOption.reset,
+                child: Row(
+                  children: [
+                    const FaIcon(FontAwesomeIcons.rotateLeft, size: 18),
+                    const SizedBox(width: 20),
+                    Text('Reset', style: theme.textTheme.bodyMedium),
+                  ],
+                ),
+              ),
               PopupMenuItem(
                 padding: const EdgeInsets.all(20),
                 value: HabitOption.edit,

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/pages/add_habit_page.dart';
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/database/date_service.dart';
@@ -63,19 +62,38 @@ class _MainPageState extends State<MainPage> {
     return false;
   }
 
+  int? getHabitValue(String id) {
+    if (completedHabitIds.containsKey(id)) {
+      return completedHabitIds[id];
+    }
+    return null;
+  }
+
   int get score => positiveScore + negativeScore;
 
-  int get positiveScore => habits
-      .where((habit) => isHabitCompleted(habit.id) && habit.score > 0)
-      .fold(0, (sum, habit) => sum + habit.score);
+  int get positiveScore => habits.where((habit) => habit.score >= 0).fold(
+      0, (sum, habit) => sum + habit.score * (getHabitValue(habit.id) ?? 0));
 
-  int get negativeScore => habits
-      .where((habit) => isHabitCompleted(habit.id) && habit.score < 0)
-      .fold(0, (sum, habit) => sum + habit.score);
+  int get negativeScore => habits.where((habit) => habit.score < 0).fold(
+      0, (sum, habit) => sum + habit.score * (getHabitValue(habit.id) ?? 0));
 
   void changeDate(DateTime date) {
     setState(() => currentDate = date);
     loadDate();
+    loadMetrics();
+  }
+
+  void resetHabit(String habitId) async {
+    setState(() {
+      if (completedHabitIds.containsKey(habitId)) {
+        completedHabitIds.remove(habitId);
+      }
+    });
+    await DateService().writeDate(Date(
+      id: currentDate.toId(),
+      completedHabitIds: completedHabitIds,
+      score: score,
+    ));
     loadMetrics();
   }
 
@@ -141,8 +159,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   void loadMetrics() {
-    highscore = DateService().getHighestScore();
-    average = DateService().getAverageScore();
+    setState(() {
+      highscore = DateService().getHighestScore();
+      average = DateService().getAverageScore();
+    });
   }
 
   void sortHabits() =>
@@ -275,14 +295,15 @@ class _MainPageState extends State<MainPage> {
                             itemCount: filteredHabits.length,
                             itemBuilder: (context, index) {
                               Habit habit = filteredHabits[index];
-                              bool isCompleted = isHabitCompleted(habit.id);
+                              int? value = getHabitValue(habit.id);
                               return HabitDisplay(
                                 habit: habit,
-                                isCompleted: isCompleted,
-                                onChanged: (_) => onHabitTap(habit),
+                                value: value,
+                                onTap: () => onHabitTap(habit),
                                 onDelete: () => onHabitDelete(habit),
                                 onEdit: () => openAddHabitPage(context,
                                     initialHabit: habit),
+                                onReset: () => resetHabit(habit.id),
                               );
                             }),
                   ],

@@ -49,10 +49,14 @@ class _IntroPageState extends State<IntroPage> {
             const Gap(60),
             ...habits.map((habit) => HabitDisplay(
                   habit: habit,
-                  isCompleted: habitIds.contains(habit.id),
-                  onChanged: (value) => setState(() => value
-                      ? habitIds.add(habit.id)
-                      : habitIds.remove(habit.id)),
+                  value: habitIds.contains(habit.id) ? 1 : 0,
+                  onTap: () {
+                    setState(() {
+                      !habitIds.contains(habit.id)
+                          ? habitIds.add(habit.id)
+                          : habitIds.remove(habit.id);
+                    });
+                  },
                 ))
           ],
         ),

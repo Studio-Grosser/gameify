@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gameify/models/habit.dart';
-import 'package:gameify/widgets/custom_checkbox.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/habit_option_menu.dart';
 import 'package:gameify/widgets/value_display.dart';
@@ -10,20 +9,18 @@ class HabitDisplay extends StatelessWidget {
   const HabitDisplay(
       {super.key,
       required this.habit,
-      this.value,
-      this.onTap,
+      this.isCompleted,
+      this.onChanged,
       this.onDelete,
-      this.onEdit,
-      this.onReset});
+      this.onEdit});
   final Habit habit;
-  final int? value;
-  final VoidCallback? onTap;
+  final bool? isCompleted;
+  final Function(bool value)? onChanged;
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
-  final VoidCallback? onReset;
 
-  bool get hasOptions => onDelete != null || onEdit != null || onReset != null;
-  bool get isTappable => onTap != null || value != null;
+  bool get hasOptions => onDelete != null || onEdit != null;
+  bool get isTappable => onChanged != null || isCompleted != null;
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +28,16 @@ class HabitDisplay extends StatelessWidget {
     return Opacity(
       opacity: habit.isActive ? 1 : 0.75,
       child: GestureDetector(
-        onTap: isTappable ? () => onTap!() : null,
+        onTap: isTappable ? () => onChanged!(!isCompleted!) : null,
         child: StyledContainer(
           hideBorder: true,
           margin: const EdgeInsets.symmetric(vertical: 5),
           child: Row(
             children: [
-              if (isTappable) ...[
-                CustomCheckbox(
-                    onTap: () => onTap!(), mode: habit.mode, value: value),
-              ],
+              if (isTappable)
+                Checkbox(
+                    value: isCompleted,
+                    onChanged: (value) => onChanged!(value ?? false)),
               const Gap(10),
               Expanded(
                   child: Text(habit.name,
@@ -54,7 +51,7 @@ class HabitDisplay extends StatelessWidget {
                   isEnabled: habit.isActive,
                   onDelete: onDelete!,
                   onEdit: onEdit!,
-                  onReset: onReset!,
+                  onReset: () => onChanged!(false),
                 )
             ],
           ),
