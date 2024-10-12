@@ -46,7 +46,8 @@ class Habit {
         name_: name,
         score_: score,
         createdAt_: createdAt.toIso8601String(),
-        isActive_: isActive ? 1 : 0
+        isActive_: isActive ? 1 : 0,
+        mode_: mode.value
       };
 
   factory Habit.fromJson(Map<String, dynamic> json) => Habit(

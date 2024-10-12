@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/database/database_service.dart';
@@ -20,11 +21,13 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
     bool confirmed = await confirmReset(context);
     if (!mounted || !confirmed) return;
     await DatabaseService.instance.delteDb();
-    Logger.i('Restarting App');
-    Restart.restartApp(
-      notificationTitle: 'Restarting App',
-      notificationBody: 'Please tap here to open the app again.',
-    );
+    if (kReleaseMode) {
+      Logger.i('Restarting App');
+      Restart.restartApp(
+        notificationTitle: 'Restarting App',
+        notificationBody: 'Please tap here to open the app again.',
+      );
+    }
   }
 
   @override

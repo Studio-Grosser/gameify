@@ -31,7 +31,8 @@ class DatabaseService {
         ${Habit.name_} TEXT NOT NULL,
         ${Habit.score_} INTEGER NOT NULL,
         ${Habit.createdAt_} TEXT NOT NULL,
-        ${Habit.isActive_} INTEGER NOT NULL
+        ${Habit.isActive_} INTEGER NOT NULL,
+        ${Habit.mode_} TEXT NOT NULL
       )
       ''');
 
