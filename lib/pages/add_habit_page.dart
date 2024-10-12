@@ -82,6 +82,7 @@ class _AddHabitPageState extends State<AddHabitPage>
       habitTextController.text = widget.initialHabit!.name;
       isScorePositive = widget.initialHabit!.score >= 0;
       habitValueController.text = widget.initialHabit!.score.abs().toString();
+      currentHabitMode = widget.initialHabit!.mode;
     } else {
       habitValueController.text = '10';
     }

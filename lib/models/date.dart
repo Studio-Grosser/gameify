@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class Date {
   final String id;
-  final Set<String> completedHabitIds;
+  final Map<String, int> completedHabitIds;
   final int score;
 
   Date({required this.id, required this.completedHabitIds, this.score = 0});
@@ -16,14 +16,14 @@ class Date {
 
   Map<String, dynamic> toJson() => {
         id_: id,
-        completedHabitIds_: jsonEncode(completedHabitIds.toList()),
+        completedHabitIds_: jsonEncode(completedHabitIds),
         score_: score,
       };
 
   factory Date.fromJson(Map<String, dynamic> json) => Date(
         id: json[id_],
         completedHabitIds:
-            Set<String>.from(jsonDecode(json[completedHabitIds_])),
+            Map<String, int>.from(jsonDecode(json[completedHabitIds_])),
         score: json[score_] as int? ?? 0,
       );
 }

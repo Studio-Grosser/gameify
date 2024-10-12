@@ -38,6 +38,15 @@ class Habit {
 
   void toggleActive() => isActive = !isActive;
 
+  int updateAlgorithm(int value) {
+    if (mode == HabitMode.count) {
+      return value + 1;
+    } else if (mode == HabitMode.checkbox) {
+      return value == 0 ? 1 : 0;
+    }
+    return 0;
+  }
+
   bool hasSameValues(Habit? b) =>
       name == b?.name && score == b?.score && mode == b?.mode;
 

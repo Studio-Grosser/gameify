@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/pages/add_habit_page.dart';
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/database/date_service.dart';
@@ -54,8 +55,13 @@ class _MainPageState extends State<MainPage> {
   List<Habit> get habits => rawHabits
       .where((habit) => habit.isActive || isHabitCompleted(habit.id))
       .toList();
-  Set<String> completedHabitIds = {};
-  bool isHabitCompleted(String id) => completedHabitIds.contains(id);
+  Map<String, int> completedHabitIds = {};
+  bool isHabitCompleted(String id) {
+    if (completedHabitIds.containsKey(id)) {
+      return completedHabitIds[id]! > 0;
+    }
+    return false;
+  }
 
   int get score => positiveScore + negativeScore;
 
@@ -81,12 +87,12 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  Future<void> onHabitChange(bool value, Habit habit) async {
+  Future<void> onHabitTap(Habit habit) async {
     jump();
     setState(() {
-      value
-          ? completedHabitIds.add(habit.id)
-          : completedHabitIds.remove(habit.id);
+      completedHabitIds.update(
+          habit.id, (value) => habit.updateAlgorithm(value),
+          ifAbsent: () => 1);
     });
     HapticFeedback.mediumImpact();
     await DateService().writeDate(Date(
@@ -273,8 +279,7 @@ class _MainPageState extends State<MainPage> {
                               return HabitDisplay(
                                 habit: habit,
                                 isCompleted: isCompleted,
-                                onChanged: (value) =>
-                                    onHabitChange(value, habit),
+                                onChanged: (_) => onHabitTap(habit),
                                 onDelete: () => onHabitDelete(habit),
                                 onEdit: () => openAddHabitPage(context,
                                     initialHabit: habit),
