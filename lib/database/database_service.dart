@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/task.dart';
+import 'package:gameify/utils/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseService {
@@ -25,7 +24,8 @@ class DatabaseService {
   }
 
   Future _createDB(Database db, int version) async {
-    await db.execute('''
+    try {
+      await db.execute('''
       CREATE TABLE ${Task.tableName} (
         ${Task.id_} TEXT PRIMARY KEY,
         ${Task.name_} TEXT NOT NULL,
@@ -35,7 +35,9 @@ class DatabaseService {
       )
       ''');
 
-    await db.execute('''
+      Logger.s('Table "${Task.tableName}" created');
+
+      await db.execute('''
       CREATE TABLE ${Date.tableName} (
         ${Date.id_} TEXT PRIMARY KEY,
         ${Date.completedTaskIds_} TEXT NOT NULL,
@@ -43,17 +45,28 @@ class DatabaseService {
       )
       ''');
 
-    log('database created');
+      Logger.s('Table "${Date.tableName}" created');
+    } catch (e, st) {
+      Logger.f('Error creating database: ${e.toString()}', st);
+    }
   }
 
   Future<void> delteDb() async {
-    await deleteDatabase(dbPath).onError((e, st) => log(e.toString()));
-    log('database deleted');
+    try {
+      await deleteDatabase(dbPath);
+      Logger.s('databse deleted');
+    } catch (e, st) {
+      Logger.e('Error deleting database', st);
+    }
   }
 
   Future<void> close() async {
-    final db = await instance.database;
-    db.close();
-    log('database closed');
+    try {
+      final db = await instance.database;
+      await db.close();
+      Logger.s('database closed');
+    } catch (e, st) {
+      Logger.e('Error closing database', st);
+    }
   }
 }
