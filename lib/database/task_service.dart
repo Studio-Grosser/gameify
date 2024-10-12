@@ -17,7 +17,8 @@ class TaskService {
 
   Future<void> updateActiveState(String taskId, bool isActive) async {
     final db = await DatabaseService.instance.database;
-    await db.update(Task.tableName, {Task.isActive_: isActive ? 1 : 0});
+    await db.update(Task.tableName, {Task.isActive_: isActive ? 1 : 0},
+        where: '${Task.id_} = ?', whereArgs: [taskId]);
     Logger.s('Task "$taskId" changed isActive status to "$isActive"');
   }
 }
