@@ -64,10 +64,11 @@ class _AddHabitPageState extends State<AddHabitPage>
       return;
     }
     Habit newHabit = Habit(
-      name: habitTextController.text,
-      score: int.parse(habitValueController.text) * (isScorePositive ? 1 : -1),
-      createdAt: widget.initialHabit?.createdAt,
-    );
+        name: habitTextController.text,
+        score:
+            int.parse(habitValueController.text) * (isScorePositive ? 1 : -1),
+        createdAt: widget.initialHabit?.createdAt,
+        mode: currentHabitMode);
     if (!newHabit.hasSameValues(widget.initialHabit)) {
       widget.onSubmit(newHabit);
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/habit.dart';
+import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/habit_display.dart';
 import 'package:gap/gap.dart';
@@ -15,11 +16,11 @@ class IntroPage extends StatefulWidget {
 
 class _IntroPageState extends State<IntroPage> {
   static final List<Habit> habits = [
-    Habit(name: 'Go to the gym', score: 20),
-    Habit(name: 'Read 10 pages', score: 5),
-    Habit(name: 'Take a 30 minute walk', score: 10),
-    Habit(name: 'Watch Netflix', score: -5),
-    Habit(name: 'Eat fast food', score: -10),
+    Habit(name: 'Go to the gym', score: 20, mode: HabitMode.checkbox),
+    Habit(name: 'Read 10 pages', score: 5, mode: HabitMode.checkbox),
+    Habit(name: 'Take a 30 minute walk', score: 10, mode: HabitMode.checkbox),
+    Habit(name: 'Watch Netflix', score: -5, mode: HabitMode.checkbox),
+    Habit(name: 'Eat fast food', score: -10, mode: HabitMode.checkbox),
   ];
 
   List<String> habitIds = [];
