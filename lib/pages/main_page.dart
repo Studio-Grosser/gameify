@@ -14,6 +14,7 @@ import 'package:gameify/widgets/custom_date_picker.dart';
 import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_task_info.dart';
+import 'package:gameify/widgets/settings_drawer.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
@@ -31,6 +32,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
   DateTime currentDate = DateTime.now();
 
@@ -186,9 +188,9 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    ThemeProvider themeProvider =
-        Provider.of<ThemeProvider>(context, listen: false);
+
     return Scaffold(
+      key: _scaffoldKey,
       floatingActionButton: StyledFab(
         padding: EdgeInsets.zero,
         height: 70,
@@ -196,6 +198,7 @@ class _MainPageState extends State<MainPage> {
         icon: FontAwesomeIcons.plus,
         onTap: () => openAddTaskPage(context),
       ),
+      endDrawer: const SettingsDrawer(),
       body: SafeArea(
         bottom: false,
         child: Padding(
@@ -209,26 +212,20 @@ class _MainPageState extends State<MainPage> {
                       style: theme.textTheme.titleMedium),
                   const Spacer(),
                   StyledIcon(
-                    icon: themeProvider.isLightTheme
-                        ? FontAwesomeIcons.sun
-                        : FontAwesomeIcons.moon,
-                    onTap: () {
-                      setState(() {
-                        themeProvider.toggleThemeMode();
-                      });
-                    },
-                  ),
-                  StyledIcon(
                     icon: FontAwesomeIcons.trashCan,
                     onTap: () => DatabaseService.instance.delteDb(),
                   ),
                   StyledIcon(
                     icon: FontAwesomeIcons.calendar,
                     onTap: showDatePicker,
+                  ),
+                  StyledIcon(
+                    icon: FontAwesomeIcons.bars,
+                    onTap: () => _scaffoldKey.currentState?.openEndDrawer(),
                   )
                 ],
               ),
-              const SizedBox(height: 20),
+              const Gap(20),
               AnimatedScale(
                 scale: _jumpScale,
                 duration: _animationDuration,
