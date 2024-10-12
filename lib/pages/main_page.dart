@@ -95,24 +95,11 @@ class _MainPageState extends State<MainPage> {
     loadMetrics();
   }
 
-  Future<void> onTaskDelete(Task task) async {
-    bool confirmed = await confirmDelete(context, task);
+  Future<void> onTaskDelete(Task task, {bool confirm = true}) async {
+    bool confirmed = !confirm ? true : await confirmDelete(context, task);
     if (!confirmed) return;
     await TaskService().updateActiveState(task.id, false);
     setState(() => task.toggleActive());
-  }
-
-  void onTaskEdit(Task task) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddTaskPage(
-        initialTask: task,
-        onSubmit: (updatedTask) async {
-          await onTaskDelete(task);
-          await TaskService().writeTask(updatedTask);
-          setState(() => rawTasks.add(updatedTask));
-        },
-      );
-    }));
   }
 
   @override
@@ -139,7 +126,10 @@ class _MainPageState extends State<MainPage> {
     loadDate();
     loadMetrics();
 
-    TaskService().readTasks().then((value) => setState(() => rawTasks = value));
+    TaskService().readTasks().then((value) => setState(() {
+          rawTasks = value;
+          sortTasks();
+        }));
   }
 
   void loadMetrics() {
@@ -147,13 +137,21 @@ class _MainPageState extends State<MainPage> {
     average = DateService().getAverageScore();
   }
 
-  void openAddTaskPage() {
+  void sortTasks() =>
+      rawTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+
+  void openAddTaskPage(BuildContext context, {Task? initialTask}) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return AddTaskPage(
+        initialTask: initialTask,
         onSubmit: (task) async {
+          if (initialTask != null) {
+            await onTaskDelete(initialTask, confirm: false);
+          }
           await TaskService().writeTask(task);
           setState(() {
             rawTasks.add(task);
+            sortTasks();
           });
         },
       );
@@ -196,7 +194,7 @@ class _MainPageState extends State<MainPage> {
         height: 70,
         width: 70,
         icon: FontAwesomeIcons.plus,
-        onTap: openAddTaskPage,
+        onTap: () => openAddTaskPage(context),
       ),
       body: SafeArea(
         bottom: false,
@@ -290,7 +288,8 @@ class _MainPageState extends State<MainPage> {
                                 isCompleted: isCompleted,
                                 onChanged: (value) => onTaskChange(value, task),
                                 onDelete: () => onTaskDelete(task),
-                                onEdit: () => onTaskEdit(task),
+                                onEdit: () =>
+                                    openAddTaskPage(context, initialTask: task),
                               );
                             }),
                   ],

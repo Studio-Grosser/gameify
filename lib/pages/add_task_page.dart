@@ -56,6 +56,7 @@ class _AddTaskPageState extends State<AddTaskPage>
     Task newTask = Task(
       name: taskTextController.text,
       score: int.parse(taskValueController.text) * (isScorePositive ? 1 : -1),
+      createdAt: widget.initialTask?.createdAt,
     );
     if (!newTask.hasSameValues(widget.initialTask)) {
       widget.onSubmit(newTask);

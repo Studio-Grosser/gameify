@@ -3,6 +3,7 @@ import 'package:gameify/models/task.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/task_option_menu.dart';
 import 'package:gameify/widgets/value_display.dart';
+import 'package:gap/gap.dart';
 
 class TaskDisplay extends StatelessWidget {
   const TaskDisplay(
@@ -37,13 +38,13 @@ class TaskDisplay extends StatelessWidget {
                 Checkbox(
                     value: isCompleted,
                     onChanged: (value) => onChanged!(value ?? false)),
-              const SizedBox(width: 10),
+              const Gap(10),
               Expanded(
                   child: Text(task.name,
                       style: theme.textTheme.bodyMedium,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1)),
-              const SizedBox(width: 10),
+              const Gap(10),
               ValueDisplay(value: task.score),
               if (hasOptions)
                 TaskOptionMenu(

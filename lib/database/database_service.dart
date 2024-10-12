@@ -30,6 +30,7 @@ class DatabaseService {
         ${Task.id_} TEXT PRIMARY KEY,
         ${Task.name_} TEXT NOT NULL,
         ${Task.score_} INTEGER NOT NULL,
+        ${Task.createdAt_} TEXT NOT NULL,
         ${Task.isActive_} INTEGER NOT NULL
       )
       ''');
