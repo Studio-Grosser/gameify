@@ -45,6 +45,7 @@ dependencies:
   flutter_launcher_icons: ^0.14.1
   provider: ^6.1.2
   gap: ^3.0.1
+  sentry_flutter: ^8.9.0
 
 dev_dependencies:
   flutter_test:
