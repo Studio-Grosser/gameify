@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/utils/utils.dart';
 
-class TaskOptionMenu extends StatelessWidget {
-  const TaskOptionMenu(
+class HabitOptionMenu extends StatelessWidget {
+  const HabitOptionMenu(
       {super.key,
       required this.isEnabled,
       required this.onDelete,
@@ -18,7 +18,7 @@ class TaskOptionMenu extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     return Opacity(
       opacity: isEnabled ? 1 : 0,
-      child: PopupMenuButton<TaskOption>(
+      child: PopupMenuButton<HabitOption>(
           enabled: isEnabled,
           menuPadding: EdgeInsets.zero,
           shape:
@@ -26,9 +26,9 @@ class TaskOptionMenu extends StatelessWidget {
           icon: FaIcon(FontAwesomeIcons.ellipsisVertical,
               size: 18, color: theme.colorScheme.secondary),
           onSelected: (value) {
-            if (value == TaskOption.delete) {
+            if (value == HabitOption.delete) {
               onDelete();
-            } else if (value == TaskOption.edit) {
+            } else if (value == HabitOption.edit) {
               onEdit();
             }
           },
@@ -36,7 +36,7 @@ class TaskOptionMenu extends StatelessWidget {
             return [
               PopupMenuItem(
                 padding: const EdgeInsets.all(20),
-                value: TaskOption.edit,
+                value: HabitOption.edit,
                 child: Row(
                   children: [
                     const FaIcon(FontAwesomeIcons.pencil, size: 18),
@@ -47,7 +47,7 @@ class TaskOptionMenu extends StatelessWidget {
               ),
               PopupMenuItem(
                 padding: const EdgeInsets.all(20),
-                value: TaskOption.delete,
+                value: HabitOption.delete,
                 child: Row(
                   children: [
                     const FaIcon(FontAwesomeIcons.trashCan,

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/models/task.dart';
+import 'package:gameify/models/habit.dart';
 import 'package:gameify/widgets/confirm_dialog.dart';
-import 'package:gameify/widgets/task_dummy.dart';
+import 'package:gameify/widgets/habit_dummy.dart';
 
 enum Filter { all, positives, negatives }
 
-enum TaskOption { edit, delete }
+enum HabitOption { edit, delete }
 
 DateTime fromId(String id) {
   final parts = id.split('-');
@@ -29,16 +29,16 @@ extension DateExtension on DateTime {
   }
 }
 
-Future<bool> confirmDelete(BuildContext context, Task task) async {
+Future<bool> confirmDelete(BuildContext context, Habit habit) async {
   return await showModalBottomSheet<bool>(
           showDragHandle: true,
           context: context,
           builder: (context) => ConfirmDialog(
-                title: 'Delete task?',
+                title: 'Delete habit?',
                 message: 'You cannot undo this action',
                 confirmText: 'Delete',
                 cancelText: 'Cancel',
-                body: TaskDummy(task: task),
+                body: HabitDummy(habit: habit),
               )) ??
       false;
 }

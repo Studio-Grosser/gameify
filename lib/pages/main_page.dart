@@ -2,27 +2,25 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gameify/pages/add_task_page.dart';
+import 'package:gameify/pages/add_habit_page.dart';
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/database/date_service.dart';
-import 'package:gameify/database/task_service.dart';
+import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/date.dart';
-import 'package:gameify/models/task.dart';
+import 'package:gameify/models/habit.dart';
 import 'package:gameify/pages/intro_page.dart';
-import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/widgets/custom_date_picker.dart';
 import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/metric_display.dart';
-import 'package:gameify/widgets/no_task_info.dart';
+import 'package:gameify/widgets/no_habit_info.dart';
 import 'package:gameify/widgets/settings_drawer.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
-import 'package:gameify/widgets/task_display.dart';
+import 'package:gameify/widgets/habit_display.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:gameify/widgets/value_display.dart';
 import 'package:gap/gap.dart';
-import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -41,33 +39,33 @@ class _MainPageState extends State<MainPage> {
 
   Filter currentFilter = Filter.all;
 
-  List<Task> get filteredTasks {
+  List<Habit> get filteredHabits {
     switch (currentFilter) {
       case Filter.positives:
-        return tasks.where((task) => task.score > 0).toList();
+        return habits.where((habit) => habit.score > 0).toList();
       case Filter.negatives:
-        return tasks.where((task) => task.score < 0).toList();
+        return habits.where((habit) => habit.score < 0).toList();
       default:
-        return tasks;
+        return habits;
     }
   }
 
-  List<Task> rawTasks = [];
-  List<Task> get tasks => rawTasks
-      .where((task) => task.isActive || isTaskCompleted(task.id))
+  List<Habit> rawHabits = [];
+  List<Habit> get habits => rawHabits
+      .where((habit) => habit.isActive || isHabitCompleted(habit.id))
       .toList();
-  Set<String> completedTaskIds = {};
-  bool isTaskCompleted(String id) => completedTaskIds.contains(id);
+  Set<String> completedHabitIds = {};
+  bool isHabitCompleted(String id) => completedHabitIds.contains(id);
 
   int get score => positiveScore + negativeScore;
 
-  int get positiveScore => tasks
-      .where((task) => isTaskCompleted(task.id) && task.score > 0)
-      .fold(0, (sum, task) => sum + task.score);
+  int get positiveScore => habits
+      .where((habit) => isHabitCompleted(habit.id) && habit.score > 0)
+      .fold(0, (sum, habit) => sum + habit.score);
 
-  int get negativeScore => tasks
-      .where((task) => isTaskCompleted(task.id) && task.score < 0)
-      .fold(0, (sum, task) => sum + task.score);
+  int get negativeScore => habits
+      .where((habit) => isHabitCompleted(habit.id) && habit.score < 0)
+      .fold(0, (sum, habit) => sum + habit.score);
 
   void changeDate(DateTime date) {
     setState(() => currentDate = date);
@@ -78,30 +76,32 @@ class _MainPageState extends State<MainPage> {
   Future<void> loadDate() async {
     DateService().readDate(currentDate.toId()).then((value) {
       setState(() {
-        completedTaskIds = value?.completedTaskIds ?? {};
+        completedHabitIds = value?.completedHabitIds ?? {};
       });
     });
   }
 
-  Future<void> onTaskChange(bool value, Task task) async {
+  Future<void> onHabitChange(bool value, Habit habit) async {
     jump();
     setState(() {
-      value ? completedTaskIds.add(task.id) : completedTaskIds.remove(task.id);
+      value
+          ? completedHabitIds.add(habit.id)
+          : completedHabitIds.remove(habit.id);
     });
     HapticFeedback.mediumImpact();
     await DateService().writeDate(Date(
       id: currentDate.toId(),
-      completedTaskIds: completedTaskIds,
+      completedHabitIds: completedHabitIds,
       score: score,
     ));
     loadMetrics();
   }
 
-  Future<void> onTaskDelete(Task task, {bool confirm = true}) async {
-    bool confirmed = !confirm ? true : await confirmDelete(context, task);
+  Future<void> onHabitDelete(Habit habit, {bool confirm = true}) async {
+    bool confirmed = !confirm ? true : await confirmDelete(context, habit);
     if (!confirmed) return;
-    await TaskService().updateActiveState(task.id, false);
-    setState(() => task.toggleActive());
+    await Habitservice().updateActiveState(habit.id, false);
+    setState(() => habit.toggleActive());
   }
 
   @override
@@ -113,10 +113,10 @@ class _MainPageState extends State<MainPage> {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.push(context, MaterialPageRoute(builder: (context) {
             return IntroPage(
-              onSubmit: (initialTasks) {
-                setState(() => rawTasks = initialTasks);
-                for (var task in initialTasks) {
-                  TaskService().writeTask(task);
+              onSubmit: (initialHabits) {
+                setState(() => rawHabits = initialHabits);
+                for (var habit in initialHabits) {
+                  Habitservice().writeHabit(habit);
                 }
               },
             );
@@ -128,9 +128,9 @@ class _MainPageState extends State<MainPage> {
     loadDate();
     loadMetrics();
 
-    TaskService().readTasks().then((value) => setState(() {
-          rawTasks = value;
-          sortTasks();
+    Habitservice().readHabits().then((value) => setState(() {
+          rawHabits = value;
+          sortHabits();
         }));
   }
 
@@ -139,21 +139,21 @@ class _MainPageState extends State<MainPage> {
     average = DateService().getAverageScore();
   }
 
-  void sortTasks() =>
-      rawTasks.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+  void sortHabits() =>
+      rawHabits.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-  void openAddTaskPage(BuildContext context, {Task? initialTask}) {
+  void openAddHabitPage(BuildContext context, {Habit? initialHabit}) {
     Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddTaskPage(
-        initialTask: initialTask,
-        onSubmit: (task) async {
-          if (initialTask != null) {
-            await onTaskDelete(initialTask, confirm: false);
+      return AddHabitPage(
+        initialHabit: initialHabit,
+        onSubmit: (habit) async {
+          if (initialHabit != null) {
+            await onHabitDelete(initialHabit, confirm: false);
           }
-          await TaskService().writeTask(task);
+          await Habitservice().writeHabit(habit);
           setState(() {
-            rawTasks.add(task);
-            sortTasks();
+            rawHabits.add(habit);
+            sortHabits();
           });
         },
       );
@@ -196,7 +196,7 @@ class _MainPageState extends State<MainPage> {
         height: 70,
         width: 70,
         icon: FontAwesomeIcons.plus,
-        onTap: () => openAddTaskPage(context),
+        onTap: () => openAddHabitPage(context),
       ),
       endDrawer: const SettingsDrawer(),
       body: SafeArea(
@@ -260,23 +260,24 @@ class _MainPageState extends State<MainPage> {
                           });
                         }),
                     const Gap(10),
-                    filteredTasks.isEmpty
-                        ? const NoTaskInfo()
+                    filteredHabits.isEmpty
+                        ? const NoHabitInfo()
                         : ListView.builder(
                             controller: _scrollController,
                             padding: const EdgeInsets.only(bottom: 100),
                             shrinkWrap: true,
-                            itemCount: filteredTasks.length,
+                            itemCount: filteredHabits.length,
                             itemBuilder: (context, index) {
-                              Task task = filteredTasks[index];
-                              bool isCompleted = isTaskCompleted(task.id);
-                              return TaskDisplay(
-                                task: task,
+                              Habit habit = filteredHabits[index];
+                              bool isCompleted = isHabitCompleted(habit.id);
+                              return HabitDisplay(
+                                habit: habit,
                                 isCompleted: isCompleted,
-                                onChanged: (value) => onTaskChange(value, task),
-                                onDelete: () => onTaskDelete(task),
-                                onEdit: () =>
-                                    openAddTaskPage(context, initialTask: task),
+                                onChanged: (value) =>
+                                    onHabitChange(value, habit),
+                                onDelete: () => onHabitDelete(habit),
+                                onEdit: () => openAddHabitPage(context,
+                                    initialHabit: habit),
                               );
                             }),
                   ],

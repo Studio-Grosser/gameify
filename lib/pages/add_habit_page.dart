@@ -3,27 +3,27 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gameify/models/task.dart';
+import 'package:gameify/models/habit.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
 
-class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({super.key, required this.onSubmit, this.initialTask});
-  final Function(Task) onSubmit;
-  final Task? initialTask;
+class AddHabitPage extends StatefulWidget {
+  const AddHabitPage({super.key, required this.onSubmit, this.initialHabit});
+  final Function(Habit) onSubmit;
+  final Habit? initialHabit;
 
   @override
-  State<AddTaskPage> createState() => _AddTaskPageState();
+  State<AddHabitPage> createState() => _AddHabitPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage>
+class _AddHabitPageState extends State<AddHabitPage>
     with SingleTickerProviderStateMixin {
-  final TextEditingController taskTextController = TextEditingController();
-  final TextEditingController taskValueController = TextEditingController();
-  final FocusNode taskTextFocusNode = FocusNode();
-  final FocusNode taskValueFocusNode = FocusNode();
+  final TextEditingController habitTextController = TextEditingController();
+  final TextEditingController habitValueController = TextEditingController();
+  final FocusNode habitTextFocusNode = FocusNode();
+  final FocusNode habitValueFocusNode = FocusNode();
 
   AnimationController? _controller;
   Animation<double>? _animation;
@@ -33,7 +33,7 @@ class _AddTaskPageState extends State<AddTaskPage>
   String get scorePrefix => isScorePositive ? '+' : '-';
   Color get scoreColor => isScorePositive ? Themes.success : Themes.danger;
   String get submitText =>
-      widget.initialTask == null ? 'add task' : 'edit task';
+      widget.initialHabit == null ? 'add habit' : 'edit habit';
 
   void changeScorePrefix() {
     setState(() {
@@ -42,24 +42,24 @@ class _AddTaskPageState extends State<AddTaskPage>
     jump();
   }
 
-  void submitTask() {
-    if (taskTextController.text.trim().isEmpty) {
-      taskTextController.text = '';
+  void submitHabit() {
+    if (habitTextController.text.trim().isEmpty) {
+      habitTextController.text = '';
       _shake();
-      taskTextFocusNode.requestFocus();
+      habitTextFocusNode.requestFocus();
       return;
     }
-    if (taskValueController.text.isEmpty) {
-      taskValueFocusNode.requestFocus();
+    if (habitValueController.text.isEmpty) {
+      habitValueFocusNode.requestFocus();
       return;
     }
-    Task newTask = Task(
-      name: taskTextController.text,
-      score: int.parse(taskValueController.text) * (isScorePositive ? 1 : -1),
-      createdAt: widget.initialTask?.createdAt,
+    Habit newHabit = Habit(
+      name: habitTextController.text,
+      score: int.parse(habitValueController.text) * (isScorePositive ? 1 : -1),
+      createdAt: widget.initialHabit?.createdAt,
     );
-    if (!newTask.hasSameValues(widget.initialTask)) {
-      widget.onSubmit(newTask);
+    if (!newHabit.hasSameValues(widget.initialHabit)) {
+      widget.onSubmit(newHabit);
     }
     Navigator.pop(context);
   }
@@ -67,12 +67,12 @@ class _AddTaskPageState extends State<AddTaskPage>
   @override
   void initState() {
     super.initState();
-    if (widget.initialTask != null) {
-      taskTextController.text = widget.initialTask!.name;
-      isScorePositive = widget.initialTask!.score >= 0;
-      taskValueController.text = widget.initialTask!.score.abs().toString();
+    if (widget.initialHabit != null) {
+      habitTextController.text = widget.initialHabit!.name;
+      isScorePositive = widget.initialHabit!.score >= 0;
+      habitValueController.text = widget.initialHabit!.score.abs().toString();
     } else {
-      taskValueController.text = '10';
+      habitValueController.text = '10';
     }
 
     _controller = AnimationController(
@@ -117,7 +117,7 @@ class _AddTaskPageState extends State<AddTaskPage>
       floatingActionButton: StyledFab(
         text: submitText,
         icon: FontAwesomeIcons.chevronUp,
-        onTap: submitTask,
+        onTap: submitHabit,
       ),
       body: SafeArea(
         child: Padding(
@@ -139,8 +139,8 @@ class _AddTaskPageState extends State<AddTaskPage>
                 },
                 child: TextField(
                     onTapOutside: (_) => FocusScope.of(context).unfocus(),
-                    controller: taskTextController,
-                    focusNode: taskTextFocusNode,
+                    controller: habitTextController,
+                    focusNode: habitTextFocusNode,
                     style: theme.textTheme.titleLarge,
                     maxLength: 30,
                     autofocus: true,
@@ -149,7 +149,7 @@ class _AddTaskPageState extends State<AddTaskPage>
                     decoration: InputDecoration(
                         counter: const SizedBox(),
                         border: InputBorder.none,
-                        hintText: 'add task description',
+                        hintText: 'add habit description',
                         hintStyle: theme.textTheme.titleLarge
                             ?.copyWith(color: theme.colorScheme.secondary))),
               ),
@@ -157,7 +157,7 @@ class _AddTaskPageState extends State<AddTaskPage>
               Row(
                 children: [
                   GestureDetector(
-                    onTap: () => taskValueFocusNode.requestFocus(),
+                    onTap: () => habitValueFocusNode.requestFocus(),
                     child: StyledContainer(
                         height: 70,
                         borderRadius: 50,
@@ -180,12 +180,12 @@ class _AddTaskPageState extends State<AddTaskPage>
                             SizedBox(
                               width: 50,
                               child: TextField(
-                                focusNode: taskValueFocusNode,
+                                focusNode: habitValueFocusNode,
                                 onTapOutside: (_) =>
                                     FocusScope.of(context).unfocus(),
                                 cursorColor: Themes.accent,
                                 cursorWidth: 3,
-                                controller: taskValueController,
+                                controller: habitValueController,
                                 style: theme.textTheme.titleLarge,
                                 maxLength: 2,
                                 keyboardType: TextInputType.number,

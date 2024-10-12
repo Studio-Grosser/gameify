@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 
-class NoTaskInfo extends StatelessWidget {
-  const NoTaskInfo({super.key});
+class NoHabitInfo extends StatelessWidget {
+  const NoHabitInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class NoTaskInfo extends StatelessWidget {
         FaIcon(FontAwesomeIcons.folderOpen,
             size: 20, color: theme.colorScheme.secondary),
         const Gap(10),
-        Text('no tasks yet',
+        Text('no habits yet',
             style: theme.textTheme.bodyMedium
                 ?.copyWith(color: theme.colorScheme.secondary)),
       ]),

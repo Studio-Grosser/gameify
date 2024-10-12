@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/models/task.dart';
+import 'package:gameify/models/habit.dart';
 import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/styled_container.dart';
@@ -7,9 +7,9 @@ import 'package:gameify/widgets/value_display.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
 
-class TaskDummy extends StatelessWidget {
-  const TaskDummy({super.key, required this.task});
-  final Task task;
+class HabitDummy extends StatelessWidget {
+  const HabitDummy({super.key, required this.habit});
+  final Habit habit;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +23,12 @@ class TaskDummy extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-              child: Text(task.name,
+              child: Text(habit.name,
                   style: theme.textTheme.bodyMedium,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1)),
           const Gap(15),
-          ValueDisplay(value: task.score),
+          ValueDisplay(value: habit.score),
         ],
       ),
     );

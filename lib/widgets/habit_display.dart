@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/models/task.dart';
+import 'package:gameify/models/habit.dart';
 import 'package:gameify/widgets/styled_container.dart';
-import 'package:gameify/widgets/task_option_menu.dart';
+import 'package:gameify/widgets/habit_option_menu.dart';
 import 'package:gameify/widgets/value_display.dart';
 import 'package:gap/gap.dart';
 
-class TaskDisplay extends StatelessWidget {
-  const TaskDisplay(
+class HabitDisplay extends StatelessWidget {
+  const HabitDisplay(
       {super.key,
-      required this.task,
+      required this.habit,
       this.isCompleted,
       this.onChanged,
       this.onDelete,
       this.onEdit});
-  final Task task;
+  final Habit habit;
   final bool? isCompleted;
   final Function(bool value)? onChanged;
   final VoidCallback? onDelete;
@@ -26,7 +26,7 @@ class TaskDisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return Opacity(
-      opacity: task.isActive ? 1 : 0.75,
+      opacity: habit.isActive ? 1 : 0.75,
       child: GestureDetector(
         onTap: isTappable ? () => onChanged!(!isCompleted!) : null,
         child: StyledContainer(
@@ -40,15 +40,15 @@ class TaskDisplay extends StatelessWidget {
                     onChanged: (value) => onChanged!(value ?? false)),
               const Gap(10),
               Expanded(
-                  child: Text(task.name,
+                  child: Text(habit.name,
                       style: theme.textTheme.bodyMedium,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1)),
               const Gap(10),
-              ValueDisplay(value: task.score),
+              ValueDisplay(value: habit.score),
               if (hasOptions)
-                TaskOptionMenu(
-                  isEnabled: task.isActive,
+                HabitOptionMenu(
+                  isEnabled: habit.isActive,
                   onDelete: onDelete!,
                   onEdit: onEdit!,
                 )

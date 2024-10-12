@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gameify/models/task.dart';
+import 'package:gameify/models/habit.dart';
 import 'package:gameify/utils/utils.dart';
 
 class FilterSlider extends StatelessWidget {
@@ -18,7 +18,7 @@ class FilterSlider extends StatelessWidget {
           backgroundColor: theme.colorScheme.primaryContainer,
           thumbColor: theme.colorScheme.secondaryContainer,
           groupValue: currentFilter,
-          children: Task.filters.map((key, value) =>
+          children: Habit.filters.map((key, value) =>
               MapEntry(key, Text(value, style: theme.textTheme.bodyMedium))),
           onValueChanged: onChanged,
         ));

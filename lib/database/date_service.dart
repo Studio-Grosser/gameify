@@ -11,7 +11,7 @@ class DateService {
     try {
       final dates = await db.query(
         Date.tableName,
-        columns: [Date.id_, Date.completedTaskIds_],
+        columns: [Date.id_, Date.completedHabitIds_],
         where: '${Date.id_} = ?',
         whereArgs: [id],
       );

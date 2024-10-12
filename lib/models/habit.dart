@@ -1,14 +1,14 @@
 import 'package:gameify/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
-class Task {
+class Habit {
   final String id;
   final String name;
   final int score;
   final DateTime createdAt;
   bool isActive;
 
-  Task(
+  Habit(
       {String? id,
       DateTime? createdAt,
       required this.name,
@@ -24,7 +24,7 @@ class Task {
   };
 
   // Identifier for database
-  static const String tableName = 'tasks';
+  static const String tableName = 'habits';
   // column names in database
   static const String id_ = '_id';
   static const String name_ = 'name';
@@ -34,7 +34,7 @@ class Task {
 
   void toggleActive() => isActive = !isActive;
 
-  bool hasSameValues(Task? b) => name == b?.name && score == b?.score;
+  bool hasSameValues(Habit? b) => name == b?.name && score == b?.score;
 
   Map<String, dynamic> toJson() => {
         id_: id,
@@ -44,7 +44,7 @@ class Task {
         isActive_: isActive ? 1 : 0
       };
 
-  factory Task.fromJson(Map<String, dynamic> json) => Task(
+  factory Habit.fromJson(Map<String, dynamic> json) => Habit(
         id: json[id_],
         name: json[name_],
         score: json[score_],

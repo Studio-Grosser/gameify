@@ -1,5 +1,5 @@
 import 'package:gameify/models/date.dart';
-import 'package:gameify/models/task.dart';
+import 'package:gameify/models/habit.dart';
 import 'package:gameify/utils/logger.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -26,21 +26,21 @@ class DatabaseService {
   Future _createDB(Database db, int version) async {
     try {
       await db.execute('''
-      CREATE TABLE ${Task.tableName} (
-        ${Task.id_} TEXT PRIMARY KEY,
-        ${Task.name_} TEXT NOT NULL,
-        ${Task.score_} INTEGER NOT NULL,
-        ${Task.createdAt_} TEXT NOT NULL,
-        ${Task.isActive_} INTEGER NOT NULL
+      CREATE TABLE ${Habit.tableName} (
+        ${Habit.id_} TEXT PRIMARY KEY,
+        ${Habit.name_} TEXT NOT NULL,
+        ${Habit.score_} INTEGER NOT NULL,
+        ${Habit.createdAt_} TEXT NOT NULL,
+        ${Habit.isActive_} INTEGER NOT NULL
       )
       ''');
 
-      Logger.s('Table "${Task.tableName}" created');
+      Logger.s('Table "${Habit.tableName}" created');
 
       await db.execute('''
       CREATE TABLE ${Date.tableName} (
         ${Date.id_} TEXT PRIMARY KEY,
-        ${Date.completedTaskIds_} TEXT NOT NULL,
+        ${Date.completedHabitIds_} TEXT NOT NULL,
         ${Date.score_} INTEGER
       )
       ''');
