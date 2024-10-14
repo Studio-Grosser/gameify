@@ -38,31 +38,32 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
 
     return Drawer(
       child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-            ListTile(
-              onTap: () {
-                setState(() {
-                  themeProvider.toggleThemeMode();
-                });
-              },
-              leading: FaIcon(themeProvider.themeIcon),
-              title: Text(themeProvider.themeDescription,
-                  style: theme.textTheme.bodyLarge),
+        child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 35),
+            onTap: () {
+              setState(() {
+                themeProvider.toggleThemeMode();
+              });
+            },
+            leading: FaIcon(themeProvider.themeIcon, size: 18),
+            title: Text(themeProvider.themeDescription,
+                style: theme.textTheme.bodyMedium),
+          ),
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 35),
+            onTap: resetApp,
+            leading: const FaIcon(
+              FontAwesomeIcons.trashCan,
+              color: Themes.danger,
+              size: 18,
             ),
-            ListTile(
-              onTap: resetApp,
-              leading:
-                  const FaIcon(FontAwesomeIcons.trashCan, color: Themes.danger),
-              title: Text(
-                'Reset App',
-                style:
-                    theme.textTheme.bodyLarge?.copyWith(color: Themes.danger),
-              ),
+            title: Text(
+              'Reset App',
+              style: theme.textTheme.bodyMedium?.copyWith(color: Themes.danger),
             ),
-          ]),
-        ),
+          ),
+        ]),
       ),
     );
   }

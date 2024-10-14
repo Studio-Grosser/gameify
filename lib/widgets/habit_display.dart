@@ -32,6 +32,7 @@ class HabitDisplay extends StatelessWidget {
       opacity: habit.isActive ? 1 : 0.75,
       child: GestureDetector(
         onTap: isTappable ? () => onTap!() : null,
+        onLongPress: isTappable ? () => onReset!() : null,
         child: StyledContainer(
           hideBorder: true,
           margin: const EdgeInsets.symmetric(vertical: 5),

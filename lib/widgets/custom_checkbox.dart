@@ -17,29 +17,21 @@ class CustomCheckbox extends StatelessWidget {
     if (mode == HabitMode.checkbox) {
       return Checkbox(value: (value ?? 0) > 0, onChanged: (_) => onTap);
     }
-    return Material(
-      child: Ink(
-        child: InkWell(
-          child: Container(
-            width: 22,
-            height: 22,
-            margin: const EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-                color:
-                    (value ?? 0) > 0 ? theme.checkboxTheme.side?.color : null,
-                borderRadius: BorderRadius.circular(40),
-                border: Border.all(
-                    width: 2, color: theme.checkboxTheme.side!.color)),
-            child: Center(
-              child: Text(
-                value.toString(),
-                style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.primaryContainer,
-                    height: 1,
-                    fontWeight: FontWeight.w800),
-              ),
-            ),
-          ),
+    return Container(
+      width: 22,
+      height: 22,
+      margin: const EdgeInsets.symmetric(horizontal: 14),
+      decoration: BoxDecoration(
+          color: (value ?? 0) > 0 ? theme.checkboxTheme.side?.color : null,
+          borderRadius: BorderRadius.circular(40),
+          border: Border.all(width: 2, color: theme.checkboxTheme.side!.color)),
+      child: Center(
+        child: Text(
+          value.toString(),
+          style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.primaryContainer,
+              height: 1,
+              fontWeight: FontWeight.w800),
         ),
       ),
     );
