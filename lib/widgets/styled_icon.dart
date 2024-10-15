@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/widgets/styled_container.dart';
 
 class StyledIcon extends StatelessWidget {
@@ -15,7 +14,7 @@ class StyledIcon extends StatelessWidget {
         borderRadius: 25,
         width: 45,
         height: 45,
-        child: Center(child: FaIcon(icon, size: 20)),
+        child: Center(child: Icon(icon, size: 20)),
       ),
     );
   }

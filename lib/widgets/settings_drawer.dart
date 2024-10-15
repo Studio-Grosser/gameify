@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -53,8 +54,8 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 35),
             onTap: resetApp,
-            leading: const FaIcon(
-              FontAwesomeIcons.trashCan,
+            leading: const Icon(
+              CupertinoIcons.trash,
               color: Themes.danger,
               size: 18,
             ),

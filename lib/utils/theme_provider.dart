@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/utils/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,9 +15,9 @@ class ThemeProvider with ChangeNotifier {
       ['System Mode', 'Light Mode', 'Dark Mode'][themeMode.index];
 
   IconData get themeIcon => [
-        FontAwesomeIcons.lightbulb,
-        FontAwesomeIcons.sun,
-        FontAwesomeIcons.moon
+        CupertinoIcons.sparkles,
+        CupertinoIcons.sun_max,
+        CupertinoIcons.moon
       ][themeMode.index];
 
   set themeMode(ThemeMode themeData) {

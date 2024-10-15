@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/pages/add_habit_page.dart';
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/database/date_service.dart';
@@ -221,7 +221,7 @@ class _MainPageState extends State<MainPage> {
         padding: EdgeInsets.zero,
         height: 70,
         width: 70,
-        icon: FontAwesomeIcons.plus,
+        icon: CupertinoIcons.plus,
         onTap: () => openAddHabitPage(context),
       ),
       endDrawer: const SettingsDrawer(),
@@ -238,11 +238,11 @@ class _MainPageState extends State<MainPage> {
                       style: theme.textTheme.titleMedium),
                   const Spacer(),
                   StyledIcon(
-                    icon: FontAwesomeIcons.calendar,
+                    icon: CupertinoIcons.calendar,
                     onTap: showDatePicker,
                   ),
                   StyledIcon(
-                    icon: FontAwesomeIcons.bars,
+                    icon: CupertinoIcons.settings,
                     onTap: () => _scaffoldKey.currentState?.openEndDrawer(),
                   )
                 ],

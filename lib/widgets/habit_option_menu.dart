@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/utils/utils.dart';
 
@@ -25,7 +25,7 @@ class HabitOptionMenu extends StatelessWidget {
           menuPadding: EdgeInsets.zero,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          icon: FaIcon(FontAwesomeIcons.ellipsisVertical,
+          icon: Icon(CupertinoIcons.ellipsis_vertical,
               size: 18, color: theme.colorScheme.secondary),
           onSelected: (value) {
             if (value == HabitOption.delete) {
@@ -43,7 +43,7 @@ class HabitOptionMenu extends StatelessWidget {
                 value: HabitOption.reset,
                 child: Row(
                   children: [
-                    const FaIcon(FontAwesomeIcons.rotateLeft, size: 18),
+                    const Icon(CupertinoIcons.arrow_counterclockwise, size: 24),
                     const SizedBox(width: 20),
                     Text('Reset', style: theme.textTheme.bodyMedium),
                   ],
@@ -54,7 +54,7 @@ class HabitOptionMenu extends StatelessWidget {
                 value: HabitOption.edit,
                 child: Row(
                   children: [
-                    const FaIcon(FontAwesomeIcons.pencil, size: 18),
+                    const Icon(CupertinoIcons.square_pencil, size: 24),
                     const SizedBox(width: 20),
                     Text('Edit', style: theme.textTheme.bodyMedium),
                   ],
@@ -65,8 +65,8 @@ class HabitOptionMenu extends StatelessWidget {
                 value: HabitOption.delete,
                 child: Row(
                   children: [
-                    const FaIcon(FontAwesomeIcons.trashCan,
-                        size: 18, color: Themes.danger),
+                    const Icon(CupertinoIcons.trash,
+                        size: 24, color: Themes.danger),
                     const SizedBox(width: 20),
                     Text('Delete',
                         style: theme.textTheme.bodyMedium

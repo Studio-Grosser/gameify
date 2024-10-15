@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/date_day_display.dart';
 
@@ -177,10 +177,7 @@ class _HeatMapState extends State<HeatMap> {
                     : () => changeMonth(Direction.backward),
                 disabledColor: theme.colorScheme.tertiary,
                 color: Themes.accent,
-                icon: const FaIcon(
-                  FontAwesomeIcons.chevronLeft,
-                  size: 16,
-                )),
+                icon: const Icon(CupertinoIcons.chevron_back, size: 24)),
             Text(calendarTitle,
                 style: Theme.of(context)
                     .textTheme
@@ -192,10 +189,7 @@ class _HeatMapState extends State<HeatMap> {
                     : () => changeMonth(Direction.forward),
                 disabledColor: theme.colorScheme.tertiary,
                 color: Themes.accent,
-                icon: const FaIcon(
-                  FontAwesomeIcons.chevronRight,
-                  size: 16,
-                )),
+                icon: const Icon(CupertinoIcons.chevron_forward, size: 24)),
           ]),
           const SizedBox(height: 30),
           GestureDetector(

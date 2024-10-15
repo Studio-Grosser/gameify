@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
 
 class NoHabitInfo extends StatelessWidget {
@@ -12,7 +12,7 @@ class NoHabitInfo extends StatelessWidget {
       constraints: const BoxConstraints(maxHeight: 250),
       alignment: Alignment.center,
       child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        FaIcon(FontAwesomeIcons.folderOpen,
+        Icon(CupertinoIcons.folder_open,
             size: 20, color: theme.colorScheme.secondary),
         const Gap(10),
         Text('no habits yet',

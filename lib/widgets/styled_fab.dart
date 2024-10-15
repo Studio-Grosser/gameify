@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gap/gap.dart';
 
@@ -19,7 +18,7 @@ class StyledFab extends StatelessWidget {
   final double? width;
   final EdgeInsets padding;
 
-  Widget get iconWidget => FaIcon(icon, color: Themes.shade1, size: 18);
+  Widget get iconWidget => Icon(icon, color: Themes.shade1, size: 24);
 
   @override
   Widget build(BuildContext context) {

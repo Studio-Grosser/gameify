@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/widgets/styled_fab.dart';
@@ -33,7 +33,7 @@ class _IntroPageState extends State<IntroPage> {
         padding: const EdgeInsets.all(0),
         height: 70,
         width: 70,
-        icon: FontAwesomeIcons.chevronRight,
+        icon: CupertinoIcons.chevron_right,
         onTap: () {
           widget.onSubmit(
               habits.where((habit) => habitIds.contains(habit.id)).toList());

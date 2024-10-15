@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -128,7 +129,7 @@ class _AddHabitPageState extends State<AddHabitPage>
     return Scaffold(
       floatingActionButton: StyledFab(
         text: submitText,
-        icon: FontAwesomeIcons.chevronUp,
+        icon: CupertinoIcons.chevron_up,
         onTap: submitHabit,
       ),
       body: SafeArea(
@@ -139,7 +140,7 @@ class _AddHabitPageState extends State<AddHabitPage>
               Align(
                 alignment: Alignment.topRight,
                 child: StyledIcon(
-                    icon: FontAwesomeIcons.xmark,
+                    icon: CupertinoIcons.xmark,
                     onTap: () => Navigator.pop(context)),
               ),
               const Spacer(flex: 1),
