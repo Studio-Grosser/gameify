@@ -10,6 +10,7 @@ import 'package:gameify/models/date.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/pages/intro_page.dart';
 import 'package:gameify/widgets/filter_slider.dart';
+import 'package:gameify/widgets/heat_map/heat_map.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_habit_info.dart';
 import 'package:gameify/widgets/settings_drawer.dart';
@@ -35,6 +36,7 @@ class _MainPageState extends State<MainPage> {
 
   Future<int?>? highscore;
   Future<double?>? average;
+  Map<DateTime, double>? heatMapData;
 
   Filter currentFilter = Filter.all;
 
@@ -151,13 +153,17 @@ class _MainPageState extends State<MainPage> {
     loadDate();
     loadMetrics();
 
+    DateService().getHeatMapData().then((value) => setState(() {
+          heatMapData = value;
+        }));
+
     Habitservice().readHabits().then((value) => setState(() {
           rawHabits = value;
           sortHabits();
         }));
   }
 
-  void loadMetrics() {
+  Future<void> loadMetrics() async {
     setState(() {
       highscore = DateService().getHighestScore();
       average = DateService().getAverageScore();
@@ -263,6 +269,7 @@ class _MainPageState extends State<MainPage> {
                         MetricDisplay(metric: highscore, unit: 'highscore'),
                       ],
                     ),
+                    HeatMap(data: heatMapData ?? {}),
                     const Gap(100),
                     FilterSlider(
                         currentFilter: currentFilter,

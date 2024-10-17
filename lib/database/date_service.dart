@@ -72,12 +72,13 @@ class DateService {
     return 0;
   }
 
-  Future<Map<DateTime, double>> getHeatMapData(int highscore) async {
+  Future<Map<DateTime, double>> getHeatMapData() async {
     final db = await DatabaseService.instance.database;
 
     try {
       final List<Map<String, dynamic>> results = await db.query(Date.tableName);
 
+      int highscore = await getHighestScore();
       Map<DateTime, double> scoreMap = {};
 
       for (var row in results) {
