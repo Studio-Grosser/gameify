@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -10,6 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
   if (kReleaseMode) {
     await SentryFlutter.init((options) {
       options.dsn =
@@ -28,7 +32,12 @@ Future<void> main() async {
 
 void initializeApp() {
   runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(), child: const MyApp()));
+      create: (context) => ThemeProvider(),
+      child: EasyLocalization(
+          supportedLocales: const [Locale('en', 'US')],
+          path: 'assets/i18n',
+          fallbackLocale: const Locale('en', 'US'),
+          child: const MyApp())));
 }
 
 class MyApp extends StatefulWidget {
@@ -61,6 +70,9 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       title: 'Gameify',
       theme: Themes.lightTheme,
       darkTheme: Themes.darkTheme,
