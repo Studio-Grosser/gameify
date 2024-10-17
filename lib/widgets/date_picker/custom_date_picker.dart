@@ -32,7 +32,6 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         child: SizedBox(
           height: 410,
           child: Calendar(
-            data: widget.heatFactors,
             selectedDate: currentDate,
             onSelection: (newDate) {
               if (newDate == null) return;

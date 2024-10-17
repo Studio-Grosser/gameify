@@ -6,15 +6,9 @@ import 'package:gameify/widgets/date_picker/date_day_display.dart';
 enum Direction { forward, backward }
 
 class Calendar extends StatefulWidget {
-  const Calendar({
-    super.key,
-    required this.onSelection,
-    this.selectedDate,
-    required this.data,
-  });
+  const Calendar({super.key, required this.onSelection, this.selectedDate});
   final Function(DateTime?) onSelection;
   final DateTime? selectedDate;
-  final Map<DateTime, double> data;
 
   @override
   State<Calendar> createState() => _CalendarState();
