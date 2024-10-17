@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
+import 'package:gameify/models/date.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:gameify/widgets/heat_map/heat_dot.dart';
 import 'package:gameify/widgets/styled_container.dart';
+import 'package:collection/collection.dart';
 
 class HeatMap extends StatelessWidget {
-  const HeatMap({super.key, required this.data});
-  final Map<DateTime, double> data;
+  const HeatMap({super.key, required this.dates, required this.currentDate});
+  final List<Date> dates;
+  final DateTime currentDate;
 
   static const _dotSize = 20.0;
   static const _dotMargin = 2.5;
@@ -24,6 +27,13 @@ class HeatMap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constaints) {
+      int highscore = 0;
+      if (dates.isNotEmpty) {
+        highscore = dates.reduce((current, next) {
+          return current.score > next.score ? current : next;
+        }).score;
+      }
+
       (int, int) calculatedDots = _calculateDots(constaints.maxWidth);
       int dotCount = calculatedDots.$1;
       int dotsInRow = calculatedDots.$2;
@@ -44,11 +54,15 @@ class HeatMap extends StatelessWidget {
                 DateTime date = _now
                     .subtract(Duration(days: dotCount - (verticalIndex + 1)));
 
-                double heatFactor = 0;
-                if (data.containsKey(date)) {
-                  heatFactor = data[date]!;
-                }
-                return HeatDot(size: _dotSize, heatFactor: heatFactor);
+                int score =
+                    dates.firstWhereOrNull((d) => date.toId() == d.id)?.score ??
+                        0;
+
+                double heatFactor = highscore > 0 ? score / highscore : 0;
+                return HeatDot(
+                    size: _dotSize,
+                    heatFactor: heatFactor,
+                    isCurrentDate: date == currentDate);
               }),
             ),
           ));

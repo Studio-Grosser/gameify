@@ -36,7 +36,7 @@ class _MainPageState extends State<MainPage> {
 
   Future<int?>? highscore;
   Future<double?>? average;
-  Map<DateTime, double>? heatMapData;
+  List<Date>? allDates;
 
   Filter currentFilter = Filter.all;
 
@@ -153,10 +153,6 @@ class _MainPageState extends State<MainPage> {
     loadDate();
     loadMetrics();
 
-    DateService().getHeatMapData().then((value) => setState(() {
-          heatMapData = value;
-        }));
-
     Habitservice().readHabits().then((value) => setState(() {
           rawHabits = value;
           sortHabits();
@@ -168,6 +164,9 @@ class _MainPageState extends State<MainPage> {
       highscore = DateService().getHighestScore();
       average = DateService().getAverageScore();
     });
+    DateService().readAllDates().then((value) => setState(() {
+          allDates = value;
+        }));
   }
 
   void sortHabits() =>
@@ -269,7 +268,7 @@ class _MainPageState extends State<MainPage> {
                         MetricDisplay(metric: highscore, unit: 'highscore'),
                       ],
                     ),
-                    HeatMap(data: heatMapData ?? {}),
+                    HeatMap(dates: allDates ?? [], currentDate: currentDate),
                     const Gap(100),
                     FilterSlider(
                         currentFilter: currentFilter,

@@ -9,17 +9,32 @@ class DateService {
     final db = await DatabaseService.instance.database;
 
     try {
-      final dates = await db.query(
+      final date = await db.query(
         Date.tableName,
-        columns: [Date.id_, Date.completedHabitIds_],
+        columns: [Date.id_, Date.completedHabitIds_, Date.score_],
         where: '${Date.id_} = ?',
         whereArgs: [id],
       );
       Logger.s('Queried Date "$id" from database');
-      if (dates.isEmpty) return null;
-      return Date.fromJson(dates.first);
+      if (date.isEmpty) return null;
+      return Date.fromJson(date.first);
     } catch (e, st) {
       Logger.e('Error querying date "$id": ${e.toString()}', st);
+      return null;
+    }
+  }
+
+  Future<List<Date>?> readAllDates() async {
+    final db = await DatabaseService.instance.database;
+
+    try {
+      final dates = await db.query(Date.tableName,
+          columns: [Date.id_, Date.completedHabitIds_, Date.score_]);
+      Logger.s('Queried all Dates from database');
+      if (dates.isEmpty) return null;
+      return dates.map((date) => Date.fromJson(date)).toList();
+    } catch (e, st) {
+      Logger.e('Error querying all dates: ${e.toString()}', st);
       return null;
     }
   }
@@ -70,31 +85,5 @@ class DateService {
       Logger.e('Error getting average score: ${e.toString()}', st);
     }
     return 0;
-  }
-
-  Future<Map<DateTime, double>> getHeatMapData() async {
-    final db = await DatabaseService.instance.database;
-
-    try {
-      final List<Map<String, dynamic>> results = await db.query(Date.tableName);
-
-      int highscore = await getHighestScore();
-      Map<DateTime, double> scoreMap = {};
-
-      for (var row in results) {
-        String id = row[Date.id_];
-        int score = row[Date.score_] ?? 0;
-
-        DateTime dateTime = fromId(id);
-        double relativeScore = highscore > 0 ? score / highscore : 0.0;
-
-        scoreMap[dateTime] = relativeScore;
-      }
-      Logger.s('Queried heat map data from database');
-      return scoreMap;
-    } catch (e, st) {
-      Logger.e('Error getting average score: ${e.toString()}', st);
-      return {};
-    }
   }
 }
