@@ -21,17 +21,9 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  static const totalMonths = 12;
-  static const totalWeekdays = 7;
-  static const weekdays = [
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat',
-    'Sun',
-  ];
+  static int get totalMonths => months.length;
+  static int get totalWeekdays => weekdays.length;
+  static const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   static const months = [
     'January',
     'February',
@@ -44,7 +36,7 @@ class _CalendarState extends State<Calendar> {
     'September',
     'October',
     'November',
-    'December',
+    'December'
   ];
 
   late DateTime selectedMonthAndYear;
@@ -107,18 +99,15 @@ class _CalendarState extends State<Calendar> {
     int daysInMonth =
         calcDaysInMonth(selectedMonthAndYear.year, selectedMonthAndYear.month);
     for (int i = 0; i < startingDay - 1; i++) {
-      dateDayDisplays.add(const DateDayDisplay(isSelectable: false));
+      dateDayDisplays.add(const DateDayDisplay());
     }
 
     for (int i = 0; i < daysInMonth; i++) {
       final DateTime date = DateTime(
           selectedMonthAndYear.year, selectedMonthAndYear.month, i + 1);
       dateDayDisplays.add(DateDayDisplay(
-        day: date.day,
         date: date,
-        heatFactor: widget.data[date] ?? 0.0,
         isSelected: date == widget.selectedDate,
-        isSelectable: true,
         onSelected: (newDate) => widget.onSelection(newDate),
       ));
     }
@@ -126,7 +115,7 @@ class _CalendarState extends State<Calendar> {
     int remaining = totalWeekdays - (dateDayDisplays.length % totalWeekdays);
     if (remaining != totalWeekdays) {
       for (int i = 0; i < remaining; i++) {
-        dateDayDisplays.add(const DateDayDisplay(isSelectable: false));
+        dateDayDisplays.add(const DateDayDisplay());
       }
     }
 

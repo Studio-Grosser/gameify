@@ -3,19 +3,14 @@ import 'package:gameify/utils/themes.dart';
 import 'package:gameify/utils/utils.dart';
 
 class DateDayDisplay extends StatefulWidget {
-  const DateDayDisplay(
-      {super.key,
-      this.day,
-      required this.isSelectable,
-      this.date,
-      this.isSelected = false,
-      this.onSelected,
-      this.heatFactor});
-  final int? day;
+  const DateDayDisplay({
+    super.key,
+    this.date,
+    this.isSelected = false,
+    this.onSelected,
+  });
   final DateTime? date;
-  final bool isSelectable;
   final bool isSelected;
-  final double? heatFactor;
   final Function(DateTime?)? onSelected;
 
   @override
@@ -23,26 +18,18 @@ class DateDayDisplay extends StatefulWidget {
 }
 
 class _DateDayDisplayState extends State<DateDayDisplay> {
-  Color? get bubbleColor {
-    if (widget.isSelected == true) return Themes.accent;
-    if (widget.date!.isToday) {
-      return Themes.accent.withValues(alpha: widget.heatFactor);
-    }
-    return Themes.success.withValues(alpha: widget.heatFactor);
-  }
+  Color? get bubbleColor => widget.isSelected ? Themes.accent : null;
 
   Color get textColor {
-    if (widget.isSelected == true) return Themes.shade1;
-    if ((widget.heatFactor ?? 0) > 0) {
-      return Themes.shade1;
-    }
-    return Themes.shade3;
+    return widget.isSelected
+        ? Themes.shade1
+        : Theme.of(context).textTheme.bodyMedium!.color!;
   }
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    if (widget.day == null) return const SizedBox();
+    if (widget.date == null) return const SizedBox();
     double size = 40;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
@@ -50,9 +37,7 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
         color: Colors.transparent,
         child: InkWell(
           borderRadius: BorderRadius.circular(5),
-          onTap: widget.isSelectable
-              ? () => widget.onSelected!(widget.date!)
-              : null,
+          onTap: () => widget.onSelected!(widget.date!),
           child: Ink(
             height: size,
             width: size,
@@ -75,7 +60,7 @@ class _DateDayDisplayState extends State<DateDayDisplay> {
                 Align(
                   alignment: Alignment.center,
                   child: Text(
-                    widget.day.toString(),
+                    widget.date!.day.toString(),
                     style:
                         theme.textTheme.bodyMedium?.copyWith(color: textColor),
                     textAlign: TextAlign.center,
