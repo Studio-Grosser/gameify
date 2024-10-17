@@ -5,8 +5,8 @@ import 'package:gameify/widgets/date_picker/date_day_display.dart';
 
 enum Direction { forward, backward }
 
-class HeatMap extends StatefulWidget {
-  const HeatMap({
+class Calendar extends StatefulWidget {
+  const Calendar({
     super.key,
     required this.onSelection,
     this.selectedDate,
@@ -17,10 +17,10 @@ class HeatMap extends StatefulWidget {
   final Map<DateTime, double> data;
 
   @override
-  State<HeatMap> createState() => _HeatMapState();
+  State<Calendar> createState() => _CalendarState();
 }
 
-class _HeatMapState extends State<HeatMap> {
+class _CalendarState extends State<Calendar> {
   static const totalMonths = 12;
   static const totalWeekdays = 7;
   static const weekdays = [

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:gameify/widgets/date_picker/heat_map.dart';
+import 'package:gameify/widgets/date_picker/calendar.dart';
 
 class CustomDatePicker extends StatefulWidget {
   const CustomDatePicker(
@@ -31,7 +31,7 @@ class _CustomDatePickerState extends State<CustomDatePicker> {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: SizedBox(
           height: 410,
-          child: HeatMap(
+          child: Calendar(
             data: widget.heatFactors,
             selectedDate: currentDate,
             onSelection: (newDate) {
