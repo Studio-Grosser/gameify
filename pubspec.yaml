@@ -48,6 +48,11 @@ dependencies:
   sentry_flutter: ^8.9.0
   shared_preferences: ^2.3.2
   restart_app: ^1.3.2
+  flutter_slidable:
+    path: ../flutter_slidable
+    # git:
+    #   url: https://github.com/linusgrosser/flutter_slidable
+    #   ref: master
 
 dev_dependencies:
   flutter_test:

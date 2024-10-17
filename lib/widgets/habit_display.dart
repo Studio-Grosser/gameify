@@ -1,12 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gameify/models/habit.dart';
+import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/custom_checkbox.dart';
 import 'package:gameify/widgets/styled_container.dart';
-import 'package:gameify/widgets/habit_option_menu.dart';
 import 'package:gameify/widgets/value_display.dart';
 import 'package:gap/gap.dart';
 
-class HabitDisplay extends StatelessWidget {
+class HabitDisplay extends StatefulWidget {
   const HabitDisplay(
       {super.key,
       required this.habit,
@@ -22,42 +24,71 @@ class HabitDisplay extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onReset;
 
-  bool get hasOptions => onDelete != null || onEdit != null || onReset != null;
-  bool get isTappable => onTap != null || value != null;
+  @override
+  State<HabitDisplay> createState() => _HabitDisplayState();
+}
+
+class _HabitDisplayState extends State<HabitDisplay> {
+  bool get showOptions => widget.onDelete != null || widget.onEdit != null;
+  bool get isTappable => widget.onTap != null || widget.value != null;
 
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return Opacity(
-      opacity: habit.isActive ? 1 : 0.75,
-      child: GestureDetector(
-        onTap: isTappable ? () => onTap!() : null,
-        onLongPress: isTappable ? () => onReset!() : null,
-        child: StyledContainer(
-          hideBorder: true,
-          margin: const EdgeInsets.symmetric(vertical: 5),
-          child: Row(
-            children: [
-              if (isTappable) ...[
-                CustomCheckbox(
-                    onTap: () => onTap!(), mode: habit.mode, value: value),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.0),
+      child: Opacity(
+        opacity: widget.habit.isActive ? 1 : 0.75,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Slidable(
+            enabled: showOptions,
+            key: UniqueKey(),
+            endActionPane: ActionPane(
+              motion: const DrawerMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (_) => widget.onEdit!(),
+                  backgroundColor: Themes.accent,
+                  foregroundColor: Themes.shade1,
+                  label: 'Edit',
+                  icon: CupertinoIcons.square_pencil,
+                ),
+                SlidableAction(
+                  onPressed: (_) => widget.onDelete!(),
+                  backgroundColor: Themes.danger,
+                  foregroundColor: Themes.shade1,
+                  label: 'Delete',
+                  icon: CupertinoIcons.trash,
+                ),
               ],
-              const Gap(10),
-              Expanded(
-                  child: Text(habit.name,
-                      style: theme.textTheme.bodyMedium,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1)),
-              const Gap(10),
-              ValueDisplay(value: habit.score),
-              if (hasOptions)
-                HabitOptionMenu(
-                  isEnabled: habit.isActive,
-                  onDelete: onDelete!,
-                  onEdit: onEdit!,
-                  onReset: onReset!,
-                )
-            ],
+            ),
+            child: GestureDetector(
+              onTap: isTappable ? () => widget.onTap!() : null,
+              onLongPress: isTappable ? () => widget.onReset!() : null,
+              child: StyledContainer(
+                hideBorder: true,
+                margin: const EdgeInsets.symmetric(vertical: 0),
+                borderRadius: 0,
+                child: Row(
+                  children: [
+                    if (isTappable) ...[
+                      CustomCheckbox(
+                          onTap: () => widget.onTap!(),
+                          mode: widget.habit.mode,
+                          value: widget.value),
+                    ],
+                    const Gap(10),
+                    Expanded(
+                        child: Text(widget.habit.name,
+                            style: theme.textTheme.bodyMedium,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1)),
+                    ValueDisplay(value: widget.habit.score),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),

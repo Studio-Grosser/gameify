@@ -15,7 +15,7 @@ class CustomCheckbox extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     if (mode == HabitMode.checkbox) {
-      return Checkbox(value: (value ?? 0) > 0, onChanged: (_) => onTap);
+      return Checkbox(value: (value ?? 0) > 0, onChanged: (_) => onTap());
     }
     return Container(
       width: 22,

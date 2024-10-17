@@ -19,15 +19,15 @@ class HabitDummy extends StatelessWidget {
     return StyledContainer(
       hideBorder: true,
       color: themeProvider.isLightTheme ? Themes.shade2 : Themes.shade6,
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Row(
         children: [
+          const Gap(10),
           Expanded(
               child: Text(habit.name,
                   style: theme.textTheme.bodyMedium,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1)),
-          const Gap(15),
           ValueDisplay(value: habit.score),
         ],
       ),

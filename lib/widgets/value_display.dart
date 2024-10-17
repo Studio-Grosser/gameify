@@ -18,6 +18,7 @@ class ValueDisplay extends StatelessWidget {
     return Container(
         width: 40,
         padding: const EdgeInsets.symmetric(vertical: 3),
+        margin: const EdgeInsets.symmetric(horizontal: 15),
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(5), color: color),
         child: Center(
