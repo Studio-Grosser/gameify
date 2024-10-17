@@ -3,13 +3,9 @@ import 'package:gameify/widgets/date_picker/calendar.dart';
 
 class CustomDatePicker extends StatefulWidget {
   const CustomDatePicker(
-      {super.key,
-      required this.onChanged,
-      required this.selectedDate,
-      required this.heatFactors});
+      {super.key, required this.onChanged, required this.selectedDate});
   final Function(DateTime) onChanged;
   final DateTime selectedDate;
-  final Map<DateTime, double> heatFactors;
 
   @override
   State<CustomDatePicker> createState() => _CustomDatePickerState();

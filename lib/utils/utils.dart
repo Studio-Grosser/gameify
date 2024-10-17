@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/widgets/confirm_dialog.dart';
+import 'package:gameify/widgets/date_picker/custom_date_picker.dart';
 import 'package:gameify/widgets/habit_dummy.dart';
 
 enum Filter { all, positives, negatives }
@@ -54,4 +55,19 @@ Future<bool> confirmReset(BuildContext context) async {
                 cancelText: 'Cancel',
               )) ??
       false;
+}
+
+void showCalendar(
+    {required BuildContext context,
+    required DateTime currentDate,
+    required Function(DateTime) changeDate}) async {
+  if (!context.mounted) return;
+  showModalBottomSheet(
+      showDragHandle: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return CustomDatePicker(
+            onChanged: changeDate, selectedDate: currentDate.startOfDay);
+      });
 }

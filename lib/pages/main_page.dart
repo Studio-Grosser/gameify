@@ -9,7 +9,6 @@ import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/pages/intro_page.dart';
-import 'package:gameify/widgets/date_picker/custom_date_picker.dart';
 import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_habit_info.dart';
@@ -186,22 +185,6 @@ class _MainPageState extends State<MainPage> {
     }));
   }
 
-  void showDatePicker() async {
-    Map<DateTime, double> heatMapData =
-        await DateService().getHeatMapData(await highscore ?? 0);
-    if (!mounted) return;
-    showModalBottomSheet(
-        showDragHandle: true,
-        isScrollControlled: true,
-        context: context,
-        builder: (context) {
-          return CustomDatePicker(
-              onChanged: changeDate,
-              selectedDate: currentDate.startOfDay,
-              heatFactors: heatMapData);
-        });
-  }
-
   double _jumpScale = 1;
   final Duration _animationDuration = const Duration(milliseconds: 100);
 
@@ -239,7 +222,10 @@ class _MainPageState extends State<MainPage> {
                   const Spacer(),
                   StyledIcon(
                     icon: CupertinoIcons.calendar,
-                    onTap: showDatePicker,
+                    onTap: () => showCalendar(
+                        context: context,
+                        currentDate: currentDate,
+                        changeDate: changeDate),
                   ),
                   StyledIcon(
                     icon: CupertinoIcons.settings,
