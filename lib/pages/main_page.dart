@@ -9,7 +9,7 @@ import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/pages/intro_page.dart';
-import 'package:gameify/widgets/custom_date_picker.dart';
+import 'package:gameify/widgets/date_picker/custom_date_picker.dart';
 import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_habit_info.dart';

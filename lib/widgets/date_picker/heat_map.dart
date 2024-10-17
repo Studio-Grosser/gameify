@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gameify/utils/themes.dart';
-import 'package:gameify/widgets/date_day_display.dart';
+import 'package:gameify/widgets/date_picker/date_day_display.dart';
 
 enum Direction { forward, backward }
 

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:gameify/widgets/heat_map.dart';
+import 'package:gameify/widgets/date_picker/heat_map.dart';
 
 class CustomDatePicker extends StatefulWidget {
   const CustomDatePicker(
