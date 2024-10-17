@@ -20,14 +20,14 @@ class CustomCheckbox extends StatelessWidget {
     return Container(
       width: 22,
       height: 22,
-      margin: const EdgeInsets.symmetric(horizontal: 14),
+      margin: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
           color: (value ?? 0) > 0 ? theme.checkboxTheme.side?.color : null,
           borderRadius: BorderRadius.circular(40),
           border: Border.all(width: 2, color: theme.checkboxTheme.side!.color)),
       child: Center(
         child: Text(
-          value.toString(),
+          (value ?? 0).toString(),
           style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.primaryContainer,
               height: 1,
