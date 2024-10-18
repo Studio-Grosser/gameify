@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gameify/main.dart';
 import 'package:gameify/pages/add_habit_page.dart';
 import 'package:gameify/database/database_service.dart';
 import 'package:gameify/database/date_service.dart';
@@ -20,6 +21,7 @@ import 'package:gameify/widgets/styled_icon.dart';
 import 'package:gameify/widgets/habit_display.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -131,23 +133,6 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
 
-    DatabaseService.instance.isInitialized.then((isInitialized) {
-      if (!isInitialized) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return IntroPage(
-              onSubmit: (initialHabits) {
-                setState(() => rawHabits = initialHabits);
-                for (var habit in initialHabits) {
-                  Habitservice().writeHabit(habit);
-                }
-              },
-            );
-          }));
-        });
-      }
-    });
-
     loadDate();
     loadMetrics();
 
@@ -171,21 +156,18 @@ class _MainPageState extends State<MainPage> {
       rawHabits.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
   void openAddHabitPage(BuildContext context, {Habit? initialHabit}) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return AddHabitPage(
-        initialHabit: initialHabit,
-        onSubmit: (habit) async {
-          if (initialHabit != null) {
-            await onHabitDelete(initialHabit, confirm: false);
-          }
-          await Habitservice().writeHabit(habit);
-          setState(() {
-            rawHabits.add(habit);
-            sortHabits();
-          });
-        },
-      );
-    }));
+    void onSubmit(Habit habit) async {
+      if (initialHabit != null) {
+        await onHabitDelete(initialHabit, confirm: false);
+      }
+      await Habitservice().writeHabit(habit);
+      setState(() {
+        rawHabits.add(habit);
+        sortHabits();
+      });
+    }
+
+    context.go('/main/addHabit', extra: [onSubmit, initialHabit]);
   }
 
   @override
