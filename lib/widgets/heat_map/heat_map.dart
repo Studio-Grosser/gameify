@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:gameify/widgets/heat_map/heat_dot.dart';
-import 'package:gameify/widgets/styled_container.dart';
+import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:collection/collection.dart';
 
 class HeatMap extends StatelessWidget {

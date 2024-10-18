@@ -4,7 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/custom_checkbox.dart';
-import 'package:gameify/widgets/styled_container.dart';
+import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:gameify/widgets/score_display.dart';
 import 'package:gap/gap.dart';
 

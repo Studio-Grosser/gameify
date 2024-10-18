@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
-import 'package:gameify/widgets/styled_fab.dart';
-import 'package:gameify/widgets/habit_display.dart';
+import 'package:gameify/widgets/styled/styled_fab.dart';
+import 'package:gameify/widgets/habit/habit_display.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 

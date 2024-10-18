@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gameify/widgets/styled_container.dart';
+import 'package:gameify/widgets/styled/styled_container.dart';
 
 class MetricDisplay extends StatelessWidget {
   const MetricDisplay({super.key, required this.metric, required this.unit});

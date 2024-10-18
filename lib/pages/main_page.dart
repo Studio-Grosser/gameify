@@ -10,12 +10,12 @@ import 'package:gap/gap.dart';
 import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/heat_map/heat_map.dart';
 import 'package:gameify/widgets/metric_display.dart';
-import 'package:gameify/widgets/no_habit_info.dart';
+import 'package:gameify/widgets/habit/no_habit_info.dart';
 import 'package:gameify/widgets/score_overview.dart';
 import 'package:gameify/widgets/settings_drawer.dart';
-import 'package:gameify/widgets/styled_fab.dart';
-import 'package:gameify/widgets/styled_icon.dart';
-import 'package:gameify/widgets/habit_display.dart';
+import 'package:gameify/widgets/styled/styled_fab.dart';
+import 'package:gameify/widgets/styled/styled_icon.dart';
+import 'package:gameify/widgets/habit/habit_display.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

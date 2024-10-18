@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gameify/utils/themes.dart';
-import 'package:gameify/widgets/styled_button.dart';
+import 'package:gameify/widgets/dialog_button.dart';
 import 'package:gap/gap.dart';
 
 class ConfirmDialog extends StatelessWidget {
@@ -30,14 +30,14 @@ class ConfirmDialog extends StatelessWidget {
             if (body != null) body!,
             const Gap(50),
             Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              StyledButton(
+              DialogButton(
                 color: Colors.transparent,
                 textColor: theme.colorScheme.onPrimaryContainer,
                 text: cancelText,
                 onTap: () => Navigator.pop(context, false),
               ),
-              const SizedBox(width: 15),
-              StyledButton(
+              const Gap(15),
+              DialogButton(
                 color: Themes.danger,
                 textColor: Themes.shade1,
                 text: confirmText,

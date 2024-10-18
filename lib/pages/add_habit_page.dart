@@ -7,10 +7,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/utils/themes.dart';
-import 'package:gameify/widgets/add_habit/habit_option.dart';
-import 'package:gameify/widgets/styled_container.dart';
-import 'package:gameify/widgets/styled_fab.dart';
-import 'package:gameify/widgets/styled_icon.dart';
+import 'package:gameify/widgets/habit/habit_option.dart';
+import 'package:gameify/widgets/styled/styled_container.dart';
+import 'package:gameify/widgets/styled/styled_fab.dart';
+import 'package:gameify/widgets/styled/styled_icon.dart';
 import 'package:gap/gap.dart';
 
 class AddHabitPage extends StatefulWidget {
@@ -36,10 +36,8 @@ class _AddHabitPageState extends State<AddHabitPage>
   HabitMode currentHabitMode = HabitMode.checkbox;
 
   void toggleHabitMode() {
-    setState(() {
-      currentHabitMode = HabitMode
-          .values[(currentHabitMode.index + 1) % HabitMode.values.length];
-    });
+    currentHabitMode = HabitMode
+        .values[(currentHabitMode.index + 1) % HabitMode.values.length];
     jump();
   }
 

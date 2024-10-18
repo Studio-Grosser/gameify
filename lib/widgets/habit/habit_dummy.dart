@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gameify/models/habit.dart';
-import 'package:gameify/widgets/styled_container.dart';
+import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:gameify/widgets/score_display.dart';
 import 'package:gap/gap.dart';
 

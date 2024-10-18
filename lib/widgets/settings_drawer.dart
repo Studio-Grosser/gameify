@@ -3,10 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/database/database_service.dart';
+import 'package:gameify/utils/dialog_utils.dart';
 import 'package:gameify/utils/logger.dart';
 import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/utils/themes.dart';
-import 'package:gameify/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:restart_app/restart_app.dart';
 

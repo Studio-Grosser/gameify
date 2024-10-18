@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class StyledButton extends StatelessWidget {
-  const StyledButton(
+class DialogButton extends StatelessWidget {
+  const DialogButton(
       {super.key,
       required this.text,
       required this.color,
