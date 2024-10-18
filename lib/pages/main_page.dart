@@ -11,7 +11,7 @@ import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/heat_map/heat_map.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_habit_info.dart';
-import 'package:gameify/widgets/score_display.dart';
+import 'package:gameify/widgets/score_overview.dart';
 import 'package:gameify/widgets/settings_drawer.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
@@ -83,7 +83,7 @@ class _MainPageState extends State<MainPage> {
                     ],
                   ),
                   const Gap(20),
-                  ScoreDisplay(
+                  ScoreOverview(
                     score: habitManager.score,
                     negativeScore: habitManager.negativeScore,
                     positiveScore: habitManager.positiveScore,

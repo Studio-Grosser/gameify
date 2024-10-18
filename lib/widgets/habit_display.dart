@@ -5,7 +5,7 @@ import 'package:gameify/models/habit.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/custom_checkbox.dart';
 import 'package:gameify/widgets/styled_container.dart';
-import 'package:gameify/widgets/value_display.dart';
+import 'package:gameify/widgets/score_display.dart';
 import 'package:gap/gap.dart';
 
 class HabitDisplay extends StatefulWidget {
@@ -83,7 +83,7 @@ class _HabitDisplayState extends State<HabitDisplay> {
                             style: theme.textTheme.bodyMedium,
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1)),
-                    ValueDisplay(value: widget.habit.score),
+                    ScoreDisplay(value: widget.habit.score),
                   ],
                 ),
               ),
