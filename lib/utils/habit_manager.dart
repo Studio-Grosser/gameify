@@ -66,6 +66,12 @@ class HabitManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addHabit(Habit habit) async {
+    _rawHabits.insert(0, habit);
+    await Habitservice().writeHabit(habit);
+    notifyListeners();
+  }
+
   Future<void> onHabitDelete(BuildContext context, Habit habit,
       {bool confirm = true}) async {
     if (!confirm || await confirmDelete(context, habit)) {

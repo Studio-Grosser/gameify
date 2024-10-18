@@ -32,12 +32,11 @@ class _MainPageState extends State<MainPage> {
 
   void openAddHabitPage({Habit? initialHabit}) {
     void onSubmit(Habit habit) async {
+      HabitManager habitManager = context.read<HabitManager>();
       if (initialHabit != null) {
-        await context
-            .read<HabitManager>()
-            .onHabitDelete(context, initialHabit, confirm: false);
+        await habitManager.onHabitDelete(context, initialHabit, confirm: false);
       }
-      await Habitservice().writeHabit(habit);
+      await habitManager.addHabit(habit);
     }
 
     context.go('/main/addHabit', extra: [onSubmit, initialHabit]);
@@ -108,7 +107,7 @@ class _MainPageState extends State<MainPage> {
                           dates: habitManager.allDates ?? [],
                           currentDate: habitManager.currentDate,
                         ),
-                        const Gap(100),
+                        const Gap(80),
                         FilterSlider(
                           currentFilter: habitManager.currentFilter,
                           onChanged: (newFilter) {

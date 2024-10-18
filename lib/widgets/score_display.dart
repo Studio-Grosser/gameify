@@ -1,4 +1,3 @@
-import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:gameify/utils/themes.dart';
 
