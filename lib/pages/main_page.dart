@@ -13,6 +13,7 @@ import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/heat_map/heat_map.dart';
 import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_habit_info.dart';
+import 'package:gameify/widgets/score_display.dart';
 import 'package:gameify/widgets/settings_drawer.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
@@ -239,25 +240,10 @@ class _MainPageState extends State<MainPage> {
                 ],
               ),
               const Gap(20),
-              AnimatedScale(
-                scale: _jumpScale,
-                duration: _animationDuration,
-                curve: Curves.easeInOut,
-                child: StyledContainer(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
-                    hideBorder: true,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        ValueDisplay(
-                            value: negativeScore, isDefaultNegative: true),
-                        Text(score.toString(),
-                            style: theme.textTheme.titleLarge),
-                        ValueDisplay(value: positiveScore),
-                      ],
-                    )),
-              ),
+              ScoreDisplay(
+                  score: score,
+                  negativeScore: negativeScore,
+                  positiveScore: positiveScore),
               Expanded(
                 child: ListView(
                   controller: _scrollController,
