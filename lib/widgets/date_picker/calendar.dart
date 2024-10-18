@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gameify/utils/date_utils.dart';
 import 'package:gameify/utils/themes.dart';
 import 'package:gameify/widgets/date_picker/date_day_display.dart';
 
@@ -15,23 +16,8 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-  static int get totalMonths => months.length;
-  static int get totalWeekdays => weekdays.length;
-  static const weekdays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  static const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
+  static int get totalMonths => DateCollection.months.length;
+  static int get totalWeekdays => DateCollection.weekdays.length;
 
   late DateTime selectedMonthAndYear;
   late DateTime minimumDate;
@@ -50,7 +36,7 @@ class _CalendarState extends State<Calendar> {
 
   String get calendarTitle {
     int monthIndex = (selectedMonthAndYear.month - 1) % totalMonths;
-    return '${months[monthIndex]} ${selectedMonthAndYear.year}';
+    return '${DateCollection.months[monthIndex]} ${selectedMonthAndYear.year}';
   }
 
   void changeMonth(Direction direction) {
@@ -77,7 +63,7 @@ class _CalendarState extends State<Calendar> {
         Padding(
           padding: const EdgeInsets.only(bottom: 10),
           child: Text(
-            weekdays[i],
+            DateCollection.weekdays[i],
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),

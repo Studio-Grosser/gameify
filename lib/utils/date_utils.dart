@@ -1,5 +1,33 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gameify/widgets/date_picker/custom_date_picker.dart';
+
+class DateCollection {
+  static List<String> months = [
+    'time.months.0'.tr(),
+    'time.months.1'.tr(),
+    'time.months.2'.tr(),
+    'time.months.3'.tr(),
+    'time.months.4'.tr(),
+    'time.months.5'.tr(),
+    'time.months.6'.tr(),
+    'time.months.7'.tr(),
+    'time.months.8'.tr(),
+    'time.months.9'.tr(),
+    'time.months.10'.tr(),
+    'time.months.11'.tr()
+  ];
+
+  static List<String> weekdays = [
+    'time.weekdays.0'.tr(),
+    'time.weekdays.1'.tr(),
+    'time.weekdays.2'.tr(),
+    'time.weekdays.3'.tr(),
+    'time.weekdays.4'.tr(),
+    'time.weekdays.5'.tr(),
+    'time.weekdays.6'.tr()
+  ];
+}
 
 DateTime fromId(String id) {
   final parts = id.split('-');
