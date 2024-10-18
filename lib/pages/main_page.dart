@@ -36,8 +36,6 @@ class _MainPageState extends State<MainPage> {
             .onHabitDelete(context, initialHabit, confirm: false);
       }
       await Habitservice().writeHabit(habit);
-      if (!mounted) return;
-      context.read<HabitManager>().loadHabits();
     }
 
     context.go('/main/addHabit', extra: [onSubmit, initialHabit]);

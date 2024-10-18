@@ -4,19 +4,22 @@ import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/habit.dart';
+import 'package:gameify/utils/habit_metrics.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:collection/collection.dart';
 
 class HabitManager extends ChangeNotifier {
+  final HabitMetrics _metrics = HabitMetrics();
+  int get highscore => _metrics.highscore;
+  int get average => _metrics.average;
+
   HabitManager() {
-    loadHabits();
-    loadAllDates();
+    _loadHabits();
+    _loadAllDates();
   }
 
   DateTime currentDate = DateTime.now().startOfDay;
   Map<String, int> _completedHabitIds = {};
-  int highscore = 0;
-  int average = 0;
   List<Date>? allDates;
   Filter currentFilter = Filter.all;
 
@@ -94,12 +97,7 @@ class HabitManager extends ChangeNotifier {
   }
 
   Future<void> _refreshMetrics() async {
-    final scores = allDates?.map((date) => date.score) ?? const [];
-    if (scores.isEmpty) return;
-    final sum = scores.reduce((a, b) => a + b);
-    highscore =
-        scores.reduce((current, next) => current > next ? current : next);
-    average = sum ~/ scores.length;
+    _metrics.refreshMetrics(allDates ?? []);
     notifyListeners();
   }
 
@@ -109,14 +107,14 @@ class HabitManager extends ChangeNotifier {
     await _writeCurrentDate();
   }
 
-  Future<void> loadHabits() async {
+  Future<void> _loadHabits() async {
     final habits = await Habitservice().readHabits();
     _rawHabits = habits;
     sortHabits();
     notifyListeners();
   }
 
-  Future<void> loadAllDates() async {
+  Future<void> _loadAllDates() async {
     final dates = await DateService().readAllDates();
     allDates = dates;
     await _loadDate();
@@ -130,9 +128,8 @@ class HabitManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void sortHabits() {
-    _rawHabits.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-  }
+  void sortHabits() =>
+      _rawHabits.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
   void changeFilter(Filter newFilter) {
     currentFilter = newFilter;
