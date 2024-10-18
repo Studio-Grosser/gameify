@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:gameify/database/database_service.dart';
+import 'package:gameify/utils/habit_manager.dart';
 import 'package:gameify/utils/router_service.dart';
 import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/utils/themes.dart';
@@ -31,8 +32,11 @@ Future<void> main() async {
 }
 
 void initializeApp() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
+        ChangeNotifierProvider(create: (context) => HabitManager()),
+      ],
       child: EasyLocalization(
           supportedLocales: const [Locale('en', 'US')],
           path: 'assets/i18n',

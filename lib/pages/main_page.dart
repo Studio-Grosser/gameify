@@ -1,12 +1,12 @@
-import 'dart:async';
-import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/habit_service.dart';
-import 'package:gameify/models/date.dart';
 import 'package:gameify/models/habit.dart';
+import 'package:gameify/utils/habit_manager.dart';
+import 'package:gameify/utils/utils.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:gap/gap.dart';
 import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/heat_map/heat_map.dart';
 import 'package:gameify/widgets/metric_display.dart';
@@ -16,9 +16,6 @@ import 'package:gameify/widgets/settings_drawer.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
 import 'package:gameify/widgets/habit_display.dart';
-import 'package:gameify/utils/utils.dart';
-import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -31,153 +28,24 @@ class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
 
-  DateTime currentDate = DateTime.now().startOfDay;
-  Map<String, int> completedHabitIds = {};
-
-  int highscore = 0;
-  int average = 0;
-  List<Date>? allDates;
-
-  Filter currentFilter = Filter.all;
-
-  List<Habit> get filteredHabits {
-    switch (currentFilter) {
-      case Filter.positives:
-        return habits.where((habit) => habit.score > 0).toList();
-      case Filter.negatives:
-        return habits.where((habit) => habit.score < 0).toList();
-      default:
-        return habits;
-    }
-  }
-
-  int get score => positiveScore + negativeScore;
-  int get positiveScore => _calculateScore((habit) => habit.score >= 0);
-  int get negativeScore => _calculateScore((habit) => habit.score < 0);
-
-  int _calculateScore(bool Function(Habit) condition) {
-    return habits.where(condition).fold(
-        0, (sum, habit) => sum + habit.score * (getHabitValue(habit.id) ?? 0));
-  }
-
-  List<Habit> rawHabits = [];
-  List<Habit> get habits => rawHabits
-      .where((habit) => habit.isActive || (getHabitValue(habit.id) ?? 0) > 0)
-      .toList();
-
-  int? getHabitValue(String id) => completedHabitIds[id];
-
-  void changeDate(DateTime date) {
-    setState(() => currentDate = date);
-    loadDate();
-  }
-
-  void resetHabit(String habitId) async {
-    setState(() {
-      if (completedHabitIds.remove(habitId) == null) {
-        _writeCurrentDate();
-      }
-    });
-  }
-
-  Future<void> _writeCurrentDate() async {
-    await DateService().writeDate(Date(
-      id: currentDate.toId(),
-      completedHabitIds: completedHabitIds,
-      score: score,
-    ));
-    refreshMetrics();
-  }
-
-  Future<void> loadDate() async {
-    Date? date = allDates?.firstWhereOrNull((d) => d.id == currentDate.toId());
-    setState(() {
-      completedHabitIds = date?.completedHabitIds ?? {};
-    });
-    refreshMetrics();
-  }
-
-  Future<void> onHabitTap(Habit habit) async {
-    setState(() {
-      completedHabitIds.update(
-          habit.id, (value) => habit.updateAlgorithm(value),
-          ifAbsent: () => 1);
-      _updateOrAddDate();
-    });
-    _writeCurrentDate();
-    HapticFeedback.mediumImpact();
-  }
-
-  void _updateOrAddDate() {
-    final newDate = Date(
-      id: currentDate.toId(),
-      completedHabitIds: completedHabitIds,
-      score: score,
-    );
-
-    final index = allDates?.indexWhere((d) => d.id == newDate.id) ?? -1;
-    if (index == -1) {
-      allDates?.add(newDate);
-    } else {
-      allDates?[index] = newDate;
-    }
-  }
-
-  Future<void> onHabitDelete(Habit habit, {bool confirm = true}) async {
-    if (!confirm || await confirmDelete(context, habit)) {
-      await Habitservice().updateActiveState(habit.id, false);
-      setState(() => habit.toggleActive());
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _loadHabits();
-    _loadAllDates();
+    final model = context.read<HabitManager>();
+    model.loadHabits();
+    model.loadAllDates();
   }
 
-  Future<void> refreshMetrics() async {
-    final scores = allDates?.map((date) => date.score) ?? const [];
-    if (scores.isEmpty) return;
-
-    final sum = scores.reduce((a, b) => a + b);
-    setState(() {
-      highscore =
-          scores.reduce((current, next) => current > next ? current : next);
-      average = sum ~/ scores.length;
-    });
-  }
-
-  Future<void> _loadHabits() async {
-    final habits = await Habitservice().readHabits();
-    setState(() {
-      rawHabits = habits;
-      sortHabits();
-    });
-  }
-
-  Future<void> _loadAllDates() async {
-    final dates = await DateService().readAllDates();
-    setState(() {
-      allDates = dates;
-      loadDate();
-    });
-  }
-
-  void sortHabits() =>
-      rawHabits.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-
-  void openAddHabitPage(BuildContext context, {Habit? initialHabit}) {
+  void openAddHabitPage({Habit? initialHabit}) {
     void onSubmit(Habit habit) async {
       if (initialHabit != null) {
-        await onHabitDelete(initialHabit, confirm: false);
+        await context
+            .read<HabitManager>()
+            .onHabitDelete(context, initialHabit, confirm: false);
       }
       await Habitservice().writeHabit(habit);
-      setState(() {
-        rawHabits.add(habit);
-        sortHabits();
-      });
+      if (!mounted) return;
+      context.read<HabitManager>().loadHabits();
     }
 
     context.go('/main/addHabit', extra: [onSubmit, initialHabit]);
@@ -186,6 +54,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
+
     return Scaffold(
       key: _scaffoldKey,
       floatingActionButton: StyledFab(
@@ -193,84 +62,98 @@ class _MainPageState extends State<MainPage> {
         height: 70,
         width: 70,
         icon: CupertinoIcons.plus,
-        onTap: () => openAddHabitPage(context),
+        onTap: () => openAddHabitPage(),
       ),
       endDrawer: const SettingsDrawer(),
       body: SafeArea(
         bottom: false,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+          child: Consumer<HabitManager>(
+            builder: (context, habitManager, child) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(currentDate.format(),
-                      style: theme.textTheme.titleMedium),
-                  const Spacer(),
-                  StyledIcon(
-                    icon: CupertinoIcons.calendar,
-                    onTap: () => showCalendar(
-                        context: context,
-                        currentDate: currentDate,
-                        changeDate: changeDate),
+                  Row(
+                    children: [
+                      Text(habitManager.currentDate.format(),
+                          style: theme.textTheme.titleMedium),
+                      const Spacer(),
+                      StyledIcon(
+                        icon: CupertinoIcons.calendar,
+                        onTap: () => showCalendar(
+                          context: context,
+                          currentDate: habitManager.currentDate,
+                          changeDate: habitManager.changeDate,
+                        ),
+                      ),
+                      StyledIcon(
+                        icon: CupertinoIcons.settings,
+                        onTap: () => _scaffoldKey.currentState?.openEndDrawer(),
+                      )
+                    ],
                   ),
-                  StyledIcon(
-                    icon: CupertinoIcons.settings,
-                    onTap: () => _scaffoldKey.currentState?.openEndDrawer(),
-                  )
-                ],
-              ),
-              const Gap(20),
-              ScoreDisplay(
-                score: score,
-                negativeScore: negativeScore,
-                positiveScore: positiveScore,
-              ),
-              Expanded(
-                child: ListView(
-                  controller: _scrollController,
-                  children: [
-                    Row(
+                  const Gap(20),
+                  ScoreDisplay(
+                    score: habitManager.score,
+                    negativeScore: habitManager.negativeScore,
+                    positiveScore: habitManager.positiveScore,
+                  ),
+                  Expanded(
+                    child: ListView(
+                      controller: _scrollController,
                       children: [
-                        MetricDisplay(metric: average, unit: 'average'),
-                        MetricDisplay(metric: highscore, unit: 'highscore'),
+                        Row(
+                          children: [
+                            MetricDisplay(
+                                metric: habitManager.average, unit: 'average'),
+                            MetricDisplay(
+                                metric: habitManager.highscore,
+                                unit: 'highscore'),
+                          ],
+                        ),
+                        HeatMap(
+                          dates: habitManager.allDates ?? [],
+                          currentDate: habitManager.currentDate,
+                        ),
+                        const Gap(100),
+                        FilterSlider(
+                          currentFilter: habitManager.currentFilter,
+                          onChanged: (newFilter) {
+                            habitManager.changeFilter(newFilter ?? Filter.all);
+                          },
+                        ),
+                        const Gap(10),
+                        habitManager.filteredHabits.isEmpty
+                            ? const NoHabitInfo()
+                            : ListView.builder(
+                                controller: _scrollController,
+                                padding: const EdgeInsets.only(bottom: 100),
+                                shrinkWrap: true,
+                                itemCount: habitManager.filteredHabits.length,
+                                itemBuilder: (context, index) {
+                                  Habit habit =
+                                      habitManager.filteredHabits[index];
+                                  int? value =
+                                      habitManager.getHabitValue(habit.id);
+                                  return HabitDisplay(
+                                    habit: habit,
+                                    value: value,
+                                    onTap: () => habitManager.onHabitTap(habit),
+                                    onDelete: () => habitManager.onHabitDelete(
+                                        context, habit),
+                                    onEdit: () =>
+                                        openAddHabitPage(initialHabit: habit),
+                                    onReset: () =>
+                                        habitManager.resetHabit(habit.id),
+                                  );
+                                }),
                       ],
                     ),
-                    HeatMap(dates: allDates ?? [], currentDate: currentDate),
-                    const Gap(100),
-                    FilterSlider(
-                        currentFilter: currentFilter,
-                        onChanged: (newFilter) {
-                          setState(() {
-                            currentFilter = newFilter ?? Filter.all;
-                          });
-                        }),
-                    const Gap(10),
-                    filteredHabits.isEmpty
-                        ? const NoHabitInfo()
-                        : ListView.builder(
-                            controller: _scrollController,
-                            padding: const EdgeInsets.only(bottom: 100),
-                            shrinkWrap: true,
-                            itemCount: filteredHabits.length,
-                            itemBuilder: (context, index) {
-                              Habit habit = filteredHabits[index];
-                              int? value = getHabitValue(habit.id);
-                              return HabitDisplay(
-                                habit: habit,
-                                value: value,
-                                onTap: () => onHabitTap(habit),
-                                onDelete: () => onHabitDelete(habit),
-                                onEdit: () => openAddHabitPage(context,
-                                    initialHabit: habit),
-                                onReset: () => resetHabit(habit.id),
-                              );
-                            }),
-                  ],
-                ),
-              )
-            ],
+                  )
+                ],
+              );
+            },
           ),
         ),
       ),
