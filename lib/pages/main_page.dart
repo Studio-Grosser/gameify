@@ -15,12 +15,10 @@ import 'package:gameify/widgets/metric_display.dart';
 import 'package:gameify/widgets/no_habit_info.dart';
 import 'package:gameify/widgets/score_display.dart';
 import 'package:gameify/widgets/settings_drawer.dart';
-import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
 import 'package:gameify/widgets/habit_display.dart';
 import 'package:gameify/utils/utils.dart';
-import 'package:gameify/widgets/value_display.dart';
 import 'package:gap/gap.dart';
 
 class MainPage extends StatefulWidget {
@@ -108,7 +106,6 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> onHabitTap(Habit habit) async {
-    jump();
     setState(() {
       completedHabitIds.update(
           habit.id, (value) => habit.updateAlgorithm(value),
@@ -191,19 +188,9 @@ class _MainPageState extends State<MainPage> {
     }));
   }
 
-  double _jumpScale = 1;
-  final Duration _animationDuration = const Duration(milliseconds: 100);
-
-  Future<void> jump() async {
-    setState(() => _jumpScale = 1.15);
-    await Future.delayed(_animationDuration);
-    setState(() => _jumpScale = 1);
-  }
-
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-
     return Scaffold(
       key: _scaffoldKey,
       floatingActionButton: StyledFab(
@@ -241,9 +228,10 @@ class _MainPageState extends State<MainPage> {
               ),
               const Gap(20),
               ScoreDisplay(
-                  score: score,
-                  negativeScore: negativeScore,
-                  positiveScore: positiveScore),
+                score: score,
+                negativeScore: negativeScore,
+                positiveScore: positiveScore,
+              ),
               Expanded(
                 child: ListView(
                   controller: _scrollController,

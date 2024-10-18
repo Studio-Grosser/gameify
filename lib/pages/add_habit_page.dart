@@ -172,6 +172,7 @@ class _AddHabitPageState extends State<AddHabitPage>
                   GestureDetector(
                     onTap: () => habitValueFocusNode.requestFocus(),
                     child: StyledContainer(
+                        showBorder: true,
                         height: 70,
                         borderRadius: 50,
                         padding: const EdgeInsets.symmetric(
@@ -219,6 +220,7 @@ class _AddHabitPageState extends State<AddHabitPage>
                   GestureDetector(
                     onTap: () => changeScorePrefix(),
                     child: StyledContainer(
+                        showBorder: true,
                         height: 70,
                         width: 70,
                         borderRadius: 50,
@@ -237,6 +239,7 @@ class _AddHabitPageState extends State<AddHabitPage>
                   GestureDetector(
                     onTap: () => toggleHabitMode(),
                     child: StyledContainer(
+                        showBorder: true,
                         height: 70,
                         width: 70,
                         borderRadius: 50,

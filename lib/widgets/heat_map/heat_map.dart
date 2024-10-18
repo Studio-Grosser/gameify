@@ -41,7 +41,6 @@ class HeatMap extends StatelessWidget {
       return StyledContainer(
           padding: const EdgeInsets.symmetric(
               vertical: _padding, horizontal: _padding),
-          hideBorder: true,
           child: Center(
             child: Wrap(
               alignment: WrapAlignment.start,

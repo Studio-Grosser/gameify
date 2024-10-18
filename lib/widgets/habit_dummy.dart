@@ -17,7 +17,6 @@ class HabitDummy extends StatelessWidget {
         Provider.of<ThemeProvider>(context, listen: false);
     ThemeData theme = Theme.of(context);
     return StyledContainer(
-      hideBorder: true,
       color: themeProvider.isLightTheme ? Themes.shade2 : Themes.shade6,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Row(

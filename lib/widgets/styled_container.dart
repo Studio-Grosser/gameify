@@ -9,13 +9,13 @@ class StyledContainer extends StatelessWidget {
       this.margin = const EdgeInsets.all(2),
       this.height,
       this.width,
-      this.hideBorder = false,
+      this.showBorder = false,
       this.color});
   final Widget child;
   final double borderRadius;
   final EdgeInsets padding;
   final EdgeInsets margin;
-  final bool hideBorder;
+  final bool showBorder;
   final double? height;
   final double? width;
   final Color? color;
@@ -32,9 +32,9 @@ class StyledContainer extends StatelessWidget {
           color: color ?? colorScheme.primaryContainer,
           border: Border.all(
               width: 2,
-              color: hideBorder
-                  ? Colors.transparent
-                  : colorScheme.secondaryContainer),
+              color: showBorder
+                  ? colorScheme.secondaryContainer
+                  : Colors.transparent),
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: child);

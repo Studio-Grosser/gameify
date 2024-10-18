@@ -67,7 +67,6 @@ class _HabitDisplayState extends State<HabitDisplay> {
               onTap: isTappable ? () => widget.onTap!() : null,
               onLongPress: isTappable ? () => widget.onReset!() : null,
               child: StyledContainer(
-                hideBorder: true,
                 margin: const EdgeInsets.symmetric(vertical: 0),
                 borderRadius: 0,
                 child: Row(

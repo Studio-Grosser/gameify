@@ -13,7 +13,6 @@ class MetricDisplay extends StatelessWidget {
       child: StyledContainer(
         height: 65,
         padding: const EdgeInsets.all(15),
-        hideBorder: true,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [

@@ -11,6 +11,7 @@ class StyledIcon extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: StyledContainer(
+        showBorder: true,
         borderRadius: 25,
         width: 45,
         height: 45,
