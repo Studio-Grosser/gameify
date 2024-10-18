@@ -7,9 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/utils/themes.dart';
+import 'package:gameify/widgets/add_habit/habit_option.dart';
 import 'package:gameify/widgets/styled_container.dart';
 import 'package:gameify/widgets/styled_fab.dart';
 import 'package:gameify/widgets/styled_icon.dart';
+import 'package:gap/gap.dart';
 
 class AddHabitPage extends StatefulWidget {
   const AddHabitPage({super.key, required this.onSubmit, this.initialHabit});
@@ -166,7 +168,7 @@ class _AddHabitPageState extends State<AddHabitPage>
                         hintStyle: theme.textTheme.titleLarge
                             ?.copyWith(color: theme.colorScheme.secondary))),
               ),
-              const SizedBox(height: 30),
+              const Gap(30),
               Row(
                 children: [
                   GestureDetector(
@@ -217,39 +219,22 @@ class _AddHabitPageState extends State<AddHabitPage>
                           ],
                         )),
                   ),
-                  GestureDetector(
-                    onTap: () => changeScorePrefix(),
-                    child: StyledContainer(
-                        showBorder: true,
-                        height: 70,
-                        width: 70,
-                        borderRadius: 50,
-                        padding: const EdgeInsets.all(16),
-                        child: AnimatedScale(
-                          scale: _jumpScale,
-                          duration: _animationDuration,
-                          curve: Curves.linear,
-                          child: Container(
-                              decoration: BoxDecoration(
-                            color: scoreColor,
-                            shape: BoxShape.circle,
-                          )),
-                        )),
-                  ),
-                  GestureDetector(
+                  HabitOption(
+                      onTap: () => changeScorePrefix(),
+                      jumpScale: _jumpScale,
+                      animationDuration: _animationDuration,
+                      child: Container(
+                          decoration: BoxDecoration(
+                        color: scoreColor,
+                        shape: BoxShape.circle,
+                      ))),
+                  HabitOption(
                     onTap: () => toggleHabitMode(),
-                    child: StyledContainer(
-                        showBorder: true,
-                        height: 70,
-                        width: 70,
-                        borderRadius: 50,
-                        child: AnimatedScale(
-                            scale: _jumpScale,
-                            duration: _animationDuration,
-                            curve: Curves.linear,
-                            child: Center(
-                                child:
-                                    FaIcon(currentHabitMode.icon, size: 30)))),
+                    jumpScale: _jumpScale,
+                    animationDuration: _animationDuration,
+                    child: Center(
+                      child: FaIcon(currentHabitMode.icon, size: 30),
+                    ),
                   ),
                 ],
               ),
