@@ -4,7 +4,7 @@ class Themes {
   static const String fontFamily = 'Figtree';
 
   static const Color shade1 = Color(0xffFFFFFF); //White Mode BG
-  static const Color shade2 = Color(0xffFBFBFB);
+  static const Color shade2 = Color(0xffFAFAFA);
   static const Color shade3 = Color(0xffF0F0F0);
   static const Color shade4 = Color(0xffDCDCDC);
   static const Color shade5 = Color(0xff4C4C4C);

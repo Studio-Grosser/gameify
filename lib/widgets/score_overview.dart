@@ -1,3 +1,4 @@
+import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:flutter/material.dart';
 import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:gameify/widgets/score_display.dart';
@@ -21,7 +22,10 @@ class ScoreOverview extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ScoreDisplay(value: negativeScore, isDefaultNegative: true),
-            Text(score.toString(), style: theme.textTheme.titleLarge),
+            AnimatedFlipCounter(
+                duration: const Duration(milliseconds: 200),
+                value: score,
+                textStyle: theme.textTheme.titleLarge),
             ScoreDisplay(value: positiveScore),
           ],
         ));
