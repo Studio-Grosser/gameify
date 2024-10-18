@@ -28,14 +28,6 @@ class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
 
-  @override
-  void initState() {
-    super.initState();
-    final model = context.read<HabitManager>();
-    model.loadHabits();
-    model.loadAllDates();
-  }
-
   void openAddHabitPage({Habit? initialHabit}) {
     void onSubmit(Habit habit) async {
       if (initialHabit != null) {
@@ -54,7 +46,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
-
     return Scaffold(
       key: _scaffoldKey,
       floatingActionButton: StyledFab(

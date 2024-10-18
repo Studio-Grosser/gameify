@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/date.dart';
@@ -9,16 +8,21 @@ import 'package:gameify/utils/utils.dart';
 import 'package:collection/collection.dart';
 
 class HabitManager extends ChangeNotifier {
+  HabitManager() {
+    loadHabits();
+    loadAllDates();
+  }
+
   DateTime currentDate = DateTime.now().startOfDay;
-  Map<String, int> completedHabitIds = {};
+  Map<String, int> _completedHabitIds = {};
   int highscore = 0;
   int average = 0;
   List<Date>? allDates;
   Filter currentFilter = Filter.all;
 
-  List<Habit> rawHabits = [];
+  List<Habit> _rawHabits = [];
 
-  List<Habit> get habits => rawHabits
+  List<Habit> get habits => _rawHabits
       .where((habit) => habit.isActive || (getHabitValue(habit.id) ?? 0) > 0)
       .toList();
 
@@ -42,22 +46,15 @@ class HabitManager extends ChangeNotifier {
         0, (sum, habit) => sum + habit.score * (getHabitValue(habit.id) ?? 0));
   }
 
-  int? getHabitValue(String id) => completedHabitIds[id];
-
-  Future<void> loadDate() async {
-    Date? date = allDates?.firstWhereOrNull((d) => d.id == currentDate.toId());
-    completedHabitIds = date?.completedHabitIds ?? {};
-    refreshMetrics();
-    notifyListeners();
-  }
+  int? getHabitValue(String id) => _completedHabitIds[id];
 
   Future<void> changeDate(DateTime date) async {
     currentDate = date;
-    await loadDate();
+    await _loadDate();
   }
 
   Future<void> onHabitTap(Habit habit) async {
-    completedHabitIds.update(habit.id, (value) => habit.updateAlgorithm(value),
+    _completedHabitIds.update(habit.id, (value) => habit.updateAlgorithm(value),
         ifAbsent: () => 1);
     _updateOrAddDate();
     await _writeCurrentDate();
@@ -76,7 +73,7 @@ class HabitManager extends ChangeNotifier {
   void _updateOrAddDate() {
     final newDate = Date(
       id: currentDate.toId(),
-      completedHabitIds: completedHabitIds,
+      completedHabitIds: _completedHabitIds,
       score: score,
     );
     final index = allDates?.indexWhere((d) => d.id == newDate.id) ?? -1;
@@ -90,13 +87,13 @@ class HabitManager extends ChangeNotifier {
   Future<void> _writeCurrentDate() async {
     await DateService().writeDate(Date(
       id: currentDate.toId(),
-      completedHabitIds: completedHabitIds,
+      completedHabitIds: _completedHabitIds,
       score: score,
     ));
-    refreshMetrics();
+    _refreshMetrics();
   }
 
-  Future<void> refreshMetrics() async {
+  Future<void> _refreshMetrics() async {
     final scores = allDates?.map((date) => date.score) ?? const [];
     if (scores.isEmpty) return;
     final sum = scores.reduce((a, b) => a + b);
@@ -107,14 +104,14 @@ class HabitManager extends ChangeNotifier {
   }
 
   Future<void> resetHabit(String habitId) async {
-    completedHabitIds.remove(habitId);
+    _completedHabitIds.remove(habitId);
+    _updateOrAddDate();
     await _writeCurrentDate();
-    notifyListeners();
   }
 
   Future<void> loadHabits() async {
     final habits = await Habitservice().readHabits();
-    rawHabits = habits;
+    _rawHabits = habits;
     sortHabits();
     notifyListeners();
   }
@@ -122,11 +119,19 @@ class HabitManager extends ChangeNotifier {
   Future<void> loadAllDates() async {
     final dates = await DateService().readAllDates();
     allDates = dates;
-    await loadDate();
+    await _loadDate();
+  }
+
+  Future<void> _loadDate() async {
+    Date? date =
+        allDates?.firstWhereOrNull((date) => date.id == currentDate.toId());
+    _completedHabitIds = date?.completedHabitIds ?? {};
+    _refreshMetrics();
+    notifyListeners();
   }
 
   void sortHabits() {
-    rawHabits.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    _rawHabits.sort((a, b) => b.createdAt.compareTo(a.createdAt));
   }
 
   void changeFilter(Filter newFilter) {
