@@ -52,24 +52,20 @@ class _MainPageState extends State<MainPage> {
   }
 
   int get score => positiveScore + negativeScore;
+  int get positiveScore => _calculateScore((habit) => habit.score >= 0);
+  int get negativeScore => _calculateScore((habit) => habit.score < 0);
 
-  int get positiveScore => habits.where((habit) => habit.score >= 0).fold(
-      0, (sum, habit) => sum + habit.score * (getHabitValue(habit.id) ?? 0));
-
-  int get negativeScore => habits.where((habit) => habit.score < 0).fold(
-      0, (sum, habit) => sum + habit.score * (getHabitValue(habit.id) ?? 0));
+  int _calculateScore(bool Function(Habit) condition) {
+    return habits.where(condition).fold(
+        0, (sum, habit) => sum + habit.score * (getHabitValue(habit.id) ?? 0));
+  }
 
   List<Habit> rawHabits = [];
   List<Habit> get habits => rawHabits
       .where((habit) => habit.isActive || (getHabitValue(habit.id) ?? 0) > 0)
       .toList();
 
-  int? getHabitValue(String id) {
-    if (completedHabitIds.containsKey(id)) {
-      return completedHabitIds[id];
-    }
-    return null;
-  }
+  int? getHabitValue(String id) => completedHabitIds[id];
 
   void changeDate(DateTime date) {
     setState(() => currentDate = date);
@@ -78,10 +74,13 @@ class _MainPageState extends State<MainPage> {
 
   void resetHabit(String habitId) async {
     setState(() {
-      if (completedHabitIds.containsKey(habitId)) {
-        completedHabitIds.remove(habitId);
+      if (completedHabitIds.remove(habitId) == null) {
+        _writeCurrentDate();
       }
     });
+  }
+
+  Future<void> _writeCurrentDate() async {
     await DateService().writeDate(Date(
       id: currentDate.toId(),
       completedHabitIds: completedHabitIds,
@@ -103,59 +102,66 @@ class _MainPageState extends State<MainPage> {
       completedHabitIds.update(
           habit.id, (value) => habit.updateAlgorithm(value),
           ifAbsent: () => 1);
-
-      Date newDate = Date(
-        id: currentDate.toId(),
-        completedHabitIds: completedHabitIds,
-        score: score,
-      );
-
-      int index = allDates?.indexWhere((d) => d.id == newDate.id) ?? -1;
-      if (index == -1) {
-        allDates?.add(newDate);
-      } else {
-        allDates?[index] = newDate;
-      }
+      _updateOrAddDate();
     });
+    _writeCurrentDate();
     HapticFeedback.mediumImpact();
-    await DateService().writeDate(Date(
+  }
+
+  void _updateOrAddDate() {
+    final newDate = Date(
       id: currentDate.toId(),
       completedHabitIds: completedHabitIds,
       score: score,
-    ));
-    refreshMetrics();
+    );
+
+    final index = allDates?.indexWhere((d) => d.id == newDate.id) ?? -1;
+    if (index == -1) {
+      allDates?.add(newDate);
+    } else {
+      allDates?[index] = newDate;
+    }
   }
 
   Future<void> onHabitDelete(Habit habit, {bool confirm = true}) async {
-    bool confirmed = !confirm ? true : await confirmDelete(context, habit);
-    if (!confirmed) return;
-    await Habitservice().updateActiveState(habit.id, false);
-    setState(() => habit.toggleActive());
+    if (!confirm || await confirmDelete(context, habit)) {
+      await Habitservice().updateActiveState(habit.id, false);
+      setState(() => habit.toggleActive());
+    }
   }
 
   @override
   void initState() {
     super.initState();
-
-    Habitservice().readHabits().then((value) => setState(() {
-          rawHabits = value;
-          sortHabits();
-        }));
-
-    DateService().readAllDates().then((value) => setState(() {
-          allDates = value;
-          loadDate();
-        }));
+    _loadHabits();
+    _loadAllDates();
   }
 
   Future<void> refreshMetrics() async {
     final scores = allDates?.map((date) => date.score) ?? const [];
-    final sum = scores.reduce((a, b) => a + b);
+    if (scores.isEmpty) return;
 
+    final sum = scores.reduce((a, b) => a + b);
     setState(() {
       highscore =
           scores.reduce((current, next) => current > next ? current : next);
-      average = scores.isNotEmpty ? sum ~/ scores.length : 0;
+      average = sum ~/ scores.length;
+    });
+  }
+
+  Future<void> _loadHabits() async {
+    final habits = await Habitservice().readHabits();
+    setState(() {
+      rawHabits = habits;
+      sortHabits();
+    });
+  }
+
+  Future<void> _loadAllDates() async {
+    final dates = await DateService().readAllDates();
+    setState(() {
+      allDates = dates;
+      loadDate();
     });
   }
 
