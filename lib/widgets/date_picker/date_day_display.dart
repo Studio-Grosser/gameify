@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gameify/utils/date_utils.dart';
 import 'package:gameify/utils/themes.dart';
-import 'package:gameify/utils/utils.dart';
 
 class DateDayDisplay extends StatefulWidget {
   const DateDayDisplay({

@@ -4,6 +4,7 @@ import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/habit.dart';
+import 'package:gameify/utils/date_utils.dart';
 import 'package:gameify/utils/dialog_utils.dart';
 import 'package:gameify/utils/habit_metrics.dart';
 import 'package:gameify/utils/utils.dart';
