@@ -38,15 +38,26 @@ DateTime fromId(String id) {
 extension DateExtension on DateTime {
   String toId() => '$year-$month-$day';
 
-  bool get isToday {
-    final now = DateTime.now();
-    return year == now.year && month == now.month && day == now.day;
+  bool get isToday => isSameDay(DateTime.now());
+  bool isSameDay(DateTime b) =>
+      year == b.year && month == b.month && day == b.day;
+
+  bool get isYesterday {
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    return isSameDay(yesterday);
+  }
+
+  bool get isTomorrow {
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    return isSameDay(tomorrow);
   }
 
   DateTime get startOfDay => DateTime(year, month, day);
 
   String format() {
-    if (isToday) return 'today';
+    if (isToday) return 'time.today'.tr();
+    if (isYesterday) return 'time.yesterday'.tr();
+    if (isTomorrow) return 'time.tomorrow'.tr();
     return '$day/$month/$year';
   }
 }

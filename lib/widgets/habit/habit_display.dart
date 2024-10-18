@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -51,14 +52,14 @@ class _HabitDisplayState extends State<HabitDisplay> {
                   onPressed: (_) => widget.onEdit!(),
                   backgroundColor: Themes.accent,
                   foregroundColor: Themes.shade1,
-                  label: 'Edit',
+                  label: 'habit.options.edit'.tr(),
                   icon: CupertinoIcons.square_pencil,
                 ),
                 SlidableAction(
                   onPressed: (_) => widget.onDelete!(),
                   backgroundColor: Themes.danger,
                   foregroundColor: Themes.shade1,
-                  label: 'Delete',
+                  label: 'habit.options.delete'.tr(),
                   icon: CupertinoIcons.trash,
                 ),
               ],

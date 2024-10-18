@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gameify/database/habit_service.dart';
@@ -17,11 +18,15 @@ class IntroPage extends StatefulWidget {
 
 class _IntroPageState extends State<IntroPage> {
   static final List<Habit> habits = [
-    Habit(name: 'Go to the gym', score: 20, mode: HabitMode.checkbox),
-    Habit(name: 'Read 10 pages', score: 5, mode: HabitMode.checkbox),
-    Habit(name: 'Take a 30 minute walk', score: 10, mode: HabitMode.checkbox),
-    Habit(name: 'Watch Netflix', score: -5, mode: HabitMode.checkbox),
-    Habit(name: 'Eat fast food', score: -10, mode: HabitMode.checkbox),
+    Habit(
+        name: 'habit.suggestions.0'.tr(), score: 20, mode: HabitMode.checkbox),
+    Habit(name: 'habit.suggestions.1'.tr(), score: 5, mode: HabitMode.checkbox),
+    Habit(
+        name: 'habit.suggestions.2'.tr(), score: 10, mode: HabitMode.checkbox),
+    Habit(
+        name: 'habit.suggestions.3'.tr(), score: -5, mode: HabitMode.checkbox),
+    Habit(
+        name: 'habit.suggestions.4'.tr(), score: -10, mode: HabitMode.checkbox),
   ];
 
   List<String> habitIds = [];
@@ -54,7 +59,8 @@ class _IntroPageState extends State<IntroPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('choose your first habits', style: theme.textTheme.bodyLarge),
+            Text('habit.suggestions.title'.tr(),
+                style: theme.textTheme.bodyLarge),
             const Gap(60),
             ...habits.map((habit) => HabitDisplay(
                   habit: habit,

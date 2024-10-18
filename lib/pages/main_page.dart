@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/habit.dart';
@@ -96,10 +97,11 @@ class _MainPageState extends State<MainPage> {
                         Row(
                           children: [
                             MetricDisplay(
-                                metric: habitManager.average, unit: 'average'),
+                                metric: habitManager.average,
+                                unit: 'score.average'.tr()),
                             MetricDisplay(
                                 metric: habitManager.highscore,
-                                unit: 'highscore'),
+                                unit: 'score.highscore'.tr()),
                           ],
                         ),
                         HeatMap(

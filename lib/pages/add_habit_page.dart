@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,8 +44,9 @@ class _AddHabitPageState extends State<AddHabitPage>
 
   String get scorePrefix => isScorePositive ? '+' : '-';
   Color get scoreColor => isScorePositive ? Themes.success : Themes.danger;
-  String get submitText =>
-      widget.initialHabit == null ? 'add habit' : 'edit habit';
+  String get submitText => widget.initialHabit == null
+      ? 'habit.add.submit'.tr()
+      : 'habit.add.submitEdit'.tr();
 
   void changeScorePrefix() {
     setState(() {
@@ -162,7 +164,7 @@ class _AddHabitPageState extends State<AddHabitPage>
                     decoration: InputDecoration(
                         counter: const SizedBox(),
                         border: InputBorder.none,
-                        hintText: 'add habit description',
+                        hintText: 'habit.add.hint'.tr(),
                         hintStyle: theme.textTheme.titleLarge
                             ?.copyWith(color: theme.colorScheme.secondary))),
               ),

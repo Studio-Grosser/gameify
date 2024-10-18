@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,7 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
               size: 18,
             ),
             title: Text(
-              'Reset App',
+              'settings.reset'.tr(),
               style: theme.textTheme.bodyMedium?.copyWith(color: Themes.danger),
             ),
           ),

@@ -26,5 +26,49 @@
             "10": "November",
             "11": "December"
         }
+    },
+    "settings": {
+        "reset": "Reset App"
+    },
+    "score": {
+        "highscore": "highscore",
+        "average": "average",
+        "score": "score"
+    },
+    "habit": {
+        "all": "all",
+        "positives": "positives",
+        "negatives": "negatives",
+        "options": {
+            "edit": "Edit",
+            "delete": "Delete"
+        },
+        "add": {
+            "hint": "add habit desciption",
+            "submit": "add habit",
+            "submitEdit": "edit habit"
+        },
+        "suggestions": {
+            "title": "choose your first habits",
+            "0": "Go to the gym",
+            "1": "Read 10 pages",
+            "2": "Take a 30 minute walk",
+            "3": "Watch Netflix",
+            "4": "Eat fast food"
+        }
+    },
+    "dialogs": {
+        "deleteHabit": {
+            "title": "Delete habit?",
+            "message": "This action can not be undone",
+            "confirm": "Delete",
+            "cancel": "Cancel"
+        },
+        "resetApp": {
+            "title": "Reset App?",
+            "message": "This action can not be undone",
+            "confirm": "Reset",
+            "cancel": "Cancel"
+        }
     }
 }
