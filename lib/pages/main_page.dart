@@ -1,15 +1,12 @@
 import 'dart:async';
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gameify/main.dart';
-import 'package:gameify/pages/add_habit_page.dart';
-import 'package:gameify/database/database_service.dart';
 import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/habit.dart';
-import 'package:gameify/pages/intro_page.dart';
 import 'package:gameify/widgets/filter_slider.dart';
 import 'package:gameify/widgets/heat_map/heat_map.dart';
 import 'package:gameify/widgets/metric_display.dart';
@@ -33,10 +30,10 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
-  DateTime currentDate = DateTime.now();
+  DateTime currentDate = DateTime.now().startOfDay;
 
-  Future<int?>? highscore;
-  Future<double?>? average;
+  int highscore = 0;
+  int average = 0;
   List<Date>? allDates;
 
   Filter currentFilter = Filter.all;
@@ -82,7 +79,7 @@ class _MainPageState extends State<MainPage> {
   void changeDate(DateTime date) {
     setState(() => currentDate = date);
     loadDate();
-    loadMetrics();
+    refreshMetrics();
   }
 
   void resetHabit(String habitId) async {
@@ -96,14 +93,13 @@ class _MainPageState extends State<MainPage> {
       completedHabitIds: completedHabitIds,
       score: score,
     ));
-    loadMetrics();
+    refreshMetrics();
   }
 
   Future<void> loadDate() async {
-    DateService().readDate(currentDate.toId()).then((value) {
-      setState(() {
-        completedHabitIds = value?.completedHabitIds ?? {};
-      });
+    Date? date = allDates?.firstWhereOrNull((d) => d.id == currentDate.toId());
+    setState(() {
+      completedHabitIds = date?.completedHabitIds ?? {};
     });
   }
 
@@ -112,6 +108,19 @@ class _MainPageState extends State<MainPage> {
       completedHabitIds.update(
           habit.id, (value) => habit.updateAlgorithm(value),
           ifAbsent: () => 1);
+
+      Date newDate = Date(
+        id: currentDate.toId(),
+        completedHabitIds: completedHabitIds,
+        score: score,
+      );
+
+      int index = allDates?.indexWhere((d) => d.id == newDate.id) ?? -1;
+      if (index == -1) {
+        allDates?.add(newDate);
+      } else {
+        allDates?[index] = newDate;
+      }
     });
     HapticFeedback.mediumImpact();
     await DateService().writeDate(Date(
@@ -119,7 +128,7 @@ class _MainPageState extends State<MainPage> {
       completedHabitIds: completedHabitIds,
       score: score,
     ));
-    loadMetrics();
+    refreshMetrics();
   }
 
   Future<void> onHabitDelete(Habit habit, {bool confirm = true}) async {
@@ -133,23 +142,27 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
 
-    loadDate();
-    loadMetrics();
-
     Habitservice().readHabits().then((value) => setState(() {
           rawHabits = value;
           sortHabits();
         }));
-  }
 
-  Future<void> loadMetrics() async {
-    setState(() {
-      highscore = DateService().getHighestScore();
-      average = DateService().getAverageScore();
-    });
     DateService().readAllDates().then((value) => setState(() {
           allDates = value;
+          loadDate();
+          refreshMetrics();
         }));
+  }
+
+  Future<void> refreshMetrics() async {
+    final scores = allDates?.map((date) => date.score) ?? const [];
+    final sum = scores.reduce((a, b) => a + b);
+
+    setState(() {
+      highscore =
+          scores.reduce((current, next) => current > next ? current : next);
+      average = scores.isNotEmpty ? sum ~/ scores.length : 0;
+    });
   }
 
   void sortHabits() =>

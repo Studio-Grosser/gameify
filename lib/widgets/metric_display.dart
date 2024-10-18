@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gameify/widgets/styled_container.dart';
 
 class MetricDisplay extends StatelessWidget {
-  const MetricDisplay({super.key, this.metric, required this.unit});
-  final Future<num?>? metric;
+  const MetricDisplay({super.key, required this.metric, required this.unit});
+  final int metric;
   final String unit;
 
   @override
@@ -16,15 +16,7 @@ class MetricDisplay extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            FutureBuilder(
-                future: metric,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const CircularProgressIndicator.adaptive();
-                  }
-                  int? value = (snapshot.data)?.toInt();
-                  return Text('$value', style: theme.textTheme.titleMedium);
-                }),
+            Text('$metric', style: theme.textTheme.titleMedium),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 5.0),
