@@ -30,7 +30,9 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
+
   DateTime currentDate = DateTime.now().startOfDay;
+  Map<String, int> completedHabitIds = {};
 
   int highscore = 0;
   int average = 0;
@@ -49,25 +51,6 @@ class _MainPageState extends State<MainPage> {
     }
   }
 
-  List<Habit> rawHabits = [];
-  List<Habit> get habits => rawHabits
-      .where((habit) => habit.isActive || isHabitCompleted(habit.id))
-      .toList();
-  Map<String, int> completedHabitIds = {};
-  bool isHabitCompleted(String id) {
-    if (completedHabitIds.containsKey(id)) {
-      return completedHabitIds[id]! > 0;
-    }
-    return false;
-  }
-
-  int? getHabitValue(String id) {
-    if (completedHabitIds.containsKey(id)) {
-      return completedHabitIds[id];
-    }
-    return null;
-  }
-
   int get score => positiveScore + negativeScore;
 
   int get positiveScore => habits.where((habit) => habit.score >= 0).fold(
@@ -76,10 +59,21 @@ class _MainPageState extends State<MainPage> {
   int get negativeScore => habits.where((habit) => habit.score < 0).fold(
       0, (sum, habit) => sum + habit.score * (getHabitValue(habit.id) ?? 0));
 
+  List<Habit> rawHabits = [];
+  List<Habit> get habits => rawHabits
+      .where((habit) => habit.isActive || (getHabitValue(habit.id) ?? 0) > 0)
+      .toList();
+
+  int? getHabitValue(String id) {
+    if (completedHabitIds.containsKey(id)) {
+      return completedHabitIds[id];
+    }
+    return null;
+  }
+
   void changeDate(DateTime date) {
     setState(() => currentDate = date);
     loadDate();
-    refreshMetrics();
   }
 
   void resetHabit(String habitId) async {
@@ -101,6 +95,7 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       completedHabitIds = date?.completedHabitIds ?? {};
     });
+    refreshMetrics();
   }
 
   Future<void> onHabitTap(Habit habit) async {
@@ -150,7 +145,6 @@ class _MainPageState extends State<MainPage> {
     DateService().readAllDates().then((value) => setState(() {
           allDates = value;
           loadDate();
-          refreshMetrics();
         }));
   }
 
