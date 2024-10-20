@@ -12,8 +12,8 @@ class Themes {
   static const Color shade7 = Color(0xff121212);
 
   static const Color accent = Color(0xff4790FD);
-  static const Color success = Color(0xff2ED573);
-  static const Color danger = Color(0xffFF4757);
+  static const Color success = Color(0xff05C46B);
+  static const Color danger = Color(0xffF53B57);
 
   static ThemeData lightTheme = ThemeData(
       bottomSheetTheme: const BottomSheetThemeData(dragHandleColor: shade4),
