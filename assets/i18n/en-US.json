@@ -46,6 +46,7 @@
         "all": "all",
         "positives": "positives",
         "negatives": "negatives",
+        "empty": "no habits yet",
         "options": {
             "edit": "Edit",
             "delete": "Delete",
