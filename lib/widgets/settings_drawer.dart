@@ -26,8 +26,8 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
     if (kReleaseMode) {
       Logger.i('Restarting App');
       Restart.restartApp(
-        notificationTitle: 'Restarting App',
-        notificationBody: 'Please tap here to open the app again.',
+        notificationTitle: 'dialogs.resetApp.notificationTitle'.tr(),
+        notificationBody: 'dialogs.resetApp.notificationBody'.tr(),
       );
     }
   }

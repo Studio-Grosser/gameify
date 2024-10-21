@@ -33,8 +33,9 @@ class _HabitDisplayState extends State<HabitDisplay>
     with SingleTickerProviderStateMixin {
   bool get showOptions => widget.onDelete != null || widget.onEdit != null;
   bool get isTappable => widget.onTap != null || widget.value != null;
-  String get habitText =>
-      _controller.isForwardOrCompleted ? 'Reset' : widget.habit.name;
+  String get habitText => _controller.isForwardOrCompleted
+      ? 'habit.options.reset'.tr()
+      : widget.habit.name;
 
   late AnimationController _controller;
   late Animation<double> _animation;

@@ -42,7 +42,8 @@
         "negatives": "negatives",
         "options": {
             "edit": "Edit",
-            "delete": "Delete"
+            "delete": "Delete",
+            "reset": "Reset"
         },
         "add": {
             "hint": "add habit desciption",
@@ -69,7 +70,9 @@
             "title": "Reset App?",
             "message": "This action can not be undone",
             "confirm": "Reset",
-            "cancel": "Cancel"
+            "cancel": "Cancel",
+            "notificationTitle": "Restarting App",
+            "notificationBody": "Please tap here to open the app again."
         }
     }
 }
