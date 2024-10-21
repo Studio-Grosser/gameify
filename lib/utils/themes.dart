@@ -16,7 +16,9 @@ class Themes {
   static const Color danger = Color(0xffF53B57);
 
   static ThemeData lightTheme = ThemeData(
-      bottomSheetTheme: const BottomSheetThemeData(dragHandleColor: shade4),
+      drawerTheme: const DrawerThemeData(backgroundColor: shade1),
+      bottomSheetTheme: const BottomSheetThemeData(
+          dragHandleColor: shade4, backgroundColor: shade1),
       iconTheme: const IconThemeData(color: shade7),
       checkboxTheme: CheckboxThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
@@ -62,7 +64,9 @@ class Themes {
       ));
 
   static ThemeData darkTheme = ThemeData(
-      bottomSheetTheme: const BottomSheetThemeData(dragHandleColor: shade5),
+      drawerTheme: const DrawerThemeData(backgroundColor: shade6),
+      bottomSheetTheme: const BottomSheetThemeData(
+          dragHandleColor: shade5, backgroundColor: shade6),
       iconTheme: const IconThemeData(color: shade4),
       checkboxTheme: CheckboxThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),

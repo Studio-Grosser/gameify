@@ -12,7 +12,7 @@ class HabitDummy extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     return StyledContainer(
-      color: theme.colorScheme.secondaryContainer,
+      color: theme.colorScheme.primaryContainer,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
       child: Row(
         children: [
