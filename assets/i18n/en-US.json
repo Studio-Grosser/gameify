@@ -28,7 +28,8 @@
         }
     },
     "settings": {
-        "reset": "Reset App"
+        "reset": "Reset App",
+        "privacy": "Privacy Policy"
     },
     "score": {
         "highscore": "highscore",

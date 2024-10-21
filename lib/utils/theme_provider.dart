@@ -12,7 +12,7 @@ class ThemeProvider with ChangeNotifier {
   bool get isLightTheme => themeMode == ThemeMode.light;
 
   String get themeDescription =>
-      ['System Mode', 'Light Mode', 'Dark Mode'][themeMode.index];
+      ['System Theme', 'Light Theme', 'Dark Theme'][themeMode.index];
 
   IconData get themeIcon => [
         CupertinoIcons.sparkles,
