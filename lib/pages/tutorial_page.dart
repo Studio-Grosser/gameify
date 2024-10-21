@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
+import 'package:gameify/utils/responsive_utils.dart';
 import 'package:gameify/widgets/habit/habit_display.dart';
 import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:gameify/widgets/styled/styled_fab.dart';
@@ -116,11 +117,12 @@ class _TutorialPageState extends State<TutorialPage> {
   }
 
   void onHabitThreeTap() async {
-    setState(() {
-      habitThreeValue++;
-      scoreValue += habitThree.score;
-    });
-    if (habitThreeValue == 3) {
+    if (habitThreeValue != 3) {
+      setState(() {
+        habitThreeValue++;
+        scoreValue += habitThree.score;
+      });
+    } else {
       setState(() {
         textOpacity = 0;
       });
@@ -152,7 +154,7 @@ class _TutorialPageState extends State<TutorialPage> {
               duration: const Duration(milliseconds: 500),
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                const Gap(50),
+                Gap(responsiveHeight(30, context)),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 1500),
                   opacity: scoreOpacity,
@@ -166,7 +168,7 @@ class _TutorialPageState extends State<TutorialPage> {
                     ),
                   ),
                 ),
-                const Gap(75),
+                Gap(responsiveHeight(75, context)),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 500),
                   opacity: textOpacity,

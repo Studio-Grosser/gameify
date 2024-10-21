@@ -4,6 +4,7 @@ import 'package:gameify/database/date_service.dart';
 import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/date.dart';
 import 'package:gameify/models/habit.dart';
+import 'package:gameify/models/heat_dot_animation.dart';
 import 'package:gameify/utils/date_utils.dart';
 import 'package:gameify/utils/dialog_utils.dart';
 import 'package:gameify/utils/habit_metrics.dart';
@@ -15,6 +16,8 @@ class HabitManager extends ChangeNotifier {
   int get highscore => _metrics.highscore;
   int get average => _metrics.average;
   VoidCallback? newHighscoreCallback;
+
+  final Map<int, HeatDotAnimation> heatDotAnimations = {};
 
   void setNewHighscoreCallback(VoidCallback callback) {
     newHighscoreCallback = callback;
@@ -69,7 +72,20 @@ class HabitManager extends ChangeNotifier {
         ifAbsent: () => 1);
     _updateOrAddDate();
     await _writeCurrentDate();
+    animate();
     notifyListeners();
+  }
+
+  void animate() async {
+    for (var entry in heatDotAnimations.entries) {
+      HeatDotAnimation heatDotAnimation = entry.value;
+      Future.delayed(
+          Duration(milliseconds: (50 * heatDotAnimation.distance).toInt()), () {
+        heatDotAnimation.controller.forward().then((_) {
+          heatDotAnimation.controller.reverse();
+        });
+      });
+    }
   }
 
   Future<void> addHabit(Habit habit) async {
