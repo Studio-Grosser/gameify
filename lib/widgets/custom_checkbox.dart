@@ -11,6 +11,14 @@ class CustomCheckbox extends StatelessWidget {
   final HabitMode mode;
   final int? value;
 
+  String get valueText {
+    if (value == null || value == 0) {
+      return '';
+    } else {
+      return value.toString();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -27,7 +35,7 @@ class CustomCheckbox extends StatelessWidget {
           border: Border.all(width: 2, color: theme.checkboxTheme.side!.color)),
       child: Center(
         child: Text(
-          (value ?? 0).toString(),
+          valueText,
           style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.primaryContainer,
               height: 1,

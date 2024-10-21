@@ -17,6 +17,7 @@ class ScoreDisplay extends StatelessWidget {
     ThemeData theme = Theme.of(context);
     return Container(
         width: 40,
+        height: 25,
         padding: const EdgeInsets.symmetric(vertical: 3),
         margin: const EdgeInsets.symmetric(horizontal: 15),
         decoration:
