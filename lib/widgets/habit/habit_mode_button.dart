@@ -42,6 +42,12 @@ class _HabitModeButtonState extends State<HabitModeButton> {
   }
 
   @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
         clipBehavior: Clip.none,
