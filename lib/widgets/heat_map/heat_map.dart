@@ -18,9 +18,9 @@ class HeatMap extends StatelessWidget {
   static const _columns = 3;
   static const _padding = 10.0;
 
-  static const _maxScale = 1.5;
+  static const _minScale = 0.75;
   static const _beginScale = 1;
-  static const _maxDistanceAnimation = 8;
+  static const _maxDistanceAnimation = 20;
 
   static (int, int) _calculateDots(double containerWidth) {
     int dotsInRow = (containerWidth / (_dotSize + _dotMargin)).toInt();
@@ -65,7 +65,8 @@ class HeatMap extends StatelessWidget {
                           ?.score ??
                       0;
 
-                  int distance = currentDate.difference(date).inDays.abs() ~/ 3;
+                  int distance =
+                      currentDate.difference(date).inDays.abs() ~/ _columns;
 
                   double heatFactor = highscore > 0 ? score / highscore : 0;
                   return HeatDot(
@@ -77,11 +78,12 @@ class HeatMap extends StatelessWidget {
                           vsync: tickerProvider,
                           duration: const Duration(milliseconds: 200));
 
-                      double endScale = _maxScale -
-                          ((_maxScale - _beginScale) / _maxDistanceAnimation) *
+                      double endScale = _minScale +
+                          ((_beginScale - _minScale) / _maxDistanceAnimation) *
                               distance;
                       endScale =
-                          endScale.clamp(_beginScale.toDouble(), _maxScale);
+                          endScale.clamp(_minScale, _beginScale.toDouble());
+
                       Animation animation =
                           Tween<double>(begin: 1, end: endScale)
                               .animate(CurvedAnimation(

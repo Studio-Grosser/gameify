@@ -80,7 +80,8 @@ class HabitManager extends ChangeNotifier {
     for (var entry in heatDotAnimations.entries) {
       HeatDotAnimation heatDotAnimation = entry.value;
       Future.delayed(
-          Duration(milliseconds: (50 * heatDotAnimation.distance).toInt()), () {
+          Duration(milliseconds: (100 * heatDotAnimation.distance).toInt()),
+          () {
         heatDotAnimation.controller.forward().then((_) {
           heatDotAnimation.controller.reverse();
         });
