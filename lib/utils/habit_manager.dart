@@ -14,6 +14,11 @@ class HabitManager extends ChangeNotifier {
   final HabitMetrics _metrics = HabitMetrics();
   int get highscore => _metrics.highscore;
   int get average => _metrics.average;
+  VoidCallback? newHighscoreCallback;
+
+  void setNewHighscoreCallback(VoidCallback callback) {
+    newHighscoreCallback = callback;
+  }
 
   HabitManager() {
     _loadHabits();
@@ -55,6 +60,7 @@ class HabitManager extends ChangeNotifier {
 
   Future<void> changeDate(DateTime date) async {
     currentDate = date;
+    _metrics.brokeHighscore = false;
     await _loadDate();
   }
 
@@ -105,7 +111,7 @@ class HabitManager extends ChangeNotifier {
   }
 
   Future<void> _refreshMetrics() async {
-    _metrics.refreshMetrics(allDates ?? []);
+    _metrics.refreshMetrics(allDates ?? [], newHighscoreCallback ?? () {});
     notifyListeners();
   }
 

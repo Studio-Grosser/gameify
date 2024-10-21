@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:confetti/confetti.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gameify/database/habit_service.dart';
@@ -29,6 +32,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
+  late ConfettiController _confettiController;
 
   void openAddHabitPage({Habit? initialHabit}) {
     void onSubmit(Habit habit) async {
@@ -40,6 +44,16 @@ class _MainPageState extends State<MainPage> {
     }
 
     context.go('/main/addHabit', extra: [onSubmit, initialHabit]);
+  }
+
+  @override
+  void initState() {
+    _confettiController =
+        ConfettiController(duration: const Duration(seconds: 1));
+    context
+        .read<HabitManager>()
+        .setNewHighscoreCallback(() => _confettiController.play());
+    super.initState();
   }
 
   @override
@@ -57,97 +71,120 @@ class _MainPageState extends State<MainPage> {
       endDrawer: const SettingsDrawer(),
       body: SafeArea(
         bottom: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
-          child: Consumer<HabitManager>(
-            builder: (context, habitManager, child) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+        child: Stack(
+          children: [
+            Align(
+                alignment: Alignment.topCenter,
+                child: ConfettiWidget(
+                  confettiController: _confettiController,
+                  blastDirection: pi / 4,
+                  shouldLoop: false,
+                  numberOfParticles: 10,
+                  blastDirectionality: BlastDirectionality.explosive,
+                )),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
+              child: Consumer<HabitManager>(
+                builder: (context, habitManager, child) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(habitManager.currentDate.format(),
-                          style: theme.textTheme.titleMedium),
-                      const Spacer(),
-                      StyledIcon(
-                        icon: CupertinoIcons.calendar,
-                        onTap: () => showCalendar(
-                          context: context,
-                          currentDate: habitManager.currentDate,
-                          changeDate: habitManager.changeDate,
-                        ),
+                      Row(
+                        children: [
+                          Text(habitManager.currentDate.format(),
+                              style: theme.textTheme.titleMedium),
+                          const Spacer(),
+                          StyledIcon(
+                            icon: CupertinoIcons.calendar,
+                            onTap: () => showCalendar(
+                              context: context,
+                              currentDate: habitManager.currentDate,
+                              changeDate: habitManager.changeDate,
+                            ),
+                          ),
+                          StyledIcon(
+                            icon: CupertinoIcons.settings,
+                            onTap: () =>
+                                _scaffoldKey.currentState?.openEndDrawer(),
+                          )
+                        ],
                       ),
-                      StyledIcon(
-                        icon: CupertinoIcons.settings,
-                        onTap: () => _scaffoldKey.currentState?.openEndDrawer(),
-                      )
-                    ],
-                  ),
-                  const Gap(20),
-                  ScoreOverview(
-                    score: habitManager.score,
-                    negativeScore: habitManager.negativeScore,
-                    positiveScore: habitManager.positiveScore,
-                  ),
-                  Expanded(
-                    child: ListView(
-                      controller: _scrollController,
-                      children: [
-                        Row(
+                      const Gap(20),
+                      ScoreOverview(
+                        score: habitManager.score,
+                        negativeScore: habitManager.negativeScore,
+                        positiveScore: habitManager.positiveScore,
+                      ),
+                      Expanded(
+                        child: ListView(
+                          controller: _scrollController,
                           children: [
-                            MetricDisplay(
-                                metric: habitManager.average,
-                                unit: 'score.average'.tr()),
-                            MetricDisplay(
-                                metric: habitManager.highscore,
-                                unit: 'score.highscore'.tr()),
+                            Row(
+                              children: [
+                                MetricDisplay(
+                                    metric: habitManager.average,
+                                    unit: 'score.average'.tr()),
+                                MetricDisplay(
+                                    metric: habitManager.highscore,
+                                    unit: 'score.highscore'.tr()),
+                              ],
+                            ),
+                            HeatMap(
+                              dates: habitManager.allDates ?? [],
+                              currentDate: habitManager.currentDate,
+                            ),
+                            const Gap(80),
+                            FilterSlider(
+                              currentFilter: habitManager.currentFilter,
+                              onChanged: (newFilter) {
+                                habitManager
+                                    .changeFilter(newFilter ?? Filter.all);
+                              },
+                            ),
+                            const Gap(10),
+                            habitManager.filteredHabits.isEmpty
+                                ? const NoHabitInfo()
+                                : ListView.builder(
+                                    controller: _scrollController,
+                                    padding: const EdgeInsets.only(bottom: 100),
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        habitManager.filteredHabits.length,
+                                    itemBuilder: (context, index) {
+                                      Habit habit =
+                                          habitManager.filteredHabits[index];
+                                      int? value =
+                                          habitManager.getHabitValue(habit.id);
+                                      return HabitDisplay(
+                                        habit: habit,
+                                        value: value,
+                                        onTap: () =>
+                                            habitManager.onHabitTap(habit),
+                                        onDelete: () => habitManager
+                                            .onHabitDelete(context, habit),
+                                        onEdit: () => openAddHabitPage(
+                                            initialHabit: habit),
+                                        onReset: () =>
+                                            habitManager.resetHabit(habit.id),
+                                      );
+                                    }),
                           ],
                         ),
-                        HeatMap(
-                          dates: habitManager.allDates ?? [],
-                          currentDate: habitManager.currentDate,
-                        ),
-                        const Gap(80),
-                        FilterSlider(
-                          currentFilter: habitManager.currentFilter,
-                          onChanged: (newFilter) {
-                            habitManager.changeFilter(newFilter ?? Filter.all);
-                          },
-                        ),
-                        const Gap(10),
-                        habitManager.filteredHabits.isEmpty
-                            ? const NoHabitInfo()
-                            : ListView.builder(
-                                controller: _scrollController,
-                                padding: const EdgeInsets.only(bottom: 100),
-                                shrinkWrap: true,
-                                itemCount: habitManager.filteredHabits.length,
-                                itemBuilder: (context, index) {
-                                  Habit habit =
-                                      habitManager.filteredHabits[index];
-                                  int? value =
-                                      habitManager.getHabitValue(habit.id);
-                                  return HabitDisplay(
-                                    habit: habit,
-                                    value: value,
-                                    onTap: () => habitManager.onHabitTap(habit),
-                                    onDelete: () => habitManager.onHabitDelete(
-                                        context, habit),
-                                    onEdit: () =>
-                                        openAddHabitPage(initialHabit: habit),
-                                    onReset: () =>
-                                        habitManager.resetHabit(habit.id),
-                                  );
-                                }),
-                      ],
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
+                      )
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
   }
 }
