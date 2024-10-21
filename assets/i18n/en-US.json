@@ -46,7 +46,7 @@
             "reset": "Reset"
         },
         "add": {
-            "hint": "add habit desciption",
+            "hint": "add habit description",
             "submit": "add habit",
             "submitEdit": "edit habit"
         },

@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/utils/themes.dart';
+import 'package:gameify/widgets/habit/habit_mode_button.dart';
 import 'package:gameify/widgets/habit/habit_option.dart';
 import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:gameify/widgets/styled/styled_fab.dart';
@@ -228,14 +229,11 @@ class _AddHabitPageState extends State<AddHabitPage>
                         color: scoreColor,
                         shape: BoxShape.circle,
                       ))),
-                  HabitOption(
-                    onTap: () => toggleHabitMode(),
-                    jumpScale: _jumpScale,
-                    animationDuration: _animationDuration,
-                    child: Center(
-                      child: FaIcon(currentHabitMode.icon, size: 30),
-                    ),
-                  ),
+                  HabitModeButton(
+                      currentHabitMode: currentHabitMode,
+                      jumpScale: _jumpScale,
+                      animationDuration: _animationDuration,
+                      onTap: toggleHabitMode)
                 ],
               ),
               const Spacer(flex: 3)

@@ -16,8 +16,8 @@ enum HabitMode {
 
 extension HabitModeExtension on HabitMode {
   String get name => <HabitMode, String>{
-        HabitMode.checkbox: 'Checkbox',
-        HabitMode.count: 'Count',
+        HabitMode.checkbox: 'Check Mode',
+        HabitMode.count: 'Counter Mode',
       }[this]!;
 
   IconData get icon => <HabitMode, IconData>{
