@@ -1,12 +1,12 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:animated_flip_counter/animated_flip_counter.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/widgets/habit/habit_display.dart';
+import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:gameify/widgets/styled/styled_fab.dart';
 import 'package:gap/gap.dart';
 
@@ -21,17 +21,17 @@ class TutorialPage extends StatefulWidget {
 
 class _TutorialPageState extends State<TutorialPage> {
   final Habit habitOne =
-      Habit(name: 'Go to the Gym', score: 20, mode: HabitMode.checkbox);
-  final Habit habitTwo =
-      Habit(name: 'Eat Fast Food', score: -10, mode: HabitMode.checkbox);
+      Habit(name: 'habit.tutorial.0'.tr(), score: 20, mode: HabitMode.checkbox);
+  final Habit habitTwo = Habit(
+      name: 'habit.tutorial.1'.tr(), score: -10, mode: HabitMode.checkbox);
   final Habit habitThree =
-      Habit(name: 'Read 10 pages', score: 5, mode: HabitMode.count);
+      Habit(name: 'habit.tutorial.2'.tr(), score: 5, mode: HabitMode.count);
   void onSubmit() async {
     if (!mounted) return;
     context.go('/tutorial/suggestions');
   }
 
-  String text = 'Complete habits to increase your score';
+  String text = 'tutorial.0'.tr();
 
   double textOpacity = 0;
   double scoreOpacity = 0;
@@ -57,7 +57,7 @@ class _TutorialPageState extends State<TutorialPage> {
     setState(() {
       textOpacity = 1;
     });
-    await Future.delayed(Duration(milliseconds: 1500));
+    await Future.delayed(const Duration(milliseconds: 1000));
     setState(() {
       habitOneOpacity = 1;
     });
@@ -69,20 +69,20 @@ class _TutorialPageState extends State<TutorialPage> {
       isHabitOneDone = true;
       scoreOpacity = 1;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     setState(() {
       scoreValue += habitOne.score;
     });
-    await Future.delayed(Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 1500));
     setState(() {
       textOpacity = 0;
     });
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
-      text = 'Bad habits will decrease your score';
+      text = 'tutorial.1'.tr();
       textOpacity = 1;
     });
-    await Future.delayed(Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 500));
     setState(() {
       habitOneOpacity = 0.25;
       habitTwoOpacity = 1;
@@ -94,21 +94,20 @@ class _TutorialPageState extends State<TutorialPage> {
     setState(() {
       isHabitTwoDone = true;
     });
-    await Future.delayed(Duration(milliseconds: 200));
+    await Future.delayed(const Duration(milliseconds: 200));
     setState(() {
       scoreValue += habitTwo.score;
     });
-    await Future.delayed(Duration(milliseconds: 2000));
+    await Future.delayed(const Duration(milliseconds: 2000));
     setState(() {
       textOpacity = 0;
     });
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     setState(() {
-      text =
-          'Create counter habits to complete habits several times in one day';
+      text = 'tutorial.2'.tr();
       textOpacity = 1;
     });
-    await Future.delayed(Duration(milliseconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     setState(() {
       habitTwoOpacity = 0.25;
 
@@ -117,18 +116,17 @@ class _TutorialPageState extends State<TutorialPage> {
   }
 
   void onHabitThreeTap() async {
-    if (habitThreeValue != 3) {
-      setState(() {
-        habitThreeValue++;
-        scoreValue += habitThree.score;
-      });
-    } else {
+    setState(() {
+      habitThreeValue++;
+      scoreValue += habitThree.score;
+    });
+    if (habitThreeValue == 3) {
       setState(() {
         textOpacity = 0;
       });
-      await Future.delayed(Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 300));
       setState(() {
-        text = 'Tap and hold a counter habit to reset its value';
+        text = 'tutorial.3'.tr();
         textOpacity = 1;
       });
     }
@@ -151,20 +149,24 @@ class _TutorialPageState extends State<TutorialPage> {
           child: Padding(
             padding: const EdgeInsets.all(30.0),
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 500),
+              duration: const Duration(milliseconds: 500),
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                Gap(50),
+                const Gap(50),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 1500),
                   opacity: scoreOpacity,
-                  child: AnimatedFlipCounter(
-                    value: scoreValue,
-                    textStyle: theme.textTheme.titleLarge,
-                    duration: Duration(milliseconds: 500),
+                  child: StyledContainer(
+                    height: 100,
+                    width: 100,
+                    child: AnimatedFlipCounter(
+                      value: scoreValue,
+                      textStyle: theme.textTheme.titleLarge,
+                      duration: const Duration(milliseconds: 200),
+                    ),
                   ),
                 ),
-                Gap(75),
+                const Gap(75),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 500),
                   opacity: textOpacity,
@@ -199,11 +201,11 @@ class _TutorialPageState extends State<TutorialPage> {
                   duration: const Duration(milliseconds: 500),
                   opacity: habitThreeOpacity,
                   child: HabitDisplay(
-                    onReset: habitThreeValue == 3
+                    onReset: habitThreeValue >= 3
                         ? () {
                             setState(() {
+                              scoreValue -= habitThree.score * habitThreeValue;
                               habitThreeValue = 0;
-                              scoreValue -= habitThree.score * 3;
                               tutorialDone = true;
                             });
                           }

@@ -27,6 +27,12 @@
             "11": "December"
         }
     },
+    "tutorial": {
+        "0": "Complete habits to increase your score",
+        "1": "Bad habits will decrease your score",
+        "2": "Create counter habits to complete habits several times in one day",
+        "3": "Tap and hold a counter habit to reset its value"
+    },
     "settings": {
         "reset": "Reset App",
         "privacy": "Privacy Policy"
@@ -57,6 +63,11 @@
             "2": "Take a 30 minute walk",
             "3": "Watch Netflix",
             "4": "Eat fast food"
+        },
+        "tutorial": {
+            "0": "Go to the Gym",
+            "1": "Eat Fast Food",
+            "2": "Read 10 Pages"
         }
     },
     "dialogs": {
