@@ -16,8 +16,7 @@ class HeatMap extends StatelessWidget {
   static const _padding = 10.0;
 
   static (int, int) _calculateDots(double containerWidth) {
-    double effectiveWidth = containerWidth - (2 * _padding);
-    int dotsInRow = (effectiveWidth / (_dotSize + _dotMargin)).toInt();
+    int dotsInRow = (containerWidth / (_dotSize + _dotMargin)).toInt();
     int dotCount = dotsInRow * _columns - 1;
     return (dotCount, dotsInRow);
   }
@@ -26,22 +25,22 @@ class HeatMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context, constaints) {
-      int highscore = 0;
-      if (dates.isNotEmpty) {
-        highscore = dates.reduce((current, next) {
-          return current.score > next.score ? current : next;
-        }).score;
-      }
+    return StyledContainer(
+        padding: const EdgeInsets.symmetric(
+            vertical: _padding, horizontal: _padding),
+        child: LayoutBuilder(builder: (context, constraints) {
+          int highscore = 0;
+          if (dates.isNotEmpty) {
+            highscore = dates.reduce((current, next) {
+              return current.score > next.score ? current : next;
+            }).score;
+          }
 
-      (int, int) calculatedDots = _calculateDots(constaints.maxWidth);
-      int dotCount = calculatedDots.$1;
-      int dotsInRow = calculatedDots.$2;
+          (int, int) calculatedDots = _calculateDots(constraints.maxWidth);
+          int dotCount = calculatedDots.$1;
+          int dotsInRow = calculatedDots.$2;
 
-      return StyledContainer(
-          padding: const EdgeInsets.symmetric(
-              vertical: _padding, horizontal: _padding),
-          child: Center(
+          return Center(
             child: Wrap(
               alignment: WrapAlignment.start,
               spacing: _dotMargin,
@@ -64,7 +63,7 @@ class HeatMap extends StatelessWidget {
                     isCurrentDate: date == currentDate);
               }),
             ),
-          ));
-    });
+          );
+        }));
   }
 }
