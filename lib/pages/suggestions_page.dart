@@ -9,18 +9,18 @@ import 'package:gameify/widgets/habit/habit_display.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
-class IntroPage extends StatefulWidget {
-  const IntroPage({super.key});
+class SuggestionsPage extends StatefulWidget {
+  const SuggestionsPage({super.key});
 
   @override
-  State<IntroPage> createState() => _IntroPageState();
+  State<SuggestionsPage> createState() => _SuggestionsPageState();
 }
 
-class _IntroPageState extends State<IntroPage> {
+class _SuggestionsPageState extends State<SuggestionsPage> {
   static final List<Habit> habits = [
     Habit(
         name: 'habit.suggestions.0'.tr(), score: 20, mode: HabitMode.checkbox),
-    Habit(name: 'habit.suggestions.1'.tr(), score: 5, mode: HabitMode.checkbox),
+    Habit(name: 'habit.suggestions.1'.tr(), score: 5, mode: HabitMode.count),
     Habit(
         name: 'habit.suggestions.2'.tr(), score: 10, mode: HabitMode.checkbox),
     Habit(
@@ -63,8 +63,9 @@ class _IntroPageState extends State<IntroPage> {
                 style: theme.textTheme.bodyLarge),
             const Gap(60),
             ...habits.map((habit) => HabitDisplay(
+                  showCheckbox: false,
                   habit: habit,
-                  value: habitIds.contains(habit.id) ? 1 : 0,
+                  showSelectionBorder: habitIds.contains(habit.id),
                   onTap: () {
                     setState(() {
                       !habitIds.contains(habit.id)

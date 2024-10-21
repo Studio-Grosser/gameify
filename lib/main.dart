@@ -67,8 +67,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void dispose() {
-    super.dispose();
     DatabaseService.instance.close();
+    super.dispose();
   }
 
   @override

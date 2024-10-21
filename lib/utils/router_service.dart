@@ -1,8 +1,9 @@
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/pages/add_habit_page.dart';
-import 'package:gameify/pages/intro_page.dart';
+import 'package:gameify/pages/suggestions_page.dart';
 import 'package:gameify/pages/loading_page.dart';
 import 'package:gameify/pages/main_page.dart';
+import 'package:gameify/pages/tutorial_page.dart';
 import 'package:go_router/go_router.dart';
 
 class RouterService {
@@ -12,9 +13,14 @@ class RouterService {
       builder: (context, state) => const LoadingPage(),
     ),
     GoRoute(
-      path: '/intro',
-      builder: (context, state) => const IntroPage(),
-    ),
+        path: '/tutorial',
+        builder: (context, state) => const TutorialPage(),
+        routes: [
+          GoRoute(
+            path: '/suggestions',
+            builder: (context, state) => const SuggestionsPage(),
+          )
+        ]),
     GoRoute(
         path: '/main',
         builder: (context, state) => const MainPage(),

@@ -14,7 +14,7 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     super.initState();
     DatabaseService.instance.isInitialized.then((isInitialized) {
-      String route = isInitialized ? '/main' : '/intro';
+      String route = !isInitialized ? '/main' : '/tutorial';
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go(route);
       });

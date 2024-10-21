@@ -17,13 +17,17 @@ class HabitDisplay extends StatefulWidget {
       this.onTap,
       this.onDelete,
       this.onEdit,
-      this.onReset});
+      this.onReset,
+      this.showCheckbox = true,
+      this.showSelectionBorder = false});
   final Habit habit;
   final int? value;
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
   final VoidCallback? onEdit;
   final VoidCallback? onReset;
+  final bool showCheckbox;
+  final bool showSelectionBorder;
 
   @override
   State<HabitDisplay> createState() => _HabitDisplayState();
@@ -121,18 +125,24 @@ class _HabitDisplayState extends State<HabitDisplay>
                       height: 66,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
+                          borderRadius: widget.showSelectionBorder
+                              ? BorderRadius.circular(15)
+                              : null,
+                          border: widget.showSelectionBorder
+                              ? Border.all(width: 2, color: Themes.accent)
+                              : null,
                           gradient: LinearGradient(stops: [
-                        0,
-                        _animation.value,
-                        _animation.value
-                      ], colors: [
-                        Themes.accent,
-                        Themes.accent,
-                        theme.colorScheme.primaryContainer,
-                      ])),
+                            0,
+                            _animation.value,
+                            _animation.value
+                          ], colors: [
+                            Themes.accent,
+                            Themes.accent,
+                            theme.colorScheme.primaryContainer,
+                          ])),
                       child: Row(
                         children: [
-                          if (isTappable) ...[
+                          if (isTappable && widget.showCheckbox) ...[
                             if (_controller.isForwardOrCompleted) ...[
                               const Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 14),
