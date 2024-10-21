@@ -130,7 +130,7 @@ class HabitManager extends ChangeNotifier {
 
   Future<void> _loadAllDates() async {
     final dates = await DateService().readAllDates();
-    allDates = dates;
+    allDates = dates ?? [];
     await _loadDate();
   }
 
