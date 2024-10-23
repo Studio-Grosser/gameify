@@ -21,11 +21,36 @@ class HeatMap extends StatelessWidget {
   static const _minScale = 0.75;
   static const _beginScale = 1;
   static const _maxDistanceAnimation = 20;
+  static const _animationDuration = Duration(milliseconds: 200);
 
   static (int, int) _calculateDots(double containerWidth) {
     int dotsInRow = (containerWidth / (_dotSize + _dotMargin)).toInt();
     int dotCount = dotsInRow * _columns - 1;
     return (dotCount, dotsInRow);
+  }
+
+  static double _calcEndScale(int distance) {
+    double a = (_beginScale - _minScale) / _maxDistanceAnimation;
+    double b = _minScale + a * distance;
+    return b.clamp(_minScale, _beginScale.toDouble());
+  }
+
+  static int _calcVerticalIndex(int index, int dotsInRow) =>
+      ((index % dotsInRow) * _columns) + (index ~/ dotsInRow);
+
+  static (Animation<double>, AnimationController) _createAnimation(
+      TickerProvider tickerProvider, int distance) {
+    AnimationController controller = AnimationController(
+        vsync: tickerProvider, duration: _animationDuration);
+
+    double endScale = _calcEndScale(distance);
+    Animation<double> animation =
+        Tween<double>(begin: 1, end: endScale).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.easeInOut,
+    ));
+
+    return (animation, controller);
   }
 
   static final DateTime _now = DateTime.now().startOfDay;
@@ -54,16 +79,13 @@ class HeatMap extends StatelessWidget {
                 spacing: _dotMargin,
                 runSpacing: _dotMargin,
                 children: List.generate(dotCount, (index) {
-                  int verticalIndex =
-                      ((index % dotsInRow) * _columns) + (index ~/ dotsInRow);
+                  int verticalIndex = _calcVerticalIndex(index, dotsInRow);
 
                   DateTime date = _now
                       .subtract(Duration(days: dotCount - (verticalIndex + 1)));
 
-                  int score = dates
-                          .firstWhereOrNull((d) => date.toId() == d.id)
-                          ?.score ??
-                      0;
+                  Date? a = dates.firstWhereOrNull((d) => date.toId() == d.id);
+                  int score = a?.score ?? 0;
 
                   int distance =
                       currentDate.difference(date).inDays.abs() ~/ _columns;
@@ -73,28 +95,14 @@ class HeatMap extends StatelessWidget {
                     size: _dotSize,
                     heatFactor: heatFactor,
                     isCurrentDate: date == currentDate,
-                    controller: (tickerProvider) {
-                      AnimationController controller = AnimationController(
-                          vsync: tickerProvider,
-                          duration: const Duration(milliseconds: 200));
-
-                      double endScale = _minScale +
-                          ((_beginScale - _minScale) / _maxDistanceAnimation) *
-                              distance;
-                      endScale =
-                          endScale.clamp(_minScale, _beginScale.toDouble());
-
-                      Animation animation =
-                          Tween<double>(begin: 1, end: endScale)
-                              .animate(CurvedAnimation(
-                        parent: controller,
-                        curve: Curves.easeInOut,
-                      ));
+                    animation: (tickerProvider) {
+                      (Animation<double>, AnimationController) temp =
+                          _createAnimation(tickerProvider, distance);
                       habitManager.heatDotAnimations[index] = HeatDotAnimation(
                         distance.toDouble(),
-                        controller,
+                        temp.$2,
                       );
-                      return animation;
+                      return temp.$1;
                     },
                   );
                 }),

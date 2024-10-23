@@ -7,12 +7,12 @@ class HeatDot extends StatefulWidget {
     required this.size,
     required this.heatFactor,
     required this.isCurrentDate,
-    required this.controller,
+    required this.animation,
   });
   final double size;
   final double heatFactor;
   final bool isCurrentDate;
-  final Animation Function(TickerProvider) controller;
+  final Animation<double> Function(TickerProvider) animation;
 
   @override
   State<HeatDot> createState() => _HeatDotState();
@@ -30,7 +30,7 @@ class _HeatDotState extends State<HeatDot> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    animation = widget.controller(this);
+    animation = widget.animation(this);
     super.initState();
   }
 
