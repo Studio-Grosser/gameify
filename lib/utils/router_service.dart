@@ -13,14 +13,17 @@ class RouterService {
       builder: (context, state) => const LoadingPage(),
     ),
     GoRoute(
-        path: '/tutorial',
-        builder: (context, state) => const TutorialPage(),
-        routes: [
-          GoRoute(
-            path: '/suggestions',
-            builder: (context, state) => const SuggestionsPage(),
-          )
-        ]),
+      path: '/tutorial',
+      builder: (context, state) {
+        assert(state.extra != null);
+        String nextRoute = state.extra as String;
+        return TutorialPage(nextRoute: nextRoute);
+      },
+    ),
+    GoRoute(
+      path: '/suggestions',
+      builder: (context, state) => const SuggestionsPage(),
+    ),
     GoRoute(
         path: '/main',
         builder: (context, state) => const MainPage(),

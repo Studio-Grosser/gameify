@@ -6,6 +6,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/utils/responsive_utils.dart';
+import 'package:gameify/widgets/dialog_button.dart';
 import 'package:gameify/widgets/habit/habit_display.dart';
 import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:gameify/widgets/styled/styled_fab.dart';
@@ -14,7 +15,8 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class TutorialPage extends StatefulWidget {
-  const TutorialPage({super.key});
+  const TutorialPage({super.key, required this.nextRoute});
+  final String nextRoute;
 
   @override
   State<TutorialPage> createState() => _TutorialPageState();
@@ -29,7 +31,7 @@ class _TutorialPageState extends State<TutorialPage> {
       Habit(name: 'habit.tutorial.2'.tr(), score: 5, mode: HabitMode.count);
   void onSubmit() async {
     if (!mounted) return;
-    context.go('/tutorial/suggestions');
+    context.go(widget.nextRoute);
   }
 
   String text = 'tutorial.0'.tr();
@@ -111,7 +113,6 @@ class _TutorialPageState extends State<TutorialPage> {
     await Future.delayed(const Duration(milliseconds: 300));
     setState(() {
       habitTwoOpacity = 0.25;
-
       habitThreeOpacity = 1;
     });
   }
@@ -154,6 +155,14 @@ class _TutorialPageState extends State<TutorialPage> {
               duration: const Duration(milliseconds: 500),
               child:
                   Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Align(
+                    alignment: Alignment.topRight,
+                    child: DialogButton(
+                      color: Colors.transparent,
+                      textColor: theme.colorScheme.onPrimaryContainer,
+                      text: 'tutorial.skip'.tr(),
+                      onTap: () => context.go(widget.nextRoute),
+                    )),
                 Gap(responsiveHeight(30, context)),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 1500),

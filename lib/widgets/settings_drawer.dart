@@ -7,6 +7,7 @@ import 'package:gameify/utils/dialog_utils.dart';
 import 'package:gameify/utils/logger.dart';
 import 'package:gameify/utils/theme_provider.dart';
 import 'package:gameify/utils/themes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -47,6 +48,13 @@ class _SettingsDrawerState extends State<SettingsDrawer> {
     return Drawer(
       child: SafeArea(
         child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+          ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 35),
+            onTap: () => context.go('/tutorial', extra: '/main'),
+            leading: const Icon(CupertinoIcons.book, size: 18),
+            title: Text('settings.tutorial'.tr(),
+                style: theme.textTheme.bodyMedium),
+          ),
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 35),
             onTap: () =>

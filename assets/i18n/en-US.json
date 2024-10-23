@@ -28,6 +28,7 @@
         }
     },
     "tutorial": {
+        "skip": "Skip",
         "0": "Complete habits to increase your score",
         "1": "Bad habits will decrease your score",
         "2": "Create counter habits to complete habits several times in one day",
@@ -35,7 +36,8 @@
     },
     "settings": {
         "reset": "Reset App",
-        "privacy": "Privacy Policy"
+        "privacy": "Privacy Policy",
+        "tutorial": "Show Tutorial"
     },
     "score": {
         "highscore": "highscore",
