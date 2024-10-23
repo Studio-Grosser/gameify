@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:confetti/confetti.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/utils/date_utils.dart';
 import 'package:gameify/utils/habit_manager.dart';

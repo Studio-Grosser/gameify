@@ -12,6 +12,8 @@ import 'package:gameify/utils/utils.dart';
 import 'package:collection/collection.dart';
 
 class HabitManager extends ChangeNotifier {
+  static const _heatMapAnimationBaseDuration = 100; //ms
+
   final HabitMetrics _metrics = HabitMetrics();
   int get highscore => _metrics.highscore;
   int get average => _metrics.average;
@@ -72,16 +74,18 @@ class HabitManager extends ChangeNotifier {
         ifAbsent: () => 1);
     _updateOrAddDate();
     await _writeCurrentDate();
-    animate();
+    _animateHeatMap();
     notifyListeners();
   }
 
-  void animate() async {
+  void _animateHeatMap() async {
     for (var entry in heatDotAnimations.entries) {
       HeatDotAnimation heatDotAnimation = entry.value;
       Future.delayed(
-          Duration(milliseconds: (100 * heatDotAnimation.distance).toInt()),
-          () {
+          Duration(
+              milliseconds:
+                  (_heatMapAnimationBaseDuration * heatDotAnimation.distance)
+                      .toInt()), () {
         heatDotAnimation.controller.forward().then((_) {
           heatDotAnimation.controller.reverse();
         });
@@ -141,7 +145,7 @@ class HabitManager extends ChangeNotifier {
   Future<void> _loadHabits() async {
     final habits = await Habitservice().readHabits();
     _rawHabits = habits;
-    sortHabits();
+    _sortHabits();
     notifyListeners();
   }
 
@@ -159,7 +163,7 @@ class HabitManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void sortHabits() =>
+  void _sortHabits() =>
       _rawHabits.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
   void changeFilter(Filter newFilter) {

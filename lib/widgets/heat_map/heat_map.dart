@@ -13,11 +13,13 @@ class HeatMap extends StatelessWidget {
   final List<Date> dates;
   final DateTime currentDate;
 
+  // Visual properties
   static const _dotSize = 20.0;
   static const _dotMargin = 2.5;
   static const _columns = 3;
   static const _padding = 10.0;
 
+  // Animation properties
   static const _minScale = 0.75;
   static const _beginScale = 1;
   static const _maxDistanceAnimation = 20;
@@ -29,14 +31,18 @@ class HeatMap extends StatelessWidget {
     return (dotCount, dotsInRow);
   }
 
+  static int _calcVerticalIndex(int index, int dotsInRow) =>
+      ((index % dotsInRow) * _columns) + (index ~/ dotsInRow);
+
+  static final DateTime _now = DateTime.now().startOfDay;
+
+  // Calculates the scale at the end of the animation
+  // based on the distance from the current date
   static double _calcEndScale(int distance) {
     double a = (_beginScale - _minScale) / _maxDistanceAnimation;
     double b = _minScale + a * distance;
     return b.clamp(_minScale, _beginScale.toDouble());
   }
-
-  static int _calcVerticalIndex(int index, int dotsInRow) =>
-      ((index % dotsInRow) * _columns) + (index ~/ dotsInRow);
 
   static (Animation<double>, AnimationController) _createAnimation(
       TickerProvider tickerProvider, int distance) {
@@ -52,8 +58,6 @@ class HeatMap extends StatelessWidget {
 
     return (animation, controller);
   }
-
-  static final DateTime _now = DateTime.now().startOfDay;
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +102,7 @@ class HeatMap extends StatelessWidget {
                     animation: (tickerProvider) {
                       (Animation<double>, AnimationController) temp =
                           _createAnimation(tickerProvider, distance);
+
                       habitManager.heatDotAnimations[index] = HeatDotAnimation(
                         distance.toDouble(),
                         temp.$2,
