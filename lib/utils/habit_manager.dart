@@ -69,6 +69,8 @@ class HabitManager extends ChangeNotifier {
     await _loadDate();
   }
 
+  Future<void> resetDate() async => await changeDate(DateTime.now());
+
   Future<void> onHabitTap(Habit habit) async {
     _completedHabitIds.update(habit.id, (value) => habit.updateAlgorithm(value),
         ifAbsent: () => 1);

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/utils/date_utils.dart';
 import 'package:gameify/utils/habit_manager.dart';
+import 'package:gameify/utils/logger.dart';
+import 'package:gameify/utils/session_utils.dart';
 import 'package:gameify/utils/utils.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +30,7 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final ScrollController _scrollController = ScrollController();
   late ConfettiController _confettiController;
@@ -47,12 +49,26 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void initState() {
+    HabitManager habitManager = context.read<HabitManager>();
+    WidgetsBinding.instance.addObserver(this);
     _confettiController =
         ConfettiController(duration: const Duration(seconds: 1));
-    context
-        .read<HabitManager>()
-        .setNewHighscoreCallback(() => _confettiController.play());
+    habitManager.setNewHighscoreCallback(() => _confettiController.play());
+    SessionUtils.registerSession();
     super.initState();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      Logger.i('App resumed');
+      bool isSessionExpired = await SessionUtils.isSessionExpired();
+      if (isSessionExpired) {
+        if (mounted) context.read<HabitManager>().resetDate();
+        SessionUtils.registerSession();
+      }
+    }
+    super.didChangeAppLifecycleState(state);
   }
 
   @override
@@ -183,6 +199,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _confettiController.dispose();
     super.dispose();
   }
