@@ -81,17 +81,21 @@ class _HabitDisplayState extends State<HabitDisplay>
     if (widget.onReset != null) _controller.reverse();
   }
 
-  void onTap() async {
+  void _startScaleAnimation() async {
+    setState(() {
+      _currentScale = _animatedScale;
+    });
+    await Future.delayed(_scaleDuration);
+    setState(() {
+      _currentScale = _defaultScale;
+    });
+  }
+
+  void onTap() {
     if (widget.onTap != null) {
-      setState(() {
-        _currentScale = _animatedScale;
-      });
+      _startScaleAnimation();
       HapticFeedback.lightImpact();
       widget.onTap!();
-      await Future.delayed(_scaleDuration);
-      setState(() {
-        _currentScale = _defaultScale;
-      });
     }
   }
 
