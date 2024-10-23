@@ -63,10 +63,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     if (state == AppLifecycleState.resumed) {
       Logger.i('App resumed');
       bool isSessionExpired = await SessionUtils.isSessionExpired();
-      if (isSessionExpired) {
-        if (mounted) context.read<HabitManager>().resetDate();
-        SessionUtils.registerSession();
-      }
+      if (isSessionExpired && mounted) context.read<HabitManager>().resetDate();
+      SessionUtils.registerSession();
     }
     super.didChangeAppLifecycleState(state);
   }
