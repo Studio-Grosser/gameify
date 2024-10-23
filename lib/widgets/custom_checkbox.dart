@@ -34,12 +34,14 @@ class CustomCheckbox extends StatelessWidget {
           borderRadius: BorderRadius.circular(40),
           border: Border.all(width: 2, color: theme.checkboxTheme.side!.color)),
       child: Center(
-        child: Text(
-          valueText,
-          style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.primaryContainer,
-              height: 1,
-              fontWeight: FontWeight.w800),
+        child: FittedBox(
+          child: Text(
+            valueText,
+            style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.primaryContainer,
+                height: 1,
+                fontWeight: FontWeight.w800),
+          ),
         ),
       ),
     );
