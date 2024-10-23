@@ -47,6 +47,11 @@ class _HabitDisplayState extends State<HabitDisplay>
   final Duration holdDuration = const Duration(milliseconds: 1500);
   final Duration reverseDuration = const Duration(milliseconds: 500);
 
+  static const _defaultScale = 1.0;
+  static const _animatedScale = 0.98;
+  static const Duration _scaleDuration = Duration(milliseconds: 100);
+  double _currentScale = 1;
+
   @override
   void initState() {
     super.initState();
@@ -76,10 +81,17 @@ class _HabitDisplayState extends State<HabitDisplay>
     if (widget.onReset != null) _controller.reverse();
   }
 
-  void onTap() {
+  void onTap() async {
     if (widget.onTap != null) {
+      setState(() {
+        _currentScale = _animatedScale;
+      });
       HapticFeedback.lightImpact();
       widget.onTap!();
+      await Future.delayed(_scaleDuration);
+      setState(() {
+        _currentScale = _defaultScale;
+      });
     }
   }
 
@@ -88,90 +100,96 @@ class _HabitDisplayState extends State<HabitDisplay>
     ThemeData theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
-      child: Opacity(
-        opacity: widget.habit.isActive ? 1 : 0.75,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Slidable(
-            enabled: showOptions,
-            key: UniqueKey(),
-            endActionPane: ActionPane(
-              motion: const DrawerMotion(),
-              children: [
-                SlidableAction(
-                  onPressed: (_) => widget.onEdit!(),
-                  backgroundColor: Themes.accent,
-                  foregroundColor: Themes.shade1,
-                  label: 'habit.options.edit'.tr(),
-                  icon: CupertinoIcons.square_pencil,
-                ),
-                SlidableAction(
-                  onPressed: (_) => widget.onDelete!(),
-                  backgroundColor: Themes.danger,
-                  foregroundColor: Themes.shade1,
-                  label: 'habit.options.delete'.tr(),
-                  icon: CupertinoIcons.trash,
-                ),
-              ],
-            ),
-            child: GestureDetector(
-              onTap: onTap,
-              onLongPress: startAnimation,
-              onLongPressUp: endAnimation,
-              child: AnimatedBuilder(
-                  animation: _animation,
-                  builder: (context, child) {
-                    return Container(
-                      height: 66,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          borderRadius: widget.showSelectionBorder
-                              ? BorderRadius.circular(15)
-                              : null,
-                          border: widget.showSelectionBorder
-                              ? Border.all(width: 2, color: Themes.accent)
-                              : null,
-                          gradient: LinearGradient(stops: [
-                            0,
-                            _animation.value,
-                            _animation.value
-                          ], colors: [
-                            Themes.accent,
-                            Themes.accent,
-                            theme.colorScheme.primaryContainer,
-                          ])),
-                      child: Row(
-                        children: [
-                          if (isTappable && widget.showCheckbox) ...[
-                            if (_controller.isForwardOrCompleted) ...[
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 14),
-                                child: Icon(
-                                  CupertinoIcons.arrow_counterclockwise,
-                                  color: Themes.shade2,
+      child: AnimatedScale(
+        scale: _currentScale,
+        duration: _scaleDuration,
+        curve: Curves.easeInOut,
+        child: Opacity(
+          opacity: widget.habit.isActive ? 1 : 0.75,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Slidable(
+              enabled: showOptions,
+              key: UniqueKey(),
+              endActionPane: ActionPane(
+                motion: const DrawerMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: (_) => widget.onEdit!(),
+                    backgroundColor: Themes.accent,
+                    foregroundColor: Themes.shade1,
+                    label: 'habit.options.edit'.tr(),
+                    icon: CupertinoIcons.square_pencil,
+                  ),
+                  SlidableAction(
+                    onPressed: (_) => widget.onDelete!(),
+                    backgroundColor: Themes.danger,
+                    foregroundColor: Themes.shade1,
+                    label: 'habit.options.delete'.tr(),
+                    icon: CupertinoIcons.trash,
+                  ),
+                ],
+              ),
+              child: GestureDetector(
+                onTap: onTap,
+                onLongPress: startAnimation,
+                onLongPressUp: endAnimation,
+                child: AnimatedBuilder(
+                    animation: _animation,
+                    builder: (context, child) {
+                      return Container(
+                        height: 66,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            borderRadius: widget.showSelectionBorder
+                                ? BorderRadius.circular(15)
+                                : null,
+                            border: widget.showSelectionBorder
+                                ? Border.all(width: 2, color: Themes.accent)
+                                : null,
+                            gradient: LinearGradient(stops: [
+                              0,
+                              _animation.value,
+                              _animation.value
+                            ], colors: [
+                              Themes.accent,
+                              Themes.accent,
+                              theme.colorScheme.primaryContainer,
+                            ])),
+                        child: Row(
+                          children: [
+                            if (isTappable && widget.showCheckbox) ...[
+                              if (_controller.isForwardOrCompleted) ...[
+                                const Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 14),
+                                  child: Icon(
+                                    CupertinoIcons.arrow_counterclockwise,
+                                    color: Themes.shade2,
+                                  ),
                                 ),
-                              ),
-                            ] else ...[
-                              CustomCheckbox(
-                                  onTap: () => widget.onTap!(),
-                                  mode: widget.habit.mode,
-                                  value: widget.value),
-                            ]
+                              ] else ...[
+                                CustomCheckbox(
+                                    onTap: () => widget.onTap!(),
+                                    mode: widget.habit.mode,
+                                    value: widget.value),
+                              ]
+                            ],
+                            const Gap(10),
+                            Expanded(
+                                child: Text(habitText,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                        color: _controller.isAnimating
+                                            ? Themes.shade2
+                                            : theme
+                                                .textTheme.bodyMedium?.color),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1)),
+                            ScoreDisplay(value: widget.habit.score),
                           ],
-                          const Gap(10),
-                          Expanded(
-                              child: Text(habitText,
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: _controller.isAnimating
-                                          ? Themes.shade2
-                                          : theme.textTheme.bodyMedium?.color),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1)),
-                          ScoreDisplay(value: widget.habit.score),
-                        ],
-                      ),
-                    );
-                  }),
+                        ),
+                      );
+                    }),
+              ),
             ),
           ),
         ),
