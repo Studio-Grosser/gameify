@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:gameify/database/habit_service.dart';
 import 'package:gameify/models/habit.dart';
 import 'package:gameify/models/habit_mode.dart';
+import 'package:gameify/widgets/page_padding.dart';
 import 'package:gameify/widgets/styled/styled_fab.dart';
 import 'package:gameify/widgets/habit/habit_display.dart';
 import 'package:gap/gap.dart';
@@ -54,8 +55,8 @@ class _SuggestionsPageState extends State<SuggestionsPage> {
         icon: CupertinoIcons.chevron_right,
         onTap: onSubmit,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(30.0),
+      body: PagePadding(
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

@@ -21,3 +21,10 @@ double responsiveHeight(double defaultSize, BuildContext context,
   double multiplier = defaultSize / referenceDeviceHeight;
   return deviceHeight * multiplier;
 }
+
+double responsiveScreenPadding(double defaultSize, BuildContext context) {
+  double deviceWidth = MediaQuery.of(context).size.width;
+  double padding = responsiveWidth(defaultSize, context);
+  if (deviceWidth > 600) padding *= 2;
+  return padding;
+}

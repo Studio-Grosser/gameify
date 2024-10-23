@@ -8,6 +8,7 @@ import 'package:gameify/models/habit_mode.dart';
 import 'package:gameify/utils/responsive_utils.dart';
 import 'package:gameify/widgets/dialog_button.dart';
 import 'package:gameify/widgets/habit/habit_display.dart';
+import 'package:gameify/widgets/page_padding.dart';
 import 'package:gameify/widgets/styled/styled_container.dart';
 import 'package:gameify/widgets/styled/styled_fab.dart';
 import 'package:gap/gap.dart';
@@ -149,8 +150,8 @@ class _TutorialPageState extends State<TutorialPage> {
               )
             : null,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
+          child: PagePadding(
+            padding: const EdgeInsets.all(20.0),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 500),
               child:

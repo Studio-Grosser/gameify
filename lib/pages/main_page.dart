@@ -9,6 +9,7 @@ import 'package:gameify/utils/habit_manager.dart';
 import 'package:gameify/utils/logger.dart';
 import 'package:gameify/utils/session_utils.dart';
 import 'package:gameify/utils/utils.dart';
+import 'package:gameify/widgets/page_padding.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -95,8 +96,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                   numberOfParticles: 10,
                   blastDirectionality: BlastDirectionality.explosive,
                 )),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 0),
+            PagePadding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Consumer<HabitManager>(
                 builder: (context, habitManager, child) {
                   return Column(
