@@ -183,7 +183,7 @@ class _TutorialPageState extends State<TutorialPage> {
                   duration: const Duration(milliseconds: 500),
                   opacity: textOpacity,
                   child: SizedBox(
-                    height: 150,
+                    height: responsiveHeight(150, context),
                     child: Text(
                       text,
                       style: theme.textTheme.bodyLarge,
